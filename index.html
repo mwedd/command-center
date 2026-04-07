@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<!-- Command Center v1.0 -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matthew's Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0d0f0e;--surface:#141816;--surface2:#1a1f1c;--surface3:#1f2621;
+  --border:#2a332d;--border2:#354039;
+  --gold:#c9a84c;--gold2:#e8c97a;
+  --sage:#7a9e7e;--sage2:#9bbfa0;
+  --rust:#b8602a;--rust2:#d4784a;
+  --slate:#6b8fa8;--slate2:#8ab2cc;
+  --lavender:#8b7fa8;--lavender2:#a99fc4;
+  --moss:#5a7a4a;--moss2:#7a9f68;
+  --cream:#e8e0cc;--cream2:#f5f0e8;
+  --dim:#8a9490;--text:#d4cfc4;--text2:#a8a49a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(1px 1px at 15% 20%,rgba(201,168,76,.4) 0%,transparent 100%),radial-gradient(1px 1px at 72% 8%,rgba(255,255,255,.3) 0%,transparent 100%),radial-gradient(1px 1px at 45% 55%,rgba(255,255,255,.2) 0%,transparent 100%),radial-gradient(1px 1px at 88% 42%,rgba(201,168,76,.3) 0%,transparent 100%),radial-gradient(1px 1px at 32% 78%,rgba(255,255,255,.15) 0%,transparent 100%);pointer-events:none;z-index:0;}
+
+/* HEADER */
+.header{position:relative;z-index:10;padding:20px 40px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,rgba(13,15,14,.95) 0%,rgba(20,24,22,.9) 100%);}
+.site-title{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:700;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;}
+.site-sub{font-style:italic;color:var(--dim);font-size:.9rem;}
+.header-right{text-align:right;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--dim);line-height:1.8;}
+.header-right .time-val{color:var(--gold);font-size:.95rem;}
+
+/* QUOTE BAR */
+.quote-bar{position:relative;z-index:10;padding:10px 40px;background:linear-gradient(90deg,rgba(90,122,74,.08) 0%,rgba(201,168,76,.06) 50%,rgba(90,122,74,.08) 100%);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;}
+.quote-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;white-space:nowrap;}
+.quote-text{font-style:italic;color:var(--dim);font-size:.88rem;}
+
+/* NAV */
+.nav{position:relative;z-index:10;display:flex;gap:2px;padding:14px 40px 0;background:rgba(13,15,14,.7);overflow-x:auto;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-tab{display:flex;align-items:center;gap:7px;padding:9px 18px;border:1px solid transparent;border-bottom:none;border-radius:6px 6px 0 0;cursor:pointer;font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);background:transparent;transition:all .2s;white-space:nowrap;position:relative;}
+.nav-tab:hover{color:var(--cream);background:var(--surface2);border-color:var(--border);}
+.nav-tab.active{color:var(--cream2);background:var(--surface);border-color:var(--border2);border-bottom-color:var(--surface);}
+.nav-tab.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--tab-color,var(--gold));}
+.nav-tab.t-field.active{--tab-color:var(--slate);}
+.nav-tab.t-trading.active{--tab-color:var(--gold);}
+.nav-tab.t-photo.active{--tab-color:var(--rust);}
+.nav-tab.t-creative.active{--tab-color:var(--lavender);}
+.nav-tab.t-stoic.active{--tab-color:var(--sage);}
+.nav-tab.t-garden.active{--tab-color:var(--moss2);}
+.nav-tab.t-journal.active{--tab-color:var(--gold2);}
+
+/* CONTENT */
+.content{position:relative;z-index:10;background:var(--surface);border:1px solid var(--border2);border-top:none;margin:0 40px;border-radius:0 0 8px 8px;min-height:calc(100vh - 220px);}
+
+/* PANELS */
+.panel{display:none;}.panel.active{display:block !important;}
+.panel.active{display:block;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:22px 30px 18px;border-bottom:1px solid var(--border);}
+.panel-title-group{display:flex;align-items:center;gap:12px;}
+.panel-icon{font-size:1.5rem;}
+.panel-title{font-family:'Cinzel',serif;font-size:1.05rem;font-weight:600;letter-spacing:.08em;}
+.panel-subtitle{font-style:italic;color:var(--text2);font-size:.82rem;margin-top:2px;}
+.panel-body{padding:24px 30px;}
+
+/* GRIDS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:18px;}
+@media(max-width:900px){.grid-2,.grid-3,.grid-2-1{grid-template-columns:1fr;}.header,.quote-bar,.nav{padding-left:16px;padding-right:16px;}.content{margin:0 16px;}.panel-body{padding:16px;}}
+
+/* CARDS */
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:18px;position:relative;overflow:hidden;margin-bottom:16px;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--card-accent,var(--gold));opacity:.55;}
+.card-title{font-family:'Cinzel',serif;font-size:.63rem;letter-spacing:.18em;text-transform:uppercase;color:var(--card-accent,var(--gold));margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+
+/* STATUS ROWS */
+.status-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:.88rem;}
+.status-row:last-child{border-bottom:none;}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:7px;}
+.dot-green{background:#5a9e6a;box-shadow:0 0 6px rgba(90,158,106,.6);}
+.dot-yellow{background:var(--gold);box-shadow:0 0 6px rgba(201,168,76,.6);}
+.dot-red{background:#b85a4a;box-shadow:0 0 6px rgba(184,90,74,.6);}
+.dot-blue{background:var(--slate);box-shadow:0 0 6px rgba(107,143,168,.5);}
+
+/* BADGES */
+.badge{font-family:'JetBrains Mono',monospace;font-size:.63rem;padding:2px 7px;border-radius:3px;background:rgba(255,255,255,.07);color:var(--text2);}
+.badge.urgent{background:rgba(184,96,42,.25);color:var(--rust2);}
+.badge.ok{background:rgba(90,122,74,.25);color:var(--moss2);}
+.badge.info{background:rgba(107,143,168,.2);color:var(--slate2);}
+.badge.warn{background:rgba(201,168,76,.2);color:var(--gold2);}
+
+/* CONTACT STATUS TOGGLE */
+.contact-status{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:10px 0;}
+.cs-btn{font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:4px 10px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .2s;}
+.cs-btn.active-attempted{background:rgba(201,168,76,.2);border-color:var(--gold);color:var(--gold2);}
+.cs-btn.active-confirmed{background:rgba(90,122,74,.3);border-color:var(--moss2);color:var(--moss2);}
+.cs-btn.active-noresponse{background:rgba(184,90,74,.2);border-color:var(--rust2);color:var(--rust2);}
+.dispatch-flag{font-size:.78rem;padding:6px 12px;border-radius:5px;margin:8px 0;font-style:italic;}
+.dispatch-flag.hold{background:rgba(184,90,74,.1);color:var(--rust2);border-left:2px solid var(--rust);}
+.dispatch-flag.go{background:rgba(90,122,74,.15);color:var(--moss2);border-left:2px solid var(--moss2);}
+.dispatch-flag.watch{background:rgba(201,168,76,.1);color:var(--gold2);border-left:2px solid var(--gold);}
+
+/* INPUTS */
+.note-area{width:100%;background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:12px;color:var(--text);font-family:'Crimson Pro',serif;font-size:.93rem;resize:vertical;min-height:100px;line-height:1.6;outline:none;transition:border-color .2s;}
+.note-area:focus{border-color:var(--border2);}
+.note-area::placeholder{color:var(--text2);font-style:italic;}
+.chat-input{flex:1;background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:'Crimson Pro',serif;font-size:.93rem;outline:none;resize:none;min-height:40px;line-height:1.5;transition:border-color .2s;}
+.chat-input:focus{border-color:var(--border2);}
+.chat-input::placeholder{color:var(--text2);font-style:italic;}
+
+/* BUTTONS */
+.btn{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;padding:7px 16px;border-radius:4px;border:1px solid var(--border2);background:var(--surface3);color:var(--text2);cursor:pointer;transition:all .2s;}
+.btn:hover{color:var(--cream);border-color:var(--gold);}
+.btn.primary{background:rgba(201,168,76,.12);border-color:var(--gold);color:var(--gold2);}
+.btn.primary:hover{background:rgba(201,168,76,.22);color:var(--cream2);}
+
+/* CHAT */
+.chat-box{background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:14px;min-height:180px;max-height:320px;overflow-y:auto;margin-bottom:10px;font-size:.88rem;line-height:1.65;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
+.chat-msg{margin-bottom:12px;}
+.chat-msg .role{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:3px;}
+.chat-msg.user .role{color:var(--gold);}
+.chat-msg.ai .role{color:var(--sage);}
+.chat-msg.ai .body{color:var(--cream);}
+.chat-input-row{display:flex;gap:8px;align-items:flex-end;}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--sage);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* MISC */
+.divider{border:none;border-top:1px solid var(--border);margin:14px 0;}
+.stat-val{font-family:'JetBrains Mono',monospace;font-size:1.5rem;color:var(--cream2);line-height:1;}
+.stat-label{font-size:.73rem;color:var(--text2);margin-top:3px;}
+.checklist-item{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--border);font-size:.88rem;}
+.checklist-item:last-child{border-bottom:none;}
+.checklist-item input[type=checkbox]{margin-top:3px;accent-color:var(--gold);}
+.pull-quote{border-left:2px solid var(--sage);padding:9px 14px;margin:12px 0;font-style:italic;font-size:.97rem;color:var(--cream);line-height:1.65;}
+.pull-quote .attr{font-style:normal;font-size:.72rem;color:var(--text2);margin-top:5px;font-family:'JetBrains Mono',monospace;}
+.cosmos-deco{font-size:2rem;text-align:center;margin:10px 0;opacity:.4;letter-spacing:8px;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:2px 8px;border-radius:20px;border:1px solid var(--border2);color:var(--text2);}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.ticker-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:.88rem;}
+.ticker-sym{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:500;color:var(--cream2);width:55px;}
+.ticker-name{color:var(--text2);font-size:.78rem;flex:1;padding:0 10px;}
+.ticker-price{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--cream);width:65px;text-align:right;}
+.ticker-change{font-family:'JetBrains Mono',monospace;font-size:.72rem;width:55px;text-align:right;padding-left:6px;}
+.up{color:#6bbf7a;}.down{color:#c97070;}
+.activity-log .al-entry{padding:5px 0;border-bottom:1px solid var(--border);font-size:.77rem;line-height:1.6;}
+.activity-log .al-entry:last-child{border-bottom:none;}
+.al-time{color:var(--gold);font-family:'JetBrains Mono',monospace;}
+.al-user-me{color:var(--slate2);}
+.al-user-sys{color:var(--text2);}
+.progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:5px;}
+.progress-fill{height:100%;border-radius:2px;background:var(--gold);opacity:.7;}
+.journal-entry{border-left:2px solid var(--border2);padding:9px 13px;margin-bottom:10px;background:var(--surface3);border-radius:0 6px 6px 0;}
+.journal-entry:hover{border-left-color:var(--gold);}
+.je-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.je-wot{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--gold);}
+.je-date{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text2);}
+.je-site{font-size:.8rem;color:var(--cream);margin-bottom:3px;}
+.je-note{font-size:.8rem;color:var(--text2);font-style:italic;line-height:1.5;}
+.nav-tab.t-reports.active{--tab-color:#8ab2cc;}
+.nav-tab.t-daily.active{--tab-color:#e8c078;}
+.dc-tab{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;padding:10px 18px;border:none;border-bottom:2px solid transparent;background:transparent;color:rgba(140,125,106,.7);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.dc-tab:hover{color:#c4a882;}
+.dc-tab.active{color:#e8c078;border-bottom-color:#c8973a;}
+.dc-panel{display:none;}
+.dc-panel.active{display:block;animation:fadeIn .25s ease;}
+.dc-check-row{display:flex;align-items:flex-start;gap:12px;padding:8px 0;cursor:pointer;border-bottom:1px solid rgba(245,234,216,.06);}
+.dc-check-row:last-child{border-bottom:none;}
+.dc-check-circle{width:18px;height:18px;border-radius:50%;border:1px solid rgba(200,151,58,.4);flex-shrink:0;margin-top:2px;transition:all .3s;display:flex;align-items:center;justify-content:center;font-size:10px;}
+.dc-check-circle.done{background:#c8973a;border-color:#c8973a;color:#1a1208;}
+.dc-check-circle.done::after{content:'✓';}
+.dc-check-text{font-size:14px;color:rgba(245,234,216,.75);line-height:1.5;}
+.dc-check-text.done{text-decoration:line-through;color:rgba(245,234,216,.35);}
+.dc-wisdom-item{background:rgba(245,234,216,.03);border:1px solid rgba(245,234,216,.08);border-radius:3px;padding:20px 22px;}
+.dc-wisdom-quote{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;font-weight:300;color:rgba(245,234,216,.8);line-height:1.6;margin-bottom:8px;}
+.dc-wisdom-meta{font-size:12px;color:#8c7d6a;letter-spacing:.05em;}
+.dc-save-btn{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;padding:7px 16px;border-radius:3px;border:1px solid rgba(200,151,58,.35);background:rgba(200,151,58,.08);color:#c8973a;cursor:pointer;transition:all .2s;}
+.dc-save-btn:hover{background:rgba(200,151,58,.18);color:#e8c078;}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div>
+    <div class="site-title">Command Center</div>
+    <div class="site-sub" style="font-style:italic;color:var(--dim);font-size:.88rem;">Matthew · Lompoc, CA</div>
+  </div>
+  <div class="header-right">
+    <div class="time-val" id="clock">--:-- --</div>
+    <div id="dateDisplay">Loading...</div>
+    <div id="weatherWidget" style="color:var(--sage2);">🌤 Loading weather...</div>
+  </div>
+</header>
+
+<div class="quote-bar">
+  <div class="quote-label">☽ Daily</div>
+  <div class="quote-text" id="dailyQuote">"The impediment to action advances action. What stands in the way becomes the way." — Marcus Aurelius</div>
+</div>
+
+<nav class="nav" id="mainNav">
+  <button class="nav-tab t-field" onclick="switchPanel('field',this)">🛠 Field Ops</button>
+  <button class="nav-tab t-trading" onclick="switchPanel('trading',this)">📈 Trading</button>
+  <button class="nav-tab t-photo" onclick="switchPanel('photo',this)">📷 Photography</button>
+  <button class="nav-tab t-creative" onclick="switchPanel('creative',this)">🎨 Creative Studio</button>
+  <button class="nav-tab t-stoic" onclick="switchPanel('stoic',this)">🌿 Stoic Corner</button>
+  <button class="nav-tab t-garden" onclick="switchPanel('garden',this)">🌱 Garden & Flock</button>
+  <button class="nav-tab t-journal" onclick="switchPanel('journal',this)">📋 Field Journal</button>
+  <button class="nav-tab t-daily" onclick="switchPanel('daily',this)">🌄 Daily Companion</button>
+  <button class="nav-tab t-reports" onclick="switchPanel('reports',this)">📄 Reports</button>
+</nav>
+
+<div class="content">
+
+<!-- ===== FIELD OPS ===== -->
+<div class="panel active" id="panel-field">
+  <div class="panel-header">
+    <div class="panel-title-group">
+      <div class="panel-icon">🛠</div>
+      <div>
+        <div class="panel-title" style="color:var(--slate2)">Field Operations</div>
+        <div class="panel-subtitle">ServiceNow · Parts · Routing · SLA</div>
+      </div>
+    </div>
+    <button class="btn" onclick="refreshFieldAI()">⟳ Morning Briefing</button>
+  </div>
+  <div class="panel-body">
+    <div class="grid-2-1">
+      <div>
+
+        <!-- Dispatch Decision Banner -->
+        <div id="dispatchBanner" class="dispatch-flag watch" style="margin-bottom:16px;">
+          ⭐ NEW LOCAL TICKET — WOT16501003 AAA Lompoc is in your backyard. Call Shawn Matz (714-850-8250) NOW — phone response SLA was 12:09pm today. Schedule for tomorrow. No drive needed.
+        </div>
+
+        <!-- Ticket Summary -->
+        <div class="card" style="--card-accent:var(--slate);">
+          <div class="card-title">🎟 Active Tickets — Apr 7 · 5 Total</div>
+
+          <!-- WOT16501003 NEW LOCAL -->
+          <div style="background:rgba(90,122,74,.12);border:1px solid var(--moss2);border-radius:6px;padding:8px 10px;margin-bottom:8px;">
+            <div style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.15em;color:var(--moss2);margin-bottom:4px;">⭐ NEW · LOCAL · NO PARTS NEEDED</div>
+            <div class="status-row" style="cursor:pointer;flex-wrap:wrap;gap:6px;border:none;padding:0;">
+              <span onclick="toggleTicket('t5')" style="flex:1;"><span class="status-dot dot-green"></span>WOT16501003 · AAA Lompoc · UPS Battery</span>
+              <span class="badge ok">Lompoc ⌂ Tomorrow</span>
+            </div>
+            <div class="contact-status" id="cs5">
+              <span style="font-size:.72rem;color:var(--text2);">Contact:</span>
+              <button class="cs-btn" onclick="setContact('cs5','attempted')">📧 Attempted</button>
+              <button class="cs-btn" onclick="setContact('cs5','confirmed')">✅ Confirmed</button>
+              <button class="cs-btn" onclick="setContact('cs5','noresponse')">🔇 No Response</button>
+            </div>
+          </div>
+
+          <!-- WOT16483038 -->
+          <div class="status-row" style="cursor:pointer;flex-wrap:wrap;gap:6px;">
+            <span onclick="toggleTicket('t1')" style="flex:1;"><span class="status-dot dot-red"></span>WOT16483038 · Landis+Gyr SB · Lat 5550</span>
+            <span class="badge ok">Parts In Hand ✓</span>
+          </div>
+          <div class="contact-status" id="cs1">
+            <span style="font-size:.72rem;color:var(--text2);">Contact:</span>
+            <button class="cs-btn" onclick="setContact('cs1','attempted')">📧 Attempted</button>
+            <button class="cs-btn" onclick="setContact('cs1','confirmed')">✅ Confirmed</button>
+            <button class="cs-btn" onclick="setContact('cs1','noresponse')">🔇 No Response</button>
+          </div>
+
+          <!-- WOT16488814 -->
+          <div class="status-row" style="cursor:pointer;flex-wrap:wrap;gap:6px;margin-top:4px;">
+            <span onclick="toggleTicket('t2')" style="flex:1;"><span class="status-dot dot-yellow"></span>WOT16488814 · UCSB SB · Lat 5440</span>
+            <span class="badge warn">PUDO Goleta</span>
+          </div>
+          <div class="contact-status" id="cs2">
+            <span style="font-size:.72rem;color:var(--text2);">Contact:</span>
+            <button class="cs-btn" onclick="setContact('cs2','attempted')">📧 Attempted</button>
+            <button class="cs-btn" onclick="setContact('cs2','confirmed')">✅ Confirmed</button>
+            <button class="cs-btn" onclick="setContact('cs2','noresponse')">🔇 No Response</button>
+          </div>
+
+          <!-- WOT16494420 -->
+          <div class="status-row" style="cursor:pointer;flex-wrap:wrap;gap:6px;margin-top:4px;">
+            <span onclick="toggleTicket('t3')" style="flex:1;"><span class="status-dot dot-yellow"></span>WOT16494420 · SLO COE · Precision 3460</span>
+            <span class="badge warn">PUDO Santa Maria</span>
+          </div>
+          <div class="contact-status" id="cs3">
+            <span style="font-size:.72rem;color:var(--text2);">Contact:</span>
+            <button class="cs-btn" onclick="setContact('cs3','attempted')">📧 Attempted</button>
+            <button class="cs-btn" onclick="setContact('cs3','confirmed')">✅ Confirmed</button>
+            <button class="cs-btn" onclick="setContact('cs3','noresponse')">🔇 No Response</button>
+          </div>
+
+          <!-- WOT16496243 -->
+          <div class="status-row" style="cursor:pointer;flex-wrap:wrap;gap:6px;margin-top:4px;">
+            <span onclick="toggleTicket('t4')" style="flex:1;"><span class="status-dot dot-blue"></span>WOT16496243 · Zone 5 Tech SLO · Pro AIO</span>
+            <span class="badge info">SLA Apr 13</span>
+          </div>
+          <div class="contact-status" id="cs4">
+            <span style="font-size:.72rem;color:var(--text2);">Contact:</span>
+            <button class="cs-btn" onclick="setContact('cs4','attempted')">📧 Attempted</button>
+            <button class="cs-btn" onclick="setContact('cs4','confirmed')">✅ Confirmed</button>
+            <button class="cs-btn" onclick="setContact('cs4','noresponse')">🔇 No Response</button>
+          </div>
+
+          <div style="margin-top:10px;font-size:.73rem;color:var(--text2);font-style:italic;">↑ Click ticket name to expand full details + activity log</div>
+        </div>
+
+        <!-- PUDO Status -->
+        <div class="card" style="--card-accent:var(--slate);">
+          <div class="card-title">📦 PUDO Status</div>
+          <div class="status-row"><span style="color:var(--text2);font-size:.78rem;font-style:italic;">Oxnard FedEx · Bill</span></div>
+          <div class="status-row"><span>Bill Confirmed</span><span class="badge ok">Yes</span></div>
+          <div class="status-row" style="margin-top:6px;"><span style="color:var(--text2);font-size:.78rem;font-style:italic;">Goleta FedEx · Sean · 495 S Fairview</span></div>
+          <div class="status-row"><span>519871207430 — UCSB parts</span><span class="badge ok">Received ✓</span></div>
+          <div class="status-row" style="margin-top:6px;"><span style="color:var(--text2);font-size:.78rem;font-style:italic;">Santa Maria FedEx · 3070 Skyway Dr</span></div>
+          <div class="status-row"><span>519871131410 — Landis+Gyr</span><span class="badge ok">✓ Delivered 4/6 · Signed M.W.</span></div>
+          <div class="status-row"><span>XHW1N — Zone 5 LCD</span><span class="badge warn">⚠ In Transit · ETA 10:30am</span></div>
+          <div class="status-row"><span>XK2JV — SLO COE SSD</span><span class="badge ok">Received ✓ 4/6</span></div>
+        </div>
+
+        <!-- Ticket Detail: WOT16501003 AAA Lompoc -->
+        <div class="card" id="t5" style="display:none;--card-accent:var(--moss2);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <span style="font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.1em;color:var(--moss2);">⭐ WOT16501003 · AAA ALTOONA · LOMPOC LOCAL · NO PARTS</span>
+            <button class="btn" onclick="toggleTicket('t5')" style="padding:3px 10px;font-size:.58rem;">Close ✕</button>
+          </div>
+          <div style="background:rgba(90,122,74,.15);padding:8px 11px;border-radius:5px;border-left:2px solid var(--moss2);margin-bottom:12px;font-size:.82rem;color:var(--moss2);">
+            ⭐ This is in Lompoc — 525 W Central Ave. Zero drive time. Call Shawn Matz NOW at 714-850-8250 (phone SLA was 12:09pm today). Schedule for tomorrow Apr 8, window 5:00–7:00pm. Est. 30 min job.
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;font-size:.82rem;">
+            <div><div class="stat-label">Issue</div><div style="color:var(--gold2);">UPS Battery Near End of Life</div></div>
+            <div><div class="stat-label">Parts</div><div style="color:var(--moss2);">None Required</div></div>
+            <div><div class="stat-label">Target Restore</div><div style="color:var(--gold2);">Apr 8 · 3:00pm</div></div>
+            <div><div class="stat-label">Phone SLA</div><div style="color:var(--rust2);">Apr 7 · 12:09pm ⚠ Call Now</div></div>
+            <div><div class="stat-label">Scheduled</div><div style="color:var(--cream);">Apr 8 · 4:44pm (30 min)</div></div>
+            <div><div class="stat-label">Urgency</div><div style="color:var(--cream);">S3</div></div>
+          </div>
+          <div class="divider"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;font-size:.82rem;">
+            <div>
+              <div class="stat-label">📍 Location</div>
+              <div style="color:var(--cream);">AAA Altoona · 525 W Central Ave</div>
+              <div style="color:var(--moss2);font-weight:600;">Lompoc, CA 93436 · LOCAL ⌂</div>
+            </div>
+            <div>
+              <div class="stat-label">📞 Contacts</div>
+              <div style="color:var(--cream);">Shawn Matz · <a href="tel:7148508250" style="color:var(--slate2);">714-850-8250</a></div>
+              <div style="color:var(--text2);">[see ServiceNow for email]</div>
+              <div style="color:var(--cream);margin-top:4px;">Jessica Garcia · <a href="tel:8057405209" style="color:var(--slate2);">805-740-5209</a></div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="font-size:.82rem;background:var(--surface3);padding:9px;border-radius:5px;margin-bottom:10px;">
+            <div class="stat-label" style="margin-bottom:5px;">📋 Issue Summary</div>
+            GSOC contacted NOC about possible commercial power issue at Lompoc. NOC checked UPS — no power issues found. UPS shows warning: "Battery Near End of Life — Order Replacement Battery." Battery replacement date on record: 09/14/2026. No special handling notes. Assessment and documentation visit only.
+          </div>
+          <div class="divider"></div>
+          <div class="card-title" style="margin-bottom:8px;">📜 Activity Log</div>
+          <div class="activity-log">
+            <div class="al-entry"><span class="al-time">04/07 11:27</span> · <span class="al-user-sys">AZ Integration Dell (Salesforce)</span> — Scheduled for 04/08 16:44 start. Window 04/08 17:00–19:00.</div>
+            <div class="al-entry"><span class="al-time">04/07 11:09</span> · <span class="al-user-sys">Sarika Gupta</span> — Assignment group updated: GEN-US-SBD-CA-Santa Barbara-700-1806. Auto-generated first task for WO10336733.</div>
+            <div class="al-entry"><span class="al-time">04/07 11:09</span> · <span class="al-user-sys">Sarika Gupta</span> — Ticket created. Assigned to Matthew Weddington. Target phone response: 04/07 12:09pm.</div>
+          </div>
+        </div>
+
+        <!-- Ticket Detail: WOT16483038 -->
+        <div class="card" id="t1" style="display:none;--card-accent:var(--rust);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <span style="font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.1em;color:var(--rust2);">🔴 WOT16483038 · LANDIS+GYR · PROSUPPORT PLUS — DO NOT MISS SLA</span>
+            <button class="btn" onclick="toggleTicket('t1')" style="padding:3px 10px;font-size:.58rem;">Close ✕</button>
+          </div>
+          <div style="background:rgba(107,191,122,.1);padding:7px 11px;border-radius:5px;border-left:2px solid #6bbf7a;margin-bottom:10px;font-size:.8rem;color:#6bbf7a;">✅ Tracking 519871131410 — Delivered Mon 4/6 at 10:13am, Goleta FedEx. Signed: M. Weddington. All 8 parts in hand.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;font-size:.82rem;">
+            <div><div class="stat-label">Device</div><div style="color:var(--cream);">Dell Latitude 5550</div></div>
+            <div><div class="stat-label">Serial</div><div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cream);">VN0MMGXXWSV0056D</div></div>
+            <div><div class="stat-label">Asset Tag</div><div style="font-family:'JetBrains Mono',monospace;color:var(--cream);">1ST5F94</div></div>
+            <div><div class="stat-label">Issue</div><div style="color:var(--rust2);">Fan noise — accidental drop</div></div>
+            <div><div class="stat-label">SLA</div><div style="color:var(--rust2);">Apr 7 · 17:59 PST · N1</div></div>
+            <div><div class="stat-label">Scheduled</div><div style="color:var(--cream);">10:13am today</div></div>
+          </div>
+          <div class="divider"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;font-size:.82rem;">
+            <div><div class="stat-label">📍 Location</div><div style="color:var(--cream);">3323 Cliff Dr, Santa Barbara, CA 93109</div></div>
+            <div><div class="stat-label">📞 Contacts</div>
+              <div style="color:var(--cream);">Fleur Phelps · <a href="tel:4705386571" style="color:var(--slate2);">470-538-6571</a></div>
+              <div style="color:var(--text2);">Jordache Joseph · <a href="tel:7622443423" style="color:var(--slate2);">762-244-3423</a></div>
+            </div>
+          </div>
+          <div style="font-size:.82rem;color:var(--gold2);background:rgba(201,168,76,.08);padding:9px;border-radius:5px;border-left:2px solid var(--gold);margin-bottom:10px;">⚠️ DC Access: (1) Training at bt.na.landisgyr.com/home ✅ Done 4/6 · (2) Submit DC Access Request → contact Fleur to shepherd. Do NOT self-schedule.</div>
+          <div class="divider"></div>
+          <div style="font-size:.78rem;margin-bottom:10px;">
+            <div class="stat-label" style="margin-bottom:7px;">🔧 Parts (8) — All In Hand</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+              <div style="padding:4px 8px;background:var(--surface3);border-radius:4px;"><span style="color:var(--text2);">012DJ</span> · Fan Assy</div>
+              <div style="padding:4px 8px;background:var(--surface3);border-radius:4px;"><span style="color:var(--text2);">835MH</span> · Keyboard Backlit</div>
+              <div style="padding:4px 8px;background:var(--surface3);border-radius:4px;"><span style="color:var(--text2);">27XMJ</span> · Heatsink</div>
+              <div style="padding:4px 8px;background:var(--surface3);border-radius:4px;"><span style="color:var(--text2);">2V9WX</span> · SVC AlsoShip</div>
+              <div style="padding:4px 8px;background:var(--surface3);border-radius:4px;"><span style="color:var(--text2);">7KFD6</span> · Antenna Cover WWAN</div>
+              <div style="padding:4px 8px;background:var(--surface3);border-radius:4px;"><span style="color:var(--text2);">RXDYH</span> · Bezel</div>
+              <div style="padding:4px 8px;background:var(--surface3);border-radius:4px;"><span style="color:var(--text2);">X7KPJ</span> · Door UMA</div>
+              <div style="padding:4px 8px;background:var(--surface3);border-radius:4px;"><span style="color:var(--text2);">WY3X9</span> · Palmrest ↩ Return</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-title" style="margin-bottom:8px;">📜 Activity Log</div>
+          <div class="activity-log">
+            <div class="al-entry"><span class="al-time">04/06 22:40</span> · <span class="al-user-me">Matthew Weddington</span> — Completed DC training. Sent email to Fleur with cell. Will be in area tomorrow — awaiting callback to confirm appointment.</div>
+            <div class="al-entry"><span class="al-time">04/06 12:05</span> · <span class="al-user-me">Matthew Weddington</span> — Ticket pulled from tank, replaced by SLO call. Parts in hand. Waiting for reassignment.</div>
+            <div class="al-entry"><span class="al-time">04/02 08:46</span> · <span class="al-user-sys">FS GFO Bulk Updates</span> — Tracking # 519871131410 confirmed.</div>
+            <div class="al-entry"><span class="al-time">04/01 16:57</span> · <span class="al-user-me">Matthew Weddington</span> — Called and left message. Asked about working tomorrow. Will update on callback.</div>
+            <div class="al-entry"><span class="al-time">04/01 11:31</span> · <span class="al-user-me">Matthew Weddington</span> — No tracking shown. Called Dell — got tracking # 519871131410.</div>
+            <div class="al-entry"><span class="al-time">04/01 09:01</span> · <span class="al-user-me">Matthew Weddington</span> — Ticket assigned. No tracking visible. In transit — may need to call Dell.</div>
+            <div class="al-entry"><span class="al-time">04/01 07:34</span> · <span class="al-user-sys">AZ Integration Dell</span> — Call assigned 04/01 11:52. ETA window 08:00–18:00.</div>
+            <div class="al-entry"><span class="al-time">03/31 09:52</span> · <span class="al-user-sys">AZ Integration Dell</span> — Ticket created. Assigned US-66880000-SBD-FES South CA.</div>
+          </div>
+        </div>
+
+        <!-- Ticket Detail: WOT16488814 -->
+        <div class="card" id="t2" style="display:none;--card-accent:var(--gold);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <span style="font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.1em;color:var(--gold2);">🟡 WOT16488814 · UCSB · LATITUDE 5440</span>
+            <button class="btn" onclick="toggleTicket('t2')" style="padding:3px 10px;font-size:.58rem;">Close ✕</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;font-size:.82rem;">
+            <div><div class="stat-label">Device</div><div style="color:var(--cream);">Dell Latitude 5440</div></div>
+            <div><div class="stat-label">Serial</div><div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cream);">CN0TC3NGCMK0036B</div></div>
+            <div><div class="stat-label">Asset Tag</div><div style="font-family:'JetBrains Mono',monospace;color:var(--cream);">HK4TCY3</div></div>
+            <div><div class="stat-label">Issue</div><div style="color:var(--gold2);">Power/startup failure — motherboard</div></div>
+            <div><div class="stat-label">SLA</div><div style="color:var(--gold2);">Apr 7 · 18:00 PST</div></div>
+            <div><div class="stat-label">Scheduled</div><div style="color:var(--cream);">10:14am today</div></div>
+          </div>
+          <div style="background:rgba(201,168,76,.08);padding:8px 11px;border-radius:5px;border-left:2px solid var(--gold);font-size:.82rem;color:var(--gold2);margin-bottom:10px;">⚠️ 2 VMs + 1 email sent 4/6 — no response. Must contact before arrival. Schedule window 9am–4pm.</div>
+          <div class="divider"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;font-size:.82rem;">
+            <div><div class="stat-label">📍 Location</div><div style="color:var(--cream);">UCSB Social Sciences Rm 1101</div><div style="color:var(--text2);">Santa Barbara, CA 93106</div></div>
+            <div><div class="stat-label">📞 Contact</div><div style="color:var(--cream);">Tony Chabolla · <a href="tel:8058932731" style="color:var(--slate2);">805-893-2731</a></div><div style="color:var(--text2);">[see ServiceNow for email]</div></div>
+          </div>
+          <div style="font-size:.78rem;margin-bottom:10px;">
+            <div class="stat-label" style="margin-bottom:7px;">🔧 Parts — Goleta PUDO · Sean · 495 S Fairview</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+              <div style="padding:4px 8px;background:var(--surface3);border-radius:4px;"><span style="color:var(--text2);">FF74N</span> · Motherboard ↩ Return · <span style="color:#6bbf7a;">Received ✓</span></div>
+              <div style="padding:4px 8px;background:var(--surface3);border-radius:4px;"><span style="color:var(--text2);">0PYG4</span> · SVC AlsoShip · <span style="color:#6bbf7a;">Received ✓</span></div>
+            </div>
+            <div style="margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text2);">Tracking: 519871207430 · Received ✓</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-title" style="margin-bottom:8px;">📜 Activity Log</div>
+          <div class="activity-log">
+            <div class="al-entry"><span class="al-time">04/07 05:05</span> · <span class="al-user-sys">AZ Integration Dell</span> — Call assigned 04/07 10:14. ETA window 08:00–18:00.</div>
+            <div class="al-entry"><span class="al-time">04/06 16:13</span> · <span class="al-user-sys">Prem Prakash S</span> — Received FE email requesting reschedule to 7th. No customer update.</div>
+            <div class="al-entry"><span class="al-time">04/06 10:32</span> · <span class="al-user-me">Matthew Weddington</span> — Sent email to Tony Chabolla. 2 VMs left, no reply. Part in hand. Will call Dell if no response.</div>
+            <div class="al-entry"><span class="al-time">04/06 08:47</span> · <span class="al-user-me">Matthew Weddington</span> — Called customer, left message. Will pick up part and head there afternoon.</div>
+            <div class="al-entry"><span class="al-time">04/03 16:29</span> · <span class="al-user-sys">Prem Prakash S</span> — Part arrived 4/3. FE emailed customer for service window. Rescheduled to 4/6.</div>
+            <div class="al-entry"><span class="al-time">04/02 10:02</span> · <span class="al-user-me">Matthew Weddington</span> — Part expected tomorrow. Will contact customer once arrived.</div>
+            <div class="al-entry"><span class="al-time">04/01 14:07</span> · <span class="al-user-sys">AZ Integration Dell</span> — Ticket created. Assigned US-66880000-SBD-FES South CA.</div>
+          </div>
+        </div>
+
+        <!-- Ticket Detail: WOT16494420 -->
+        <div class="card" id="t3" style="display:none;--card-accent:var(--gold);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <span style="font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.1em;color:var(--gold2);">🟡 WOT16494420 · SLO COUNTY OFFICE OF EDUCATION</span>
+            <button class="btn" onclick="toggleTicket('t3')" style="padding:3px 10px;font-size:.58rem;">Close ✕</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;font-size:.82rem;">
+            <div><div class="stat-label">Device</div><div style="color:var(--cream);">Dell Precision 3460</div></div>
+            <div><div class="stat-label">Serial</div><div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cream);">CN0XV49JFCW0035A</div></div>
+            <div><div class="stat-label">Asset Tag</div><div style="font-family:'JetBrains Mono',monospace;color:var(--cream);">95M3SY3</div></div>
+            <div><div class="stat-label">Issue</div><div style="color:var(--gold2);">Hard drive failure — SSD diagnostic</div></div>
+            <div><div class="stat-label">SLA</div><div style="color:var(--gold2);">Apr 7 · 18:00 PST</div></div>
+            <div><div class="stat-label">Scheduled</div><div style="color:var(--cream);">12:19pm today</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;font-size:.82rem;">
+            <div><div class="stat-label">📍 Location</div><div style="color:var(--cream);">3350 Education Dr</div><div style="color:var(--text2);">San Luis Obispo, CA 93405</div></div>
+            <div><div class="stat-label">📞 Contact</div><div style="color:var(--cream);">Glen McColm · <a href="tel:8053055286" style="color:var(--slate2);">805-305-5286</a></div><div style="color:var(--text2);">[see ServiceNow for email]</div><div style="color:var(--gold2);font-size:.75rem;margin-top:2px;">Said he'd call back 4/6 — no call yet</div></div>
+          </div>
+          <div style="font-size:.78rem;margin-bottom:10px;">
+            <div class="stat-label" style="margin-bottom:7px;">🔧 Part — Santa Maria PUDO · 3070 Skyway Dr</div>
+            <div style="padding:4px 8px;background:var(--surface3);border-radius:4px;font-size:.8rem;"><span style="color:var(--text2);">XK2JV</span> · 1TB SSD Encrypted ↩ Return · <span style="color:#6bbf7a;">Received ✓ 4/6</span></div>
+            <div style="margin-top:5px;font-size:.72rem;color:var(--rust2);">⚠ 43.87% repeat dispatch risk — SSD RCA flag</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-title" style="margin-bottom:8px;">📜 Activity Log</div>
+          <div class="activity-log">
+            <div class="al-entry"><span class="al-time">04/06 16:18</span> · <span class="al-user-sys">Prem Prakash S</span> — FE spoke to Glen McColm. Customer will get back with service window. Rescheduled to 4/7.</div>
+            <div class="al-entry"><span class="al-time">04/06 11:54</span> · <span class="al-user-me">Matthew Weddington</span> — Touched base with Glen McColm. Checking on a few things — said he'd call back later.</div>
+            <div class="al-entry"><span class="al-time">04/06 08:49</span> · <span class="al-user-me">Matthew Weddington</span> — Checked tracking — part may arrive tomorrow. Will monitor and update.</div>
+            <div class="al-entry"><span class="al-time">04/06 06:23</span> · <span class="al-user-sys">AZ Integration Dell</span> — Call assigned 04/06 14:01. ETA window 08:00–18:00.</div>
+            <div class="al-entry"><span class="al-time">04/03 16:20</span> · <span class="al-user-sys">AZ Integration Dell</span> — Ticket created. Assigned South CA group. Rescheduled to 04/06.</div>
+          </div>
+        </div>
+
+        <!-- Ticket Detail: WOT16496243 -->
+        <div class="card" id="t4" style="display:none;--card-accent:var(--slate);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <span style="font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.1em;color:var(--slate2);">🔵 WOT16496243 · ZONE 5 TECHNOLOGIES · SLA APR 13</span>
+            <button class="btn" onclick="toggleTicket('t4')" style="padding:3px 10px;font-size:.58rem;">Close ✕</button>
+          </div>
+          <div style="background:rgba(201,168,76,.08);padding:7px 11px;border-radius:5px;border-left:2px solid var(--gold);font-size:.8rem;color:var(--gold2);margin-bottom:10px;">⚠ Part in transit to Santa Maria PUDO. Verify arrival before committing to drive. Best times: Mon/Wed/Fri 9am–2pm but any time works.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;font-size:.82rem;">
+            <div><div class="stat-label">Device</div><div style="color:var(--cream);">Dell Pro 24 AIO QC24250</div></div>
+            <div><div class="stat-label">Serial</div><div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cream);">CN09W8F5WS20054M</div></div>
+            <div><div class="stat-label">Asset Tag</div><div style="font-family:'JetBrains Mono',monospace;color:var(--cream);">7ZV1DB4</div></div>
+            <div><div class="stat-label">Issue</div><div style="color:var(--slate2);">Cracked LCD — replace assembly</div></div>
+            <div><div class="stat-label">SLA</div><div style="color:var(--slate2);">Apr 13 · 17:59 PST · 5-Day</div></div>
+            <div><div class="stat-label">Scheduled</div><div style="color:var(--cream);">2:00pm today</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;font-size:.82rem;">
+            <div><div class="stat-label">📍 Location</div><div style="color:var(--cream);">827 Buckley Rd</div><div style="color:var(--text2);">San Luis Obispo, CA 93401</div></div>
+            <div><div class="stat-label">📞 Contact</div><div style="color:var(--cream);">Tristan Soares · <a href="tel:8055488663" style="color:var(--slate2);">805-548-8663</a></div><div style="color:var(--text2);">[see ServiceNow for email]</div><div style="color:var(--text2);font-size:.75rem;margin-top:2px;">Billable · Customer: Warm</div></div>
+          </div>
+          <div style="font-size:.78rem;margin-bottom:10px;">
+            <div class="stat-label" style="margin-bottom:7px;">🔧 Part — Santa Maria PUDO · 3070 Skyway Dr</div>
+            <div style="padding:4px 8px;background:var(--surface3);border-radius:4px;"><span style="color:var(--text2);">XHW1N</span> · 23.8" Touch LCD FHD ↩ Return · <span style="color:var(--gold2);">In Transit · ETA 10:30am</span></div>
+            <div style="margin-top:5px;font-size:.72rem;color:var(--text2);">Instructions: Replace LCD → verify system → run ePSA diagnostic. RD probability 21.83%.</div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-title" style="margin-bottom:8px;">📜 Activity Log</div>
+          <div class="activity-log">
+            <div class="al-entry"><span class="al-time">04/07 06:28</span> · <span class="al-user-sys">AZ Integration Dell</span> — Call assigned 04/07 14:00. ETA window 08:00–18:00.</div>
+            <div class="al-entry"><span class="al-time">04/06 19:11</span> · <span class="al-user-sys">Suzanne Marchese</span> — Task work logged (8 seconds).</div>
+            <div class="al-entry"><span class="al-time">04/06 16:15</span> · <span class="al-user-sys">MessageBus Integration</span> — Moved by Salesforce to territory.</div>
+            <div class="al-entry"><span class="al-time">04/06 10:47</span> · <span class="al-user-sys">AZ Integration Dell</span> — Rescheduled. Window 04/07–04/13. Reason: Client Appointment Booking.</div>
+            <div class="al-entry"><span class="al-time">04/06 10:45</span> · <span class="al-user-sys">AZ Integration Dell</span> — Ticket created. Assigned US-66880000-SBD-FES South CA. Transfer order TO6100909 for LCD to Santa Maria PUDO.</div>
+          </div>
+        </div>
+
+        <!-- Route -->
+        <div class="card" style="--card-accent:var(--slate);">
+          <div class="card-title">🗺 Route — Apr 7 (Activates on Contact Confirmation)</div>
+          <div id="routeStatus" style="font-size:.8rem;color:var(--rust2);font-style:italic;margin-bottom:10px;">⏸ Holding — confirm at least one customer before dispatching</div>
+          <div class="checklist-item"><input type="checkbox" id="r1"><label for="r1">1. WOT16483038 — Parts in hand ✓ · Landis+Gyr 3323 Cliff Dr SB · SLA 17:59 ⚠ ProSupport Plus</label></div>
+          <div class="checklist-item"><input type="checkbox" id="r2"><label for="r2">2. Goleta PUDO — 495 S Fairview · FF74N + 0PYG4 for UCSB · Sean</label></div>
+          <div class="checklist-item"><input type="checkbox" id="r3"><label for="r3">3. WOT16488814 — UCSB Rm 1101 SB · Call Tony first · SLA 18:00</label></div>
+          <div class="checklist-item"><input type="checkbox" id="r4"><label for="r4">4. Santa Maria PUDO — 3070 Skyway Dr · XK2JV (SLO COE) + verify XHW1N arrived (Zone 5)</label></div>
+          <div class="checklist-item"><input type="checkbox" id="r5"><label for="r5">5. WOT16494420 — SLO COE 3350 Education Dr · Call Glen first · SLA 18:00</label></div>
+          <div class="checklist-item"><input type="checkbox" id="r6"><label for="r6">6. WOT16496243 — Zone 5 Tech 827 Buckley Rd SLO · Call Tristan first · SLA Apr 13 · 2pm</label></div>
+        </div>
+
+        <!-- Field Notes -->
+        <div class="card" style="--card-accent:var(--slate);">
+          <div class="card-title">📝 Field Notes</div>
+          <textarea class="note-area" placeholder="Customer notes, access codes, part numbers, anything for today..."></textarea>
+        </div>
+
+      </div>
+
+      <!-- AI Field Briefing -->
+      <div>
+        <div class="card" style="--card-accent:var(--slate);">
+          <div class="card-title">🤖 AI Field Briefing</div>
+          <div class="chat-box" id="fieldChat">
+            <div class="chat-msg ai"><div class="role">Command</div><div class="body">Good morning, Matthew. Update your contact status for each ticket above, then I'll tell you exactly when and how to move. Ask me anything about routing, SLA priority, or parts.</div></div>
+          </div>
+          <div class="chat-input-row">
+            <textarea class="chat-input" id="fieldInput" placeholder="Ask about routing, parts, or today's priority..." rows="2" onkeydown="handleEnter(event,'field')"></textarea>
+            <button class="btn primary" onclick="sendChat('field')">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TRADING ===== -->
+<div class="panel" id="panel-trading">
+  <div class="panel-header">
+    <div class="panel-title-group"><div class="panel-icon">📈</div><div><div class="panel-title" style="color:var(--gold2)">Trading Desk</div><div class="panel-subtitle">Microcap Scanner · Watchlist · Journal</div></div></div>
+    <button class="btn primary" onclick="scanTickers()">⟳ Scan Microcaps</button>
+  </div>
+  <div class="panel-body">
+    <div class="grid-2-1">
+      <div>
+        <div class="card" style="--card-accent:var(--gold);">
+          <div class="card-title">👁 Watchlist</div>
+          <div id="watchlist">
+            <div class="ticker-row"><span class="ticker-sym">MVST</span><span class="ticker-name">Microvast Holdings</span><span class="ticker-price">$1.84</span><span class="ticker-change up">+4.2%</span></div>
+            <div class="ticker-row"><span class="ticker-sym">RNXT</span><span class="ticker-name">RenovoRx Inc.</span><span class="ticker-price">$0.31</span><span class="ticker-change down">-1.8%</span></div>
+            <div class="ticker-row"><span class="ticker-sym">BLNK</span><span class="ticker-name">Blink Charging</span><span class="ticker-price">$2.17</span><span class="ticker-change up">+2.1%</span></div>
+            <div class="ticker-row"><span class="ticker-sym">IDAI</span><span class="ticker-name">iDeanAI Corp.</span><span class="ticker-price">$0.09</span><span class="ticker-change up">+18.4%</span></div>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:8px;"><input id="newTicker" class="chat-input" style="min-height:34px;" placeholder="Add ticker..."/><button class="btn" onclick="addTicker()">Add</button></div>
+        </div>
+        <div class="card" style="--card-accent:var(--gold);"><div class="card-title">📓 Trade Journal</div><textarea class="note-area" placeholder="Entry/exit notes, thesis, what worked..."></textarea><div style="margin-top:8px;display:flex;gap:8px;"><button class="btn primary">Save Entry</button></div></div>
+      </div>
+      <div>
+        <div class="card" style="--card-accent:var(--gold);margin-bottom:16px;">
+          <div class="card-title">📊 Session Stats</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;">
+            <div><div class="stat-val" style="color:var(--gold2)">+$84</div><div class="stat-label">Today P&L</div></div>
+            <div><div class="stat-val">3</div><div class="stat-label">Trades Today</div></div>
+            <div><div class="stat-val" style="color:#6bbf7a">2W/1L</div><div class="stat-label">Win/Loss</div></div>
+            <div><div class="stat-val">67%</div><div class="stat-label">Win Rate</div></div>
+          </div>
+        </div>
+        <div class="card" style="--card-accent:var(--gold);">
+          <div class="card-title">🤖 Market Scout</div>
+          <div class="chat-box" id="tradingChat" style="min-height:140px;"><div class="chat-msg ai"><div class="role">Scout</div><div class="body">Ask me to scan for momentum, volume spikes, or explain any microcap move.</div></div></div>
+          <div class="chat-input-row"><textarea class="chat-input" id="tradingInput" placeholder="Any unusual volume today?" rows="2" onkeydown="handleEnter(event,'trading')"></textarea><button class="btn primary" onclick="sendChat('trading')">Send</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PHOTOGRAPHY ===== -->
+<div class="panel" id="panel-photo">
+  <div class="panel-header"><div class="panel-title-group"><div class="panel-icon">📷</div><div><div class="panel-title" style="color:var(--rust2)">Photography</div><div class="panel-subtitle">Projects · Ideas · Gear · Inspiration</div></div></div></div>
+  <div class="panel-body">
+    <div class="grid-2-1">
+      <div>
+        <div class="card" style="--card-accent:var(--rust);">
+          <div class="card-title">📁 Active Projects</div>
+          <div class="status-row"><span>Santa Barbara Coastline Series</span><span class="badge info">In Progress</span></div>
+          <div class="status-row"><span>Golden Hour — Garden & Flock</span><span class="badge ok">Editing</span></div>
+          <div class="status-row"><span>Long Exposure — Lompoc Night Sky</span><span class="badge warn">Planned</span></div>
+          <div class="status-row"><span>Macro — Wildflowers in Bloom</span><span class="badge warn">Seasonal</span></div>
+        </div>
+        <div class="card" style="--card-accent:var(--rust);"><div class="card-title">💡 Shot Ideas</div><textarea class="note-area" placeholder="Locations, lighting, compositions to try..."></textarea><div class="tags"><span class="tag">golden hour</span><span class="tag">long exposure</span><span class="tag">macro</span><span class="tag">coastal</span><span class="tag">night sky</span></div></div>
+      </div>
+      <div>
+        <div class="card" style="--card-accent:var(--rust);margin-bottom:16px;">
+          <div class="card-title">📦 Gear</div>
+          <div class="status-row"><span>Main Body</span><span class="badge info">Sony A7 IV</span></div>
+          <div class="status-row"><span>Lens 1</span><span class="badge info">24-70mm f/2.8</span></div>
+          <div class="status-row"><span>Lens 2</span><span class="badge info">85mm f/1.8</span></div>
+          <div class="status-row"><span>Batteries</span><span class="badge ok">Charged</span></div>
+        </div>
+        <div class="card" style="--card-accent:var(--rust);">
+          <div class="card-title">🤖 Photo Mentor</div>
+          <div class="chat-box" id="photoChat" style="min-height:140px;"><div class="chat-msg ai"><div class="role">Mentor</div><div class="body">Ask about composition, settings, locations near Lompoc or Santa Barbara, editing tips.</div></div></div>
+          <div class="chat-input-row"><textarea class="chat-input" id="photoInput" placeholder="How do I nail the Milky Way over the coast?" rows="2" onkeydown="handleEnter(event,'photo')"></textarea><button class="btn primary" onclick="sendChat('photo')">Send</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CREATIVE STUDIO ===== -->
+<div class="panel" id="panel-creative">
+  <div class="panel-header"><div class="panel-title-group"><div class="panel-icon">🎨</div><div><div class="panel-title" style="color:var(--lavender2)">Creative Studio</div><div class="panel-subtitle">Acrylic · Etsy · Woodworking · Ideas</div></div></div></div>
+  <div class="panel-body">
+    <div class="grid-2-1">
+      <div>
+        <div class="card" style="--card-accent:var(--lavender);">
+          <div class="card-title">🛍 Etsy Shop</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div><div class="stat-val" style="color:var(--lavender2)">12</div><div class="stat-label">Active Listings</div></div>
+            <div><div class="stat-val" style="color:#6bbf7a">3</div><div class="stat-label">Orders Pending</div></div>
+            <div><div class="stat-val">4.9★</div><div class="stat-label">Rating</div></div>
+          </div>
+          <div class="status-row"><span>Abstract Forest — 12×16"</span><span class="badge warn">Ship by Fri</span></div>
+          <div class="status-row"><span>Moon Phase Series — Print</span><span class="badge info">Processing</span></div>
+        </div>
+        <div class="card" style="--card-accent:var(--lavender);">
+          <div class="card-title">🖌 Current Paintings</div>
+          <div class="status-row"><span>Valley Oak at Dusk — 18×24"</span><span class="badge info">Layer 3/5</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:60%;background:var(--lavender);"></div></div>
+          <div class="status-row" style="margin-top:10px;"><span>Ocean Wave Triptych</span><span class="badge warn">Sketch</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:15%;background:var(--lavender);"></div></div>
+          <textarea class="note-area" style="min-height:70px;margin-top:10px;" placeholder="Color notes, technique ideas..."></textarea>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="--card-accent:var(--lavender);margin-bottom:16px;"><div class="card-title">💡 Ideas Bin</div><textarea class="note-area" style="min-height:140px;" placeholder="New painting concepts, Etsy ideas, wood projects..."></textarea></div>
+        <div class="card" style="--card-accent:var(--lavender);">
+          <div class="card-title">🤖 Creative Partner</div>
+          <div class="chat-box" id="creativeChat" style="min-height:140px;"><div class="chat-msg ai"><div class="role">Partner</div><div class="body">Tell me about a piece you're working on — color theory, Etsy copy, pricing, or brainstorming.</div></div></div>
+          <div class="chat-input-row"><textarea class="chat-input" id="creativeInput" placeholder="I'm trying to capture the feeling of..." rows="2" onkeydown="handleEnter(event,'creative')"></textarea><button class="btn primary" onclick="sendChat('creative')">Send</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== STOIC CORNER ===== -->
+<div class="panel" id="panel-stoic">
+  <div class="panel-header"><div class="panel-title-group"><div class="panel-icon">🌿</div><div><div class="panel-title" style="color:var(--sage2)">Stoic Corner</div><div class="panel-subtitle">Reflection · Meditation · Philosophy · Sobriety</div></div></div><button class="btn" onclick="newReflection()">New Reflection</button></div>
+  <div class="panel-body">
+    <div class="grid-2-1">
+      <div>
+        <div class="card" style="--card-accent:var(--sage);">
+          <div class="card-title">☀ Morning Reflection</div>
+          <div class="pull-quote" id="stoicQuote">"You have power over your mind — not outside events. Realize this, and you will find strength."<div class="attr">— Marcus Aurelius, Meditations</div></div>
+          <div class="cosmos-deco">☽ ✦ ☾</div>
+          <label style="font-size:.73rem;color:var(--text2);display:block;margin-bottom:5px;">Today I intend to...</label>
+          <textarea class="note-area" style="min-height:70px;" placeholder="Set your intention..."></textarea>
+        </div>
+        <div class="card" style="--card-accent:var(--sage);">
+          <div class="card-title">🌙 Evening Review</div>
+          <label style="font-size:.73rem;color:var(--text2);display:block;margin-bottom:5px;">What went well...</label>
+          <textarea class="note-area" style="min-height:55px;" placeholder="What I handled with virtue today..."></textarea>
+          <label style="font-size:.73rem;color:var(--text2);display:block;margin:8px 0 5px;">Where I could improve...</label>
+          <textarea class="note-area" style="min-height:55px;" placeholder="Where reason didn't lead today..."></textarea>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="--card-accent:var(--sage);margin-bottom:16px;text-align:center;">
+          <div class="card-title" style="justify-content:center;">🌟 Sobriety</div>
+          <div class="stat-val" style="font-size:2.6rem;color:var(--sage2);margin:8px 0;" id="sobrietyDays">365+</div>
+          <div class="stat-label">Days of clarity</div>
+          <div style="margin-top:12px;font-style:italic;color:var(--text2);font-size:.83rem;">"He who is brave is free."<br><span style="font-size:.7rem;">— Seneca</span></div>
+        </div>
+        <div class="card" style="--card-accent:var(--sage);margin-bottom:16px;">
+          <div class="card-title">🧘 Meditation Log</div>
+          <div class="status-row"><span>Today</span><span class="badge ok">✓ 15 min</span></div>
+          <div class="status-row"><span>Yesterday</span><span class="badge ok">✓ 20 min</span></div>
+          <div class="status-row"><span>This Week</span><span class="badge info">5 of 7 days</span></div>
+          <div style="margin-top:10px;display:flex;gap:8px;"><input class="chat-input" style="min-height:34px;" placeholder="Log today (e.g. 20 min)"/><button class="btn primary">Log</button></div>
+        </div>
+        <div class="card" style="--card-accent:var(--sage);">
+          <div class="card-title">🤖 Stoic Guide</div>
+          <div class="chat-box" id="stoicChat" style="min-height:120px;"><div class="chat-msg ai"><div class="role">Guide</div><div class="body">How are you showing up today, Matthew? Ask me about any passage, concept, or share what's weighing on you.</div></div></div>
+          <div class="chat-input-row"><textarea class="chat-input" id="stoicInput" placeholder="What does Marcus mean when he says..." rows="2" onkeydown="handleEnter(event,'stoic')"></textarea><button class="btn primary" onclick="sendChat('stoic')">Send</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GARDEN & FLOCK ===== -->
+<div class="panel" id="panel-garden">
+  <div class="panel-header"><div class="panel-title-group"><div class="panel-icon">🌱</div><div><div class="panel-title" style="color:var(--moss2)">Garden & Flock</div><div class="panel-subtitle">Easter Egger · Red · Floppy · Planting · Nature</div></div></div></div>
+  <div class="panel-body">
+    <div class="grid-2-1">
+      <div>
+        <div class="card" style="--card-accent:var(--moss2);">
+          <div class="card-title">🐔 Flock Status</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div><div style="font-size:1.4rem;">🥚</div><div class="stat-label">Eggs Today</div><div class="stat-val" style="font-size:1.3rem;" id="eggCount">4</div></div>
+            <div><div style="font-size:1.4rem;">🐓</div><div class="stat-label">Flock Count</div><div class="stat-val" style="font-size:1.3rem;">3</div></div>
+            <div><div style="font-size:1.4rem;">💧</div><div class="stat-label">Water</div><div class="stat-val" style="font-size:.9rem;color:var(--sage2);">Refilled</div></div>
+          </div>
+          <div class="status-row"><span>🐓 Easter Egger</span><span class="badge ok">Active</span></div>
+          <div class="status-row"><span>🐓 Red</span><span class="badge ok">Active</span></div>
+          <div class="status-row"><span>🐓 Floppy</span><span class="badge ok">Active</span></div>
+          <div style="margin-top:10px;display:flex;gap:8px;align-items:center;"><span style="font-size:.8rem;color:var(--text2);">Log eggs:</span><input type="number" class="chat-input" style="min-height:32px;width:65px;" min="0" max="20" value="4" oninput="document.getElementById('eggCount').textContent=this.value"/><button class="btn primary">Save</button></div>
+        </div>
+        <div class="card" style="--card-accent:var(--moss2);">
+          <div class="card-title">🌿 Garden Planner</div>
+          <div class="status-row"><span>Tomatoes (Early Girl)</span><span class="badge info">Seedling</span></div>
+          <div class="status-row"><span>Zucchini</span><span class="badge ok">Transplanted</span></div>
+          <div class="status-row"><span>Lavender</span><span class="badge ok">Established</span></div>
+          <div class="status-row"><span>Basil</span><span class="badge warn">Needs Water</span></div>
+          <div class="status-row"><span>Sunflowers</span><span class="badge info">Germinating</span></div>
+          <textarea class="note-area" style="min-height:65px;margin-top:10px;" placeholder="What to plant next, soil notes..."></textarea>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="--card-accent:var(--moss2);margin-bottom:16px;">
+          <div class="card-title">🌤 Season Tasks · Spring</div>
+          <div class="checklist-item"><input type="checkbox" id="g1"><label for="g1">Morning coop check & feed</label></div>
+          <div class="checklist-item"><input type="checkbox" id="g2"><label for="g2">Water garden beds</label></div>
+          <div class="checklist-item"><input type="checkbox" id="g3"><label for="g3">Turn compost</label></div>
+          <div class="checklist-item"><input type="checkbox" id="g4"><label for="g4">Check seedlings under grow light</label></div>
+          <div class="checklist-item"><input type="checkbox" id="g5"><label for="g5">Collect eggs (evening)</label></div>
+        </div>
+        <div class="card" style="--card-accent:var(--moss2);margin-bottom:16px;"><div class="card-title">📖 Nature Journal</div><textarea class="note-area" style="min-height:100px;" placeholder="What did you notice today?"></textarea></div>
+        <div class="card" style="--card-accent:var(--moss2);">
+          <div class="card-title">🤖 Garden Advisor</div>
+          <div class="chat-box" id="gardenChat" style="min-height:110px;"><div class="chat-msg ai"><div class="role">Advisor</div><div class="body">Ask about Easter Egger, Red, or Floppy — or planting schedules for Lompoc's climate.</div></div></div>
+          <div class="chat-input-row"><textarea class="chat-input" id="gardenInput" placeholder="Floppy hasn't laid in 3 days..." rows="2" onkeydown="handleEnter(event,'garden')"></textarea><button class="btn primary" onclick="sendChat('garden')">Send</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FIELD JOURNAL ===== -->
+<div class="panel" id="panel-journal">
+  <div class="panel-header">
+    <div class="panel-title-group"><div class="panel-icon">📋</div><div><div class="panel-title" style="color:var(--gold2)">Field Journal</div><div class="panel-subtitle">Work Log · Timecard · Mileage · Daily Record</div></div></div>
+    <div style="display:flex;gap:8px;"><button class="btn primary" onclick="addJournalEntry()">+ New Entry</button><button class="btn" onclick="exportJournal()">Export CSV</button></div>
+  </div>
+  <div class="panel-body">
+    <div class="grid-2-1">
+      <div>
+        <div class="card" style="--card-accent:var(--gold2);margin-bottom:0;">
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <input id="journalSearch" class="chat-input" style="min-height:34px;flex:1;" placeholder="Search WOT#, customer, keyword..." oninput="filterJournal()"/>
+            <select id="journalFilter" class="btn" style="font-family:'Crimson Pro',serif;font-size:.85rem;" onchange="filterJournal()">
+              <option value="all">All Types</option><option value="dispatch">Dispatch</option><option value="pudo">PUDO</option><option value="admin">Admin</option><option value="travel">Travel</option>
+            </select>
+          </div>
+        </div>
+        <div id="journalEntries" style="margin-top:14px;">
+          <div style="font-family:'Cinzel',serif;font-size:.63rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;">Tuesday · April 7, 2026</div>
+          <div class="journal-entry" data-type="dispatch" data-search="WOT16483038 landis gyr santa barbara latitude 5550 fleur phelps prosupport fan">
+            <div class="je-header"><span class="je-wot">WOT16483038</span><span class="je-date">Apr 7 · SLA 17:59 · ProSupport Plus</span></div>
+            <div class="je-site">Landis+Gyr · 3323 Cliff Dr, Santa Barbara</div>
+            <div class="je-note">Latitude 5550 · Fan noise after accidental drop. 8 parts in hand (confirmed delivered 4/6). DC training completed. Emailed Fleur for callback. Awaiting response before dispatch.</div>
+            <div class="tags"><span class="tag">Parts In Hand</span><span class="tag">ProSupport Plus</span><span class="tag">Awaiting Contact</span></div>
+          </div>
+          <div class="journal-entry" data-type="dispatch" data-search="WOT16488814 ucsb tony chabolla latitude 5440 motherboard pudo goleta">
+            <div class="je-header"><span class="je-wot">WOT16488814</span><span class="je-date">Apr 7 · SLA 18:00 · Scheduled 10:14am</span></div>
+            <div class="je-site">UCSB Social Sciences Rm 1101 · Santa Barbara</div>
+            <div class="je-note">Latitude 5440 · Power/startup failure, motherboard swap. Parts at Goleta PUDO (received ✓). Tony Chabolla — 2 VMs + 1 email, no response. Holding until confirmed.</div>
+            <div class="tags"><span class="tag">PUDO Goleta</span><span class="tag">Unresponsive</span><span class="tag">Holding</span></div>
+          </div>
+          <div class="journal-entry" data-type="dispatch" data-search="WOT16494420 slo county office education glen mccolm precision 3460 ssd santa maria pudo">
+            <div class="je-header"><span class="je-wot">WOT16494420</span><span class="je-date">Apr 7 · SLA 18:00 · Scheduled 12:19pm</span></div>
+            <div class="je-site">SLO County Office of Education · 3350 Education Dr, San Luis Obispo</div>
+            <div class="je-note">Precision 3460 · 1TB SSD failure. Part at Santa Maria PUDO (received ✓ 4/6). Glen McColm said he'd call back 4/6 — no callback yet. Holding.</div>
+            <div class="tags"><span class="tag">PUDO Santa Maria</span><span class="tag">Awaiting Callback</span><span class="tag">High RD Risk</span></div>
+          </div>
+          <div class="journal-entry" data-type="dispatch" data-search="WOT16496243 zone 5 technologies tristan soares pro AIO lcd screen slo buckley">
+            <div class="je-header"><span class="je-wot">WOT16496243</span><span class="je-date">Apr 7 · SLA Apr 13 · Scheduled 2:00pm</span></div>
+            <div class="je-site">Zone 5 Technologies · 827 Buckley Rd, San Luis Obispo</div>
+            <div class="je-note">Dell Pro 24 AIO · Cracked LCD. Part XHW1N in transit to Santa Maria PUDO — ETA 10:30am. No contact made yet. Verify part arrival before calling Tristan. Billable.</div>
+            <div class="tags"><span class="tag">LCD Replacement</span><span class="tag">In Transit</span><span class="tag">Billable</span></div>
+          </div>
+          <div style="font-family:'Cinzel',serif;font-size:.63rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin:16px 0 8px;">Monday · April 6, 2026</div>
+          <div class="journal-entry" data-type="admin" data-search="WOT16483038 landis gyr data center training fleur email">
+            <div class="je-header"><span class="je-wot">WOT16483038 · Admin</span><span class="je-date">Apr 6 · 22:40</span></div>
+            <div class="je-site">Remote — Landis+Gyr DC Training</div>
+            <div class="je-note">Completed data center training at bt.na.landisgyr.com/home. Sent email to Fleur Phelps with cell for callback to schedule appointment.</div>
+            <div class="tags"><span class="tag">Training Complete</span><span class="tag">Email Sent</span></div>
+          </div>
+          <div class="journal-entry" data-type="dispatch" data-search="WOT16494420 glen mccolm slo touched base callback">
+            <div class="je-header"><span class="je-wot">WOT16494420 · Contact</span><span class="je-date">Apr 6 · 11:54</span></div>
+            <div class="je-site">SLO County Office of Education — Phone</div>
+            <div class="je-note">Touched base with Glen McColm. He wanted to check on a few things — said he'd call back later. Awaiting callback to confirm service window.</div>
+            <div class="tags"><span class="tag">Customer Contact</span><span class="tag">Awaiting Callback</span></div>
+          </div>
+          <div class="journal-entry" data-type="dispatch" data-search="WOT16488814 tony chabolla email voicemail ucsb unresponsive">
+            <div class="je-header"><span class="je-wot">WOT16488814 · Contact</span><span class="je-date">Apr 6 · 10:32</span></div>
+            <div class="je-site">UCSB — Phone + Email Attempt</div>
+            <div class="je-note">Sent email to Tony Chabolla after 2 unanswered voicemails. Part in hand. If no reply, will call Dell to escalate.</div>
+            <div class="tags"><span class="tag">Unresponsive</span><span class="tag">Escalation Pending</span></div>
+          </div>
+        </div>
+        <div id="newEntryForm" style="display:none;margin-top:14px;">
+          <div class="card" style="--card-accent:var(--gold2);">
+            <div class="card-title">+ New Entry</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+              <input class="chat-input" id="je_wot" style="min-height:34px;" placeholder="WOT# or Title"/>
+              <input class="chat-input" id="je_site" style="min-height:34px;" placeholder="Customer / Location"/>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+              <input class="chat-input" id="je_date" style="min-height:34px;" placeholder="Date"/>
+              <select id="je_type" class="btn" style="font-family:'Crimson Pro',serif;font-size:.9rem;min-height:34px;"><option value="dispatch">Dispatch</option><option value="pudo">PUDO</option><option value="admin">Admin</option><option value="travel">Travel</option></select>
+            </div>
+            <textarea class="note-area" id="je_note" style="min-height:70px;" placeholder="Notes..."></textarea>
+            <div style="margin-top:8px;display:flex;gap:8px;"><button class="btn primary" onclick="saveJournalEntry()">Save</button><button class="btn" onclick="document.getElementById('newEntryForm').style.display='none'">Cancel</button></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="--card-accent:var(--gold2);margin-bottom:16px;">
+          <div class="card-title">📊 Week Summary</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div><div class="stat-val" style="color:var(--gold2)">4</div><div class="stat-label">Open Tickets</div></div>
+            <div><div class="stat-val">0</div><div class="stat-label">Confirmed Today</div></div>
+            <div><div class="stat-val" style="color:var(--rust2)">0</div><div class="stat-label">Dispatched</div></div>
+            <div><div class="stat-val">2</div><div class="stat-label">PUDO Stops Needed</div></div>
+          </div>
+        </div>
+        <div class="card" style="--card-accent:var(--gold2);margin-bottom:16px;">
+          <div class="card-title">🚗 Mileage Log</div>
+          <div class="status-row"><span>Mon Apr 6</span><span class="badge info">~150 mi</span></div>
+          <div class="status-row"><span>Tue Apr 7 (est.)</span><span class="badge warn">TBD — holding</span></div>
+          <div style="margin-top:10px;display:flex;gap:8px;">
+            <input class="chat-input" id="mileageInput" style="min-height:34px;" placeholder="Log today's miles..."/>
+            <button class="btn primary" onclick="logMileage()">Log</button>
+          </div>
+          <div id="mileageLog" style="margin-top:8px;font-size:.8rem;color:var(--text2);"></div>
+        </div>
+        <div class="card" style="--card-accent:var(--gold2);">
+          <div class="card-title">🤖 Journal AI</div>
+          <div class="chat-box" id="journalChat" style="min-height:140px;"><div class="chat-msg ai"><div class="role">Journal</div><div class="body">Ask me to summarize your week, draft a closure note, or help write an activity log entry.</div></div></div>
+          <div class="chat-input-row"><textarea class="chat-input" id="journalInput" placeholder="Summarize this week's work..." rows="2" onkeydown="handleEnter(event,'journal')"></textarea><button class="btn primary" onclick="sendChat('journal')">Send</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REPORTS ===== -->
+<div class="panel" id="panel-reports">
+  <div class="panel-header">
+    <div class="panel-title-group">
+      <div class="panel-icon">📄</div>
+      <div>
+        <div class="panel-title" style="color:var(--slate2)">Closure Reports</div>
+        <div class="panel-subtitle">Work Order Documentation · Archive · Export</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn primary" onclick="showNewReport()">+ Paste New Report</button>
+      <button class="btn" onclick="exportAllReports()">Export All CSV</button>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="grid-2-1">
+
+      <!-- Left: Report List -->
+      <div>
+        <!-- Search -->
+        <div class="card" style="--card-accent:var(--slate);margin-bottom:0;">
+          <div style="display:flex;gap:10px;align-items:center;">
+            <input id="reportSearch" class="chat-input" style="min-height:34px;flex:1;" placeholder="Search by WOT#, customer, date..." oninput="filterReports()"/>
+            <select id="reportStatusFilter" class="btn" style="font-family:'Crimson Pro',serif;font-size:.85rem;" onchange="filterReports()">
+              <option value="all">All Status</option>
+              <option value="closed">Closed</option>
+              <option value="draft">Draft</option>
+              <option value="escalated">Escalated</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Report Cards List -->
+        <div id="reportsList" style="margin-top:14px;"></div>
+
+        <!-- New Report Paste Form -->
+        <div id="newReportForm" style="display:none;margin-top:14px;">
+          <div class="card" style="--card-accent:var(--slate);">
+            <div class="card-title">📋 Paste Generated Report</div>
+            <div style="font-size:.82rem;color:var(--text2);margin-bottom:12px;font-style:italic;">
+              Generate the report with Claude in chat, then paste the full output below. Fill in the actuals, then save.
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+              <input class="chat-input" id="rpt_wot" style="min-height:34px;" placeholder="WOT# (e.g. WOT16501003)"/>
+              <input class="chat-input" id="rpt_customer" style="min-height:34px;" placeholder="Customer / Business Name"/>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;">
+              <input class="chat-input" id="rpt_date" style="min-height:34px;" placeholder="Date (e.g. Apr 8, 2026)"/>
+              <input class="chat-input" id="rpt_arrived" style="min-height:34px;" placeholder="Arrived on-site (time)"/>
+              <input class="chat-input" id="rpt_closed" style="min-height:34px;" placeholder="Closed (time)"/>
+            </div>
+            <select id="rpt_status" class="btn" style="font-family:'Crimson Pro',serif;font-size:.9rem;min-height:34px;margin-bottom:10px;">
+              <option value="closed">Closed — Resolved</option>
+              <option value="draft">Draft — In Progress</option>
+              <option value="escalated">Escalated</option>
+            </select>
+            <textarea class="note-area" id="rpt_body" style="min-height:280px;font-family:'JetBrains Mono',monospace;font-size:.75rem;line-height:1.7;" placeholder="Paste the full Claude-generated report here..."></textarea>
+            <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end;align-items:center;">
+              <button class="btn" onclick="document.getElementById('newReportForm').style.display='none'">Cancel</button>
+              <button class="btn primary" onclick="saveReport()">Save Report</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Report Viewer -->
+      <div>
+        <div class="card" style="--card-accent:var(--slate);height:100%;" id="reportViewer">
+          <div class="card-title">👁 Report Viewer</div>
+          <div id="reportViewerContent" style="font-size:.8rem;color:var(--text2);font-style:italic;padding:20px 0;text-align:center;">
+            Select a report from the list to view it here
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="panel" id="panel-daily">
+  <div class="panel-header">
+    <div class="panel-title-group">
+      <div class="panel-icon">🌄</div>
+      <div>
+        <div class="panel-title" style="color:#e8c078;">Daily Companion</div>
+        <div class="panel-subtitle">Morning · Midday · Evening · Wisdom · Journal</div>
+      </div>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--dim);" id="dc-phase-label">Morning Reflection</div>
+  </div>
+
+  <!-- Daily Companion inner tabs -->
+  <div style="display:flex;gap:2px;padding:0 30px;background:rgba(44,31,14,.6);border-bottom:1px solid rgba(200,151,58,.15);overflow-x:auto;scrollbar-width:none;">
+    <button class="dc-tab active" onclick="dcTab('morning',this)">☀ Morning</button>
+    <button class="dc-tab" onclick="dcTab('midday',this)">🌤 Midday</button>
+    <button class="dc-tab" onclick="dcTab('evening',this)">🌙 Evening</button>
+    <button class="dc-tab" onclick="dcTab('wisdom',this)">✦ Wisdom</button>
+    <button class="dc-tab" onclick="dcTab('dcjournal',this)">📖 Journal</button>
+  </div>
+
+  <div style="background:linear-gradient(180deg,#1a1208 0%,#2c1f0e 100%);min-height:calc(100vh - 280px);padding:32px 30px;">
+
+    <!-- MORNING -->
+    <div class="dc-panel active" id="dc-morning">
+      <div style="max-width:660px;margin:0 auto;">
+        <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.25em;color:#c8973a;text-transform:uppercase;margin-bottom:20px;opacity:.8;">Morning Reflection</div>
+        <div style="border-left:2px solid #c8973a;padding-left:22px;margin-bottom:24px;">
+          <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(18px,3vw,23px);font-weight:300;font-style:italic;line-height:1.55;color:#f5ead8;margin-bottom:10px;" id="dc-morning-quote">Loading...</div>
+          <div style="font-size:13px;color:#8c7d6a;letter-spacing:.05em;" id="dc-morning-source"></div>
+        </div>
+        <div style="font-size:15px;line-height:1.8;color:rgba(245,234,216,.75);margin-bottom:24px;" id="dc-morning-reflection"></div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(17px,2.5vw,21px);font-style:italic;font-weight:300;color:#e8c078;line-height:1.6;text-align:center;padding:12px 0;margin-bottom:24px;" id="dc-morning-question"></div>
+        <div style="background:rgba(245,234,216,.04);border:1px solid rgba(245,234,216,.1);border-radius:4px;padding:24px;margin-bottom:20px;">
+          <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.22em;color:#c8973a;text-transform:uppercase;margin-bottom:14px;opacity:.8;">Today I Intend To</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:18px;" id="dc-intentions"></ul>
+          <div style="font-size:13px;color:#8c7d6a;font-style:italic;margin-bottom:14px;" id="dc-carry-thought"></div>
+          <textarea id="dc-morning-note" style="width:100%;background:rgba(0,0,0,.2);border:1px solid rgba(245,234,216,.12);border-radius:3px;padding:14px;color:#f5ead8;font-family:'Crimson Pro',serif;font-size:15px;resize:vertical;min-height:90px;outline:none;line-height:1.65;" placeholder="Add your own intention for today..."></textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:10px;gap:10px;align-items:center;">
+            <span id="dc-morning-saved" style="font-size:12px;color:#7a8c6a;opacity:0;transition:opacity .4s;">Saved ✓</span>
+            <button class="dc-save-btn" onclick="dcSave('morning')">Save Intention</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIDDAY -->
+    <div class="dc-panel" id="dc-midday">
+      <div style="max-width:660px;margin:0 auto;">
+        <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.25em;color:#c8973a;text-transform:uppercase;margin-bottom:20px;opacity:.8;">Midday Pause</div>
+        <div style="border-left:2px solid #c8973a;padding-left:22px;margin-bottom:24px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(18px,3vw,23px);font-weight:300;font-style:italic;line-height:1.55;color:#f5ead8;margin-bottom:10px;" id="dc-midday-quote"></div>
+          <div style="font-size:13px;color:#8c7d6a;" id="dc-midday-source"></div>
+        </div>
+        <div style="font-size:15px;line-height:1.8;color:rgba(245,234,216,.75);margin-bottom:24px;" id="dc-midday-reflection"></div>
+        <div style="background:rgba(245,234,216,.04);border:1px solid rgba(245,234,216,.1);border-radius:4px;padding:24px;margin-bottom:20px;">
+          <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.22em;color:#c8973a;text-transform:uppercase;margin-bottom:14px;opacity:.8;">Midday Check-In</div>
+          <div id="dc-midday-checks" style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;"></div>
+          <textarea id="dc-midday-note" style="width:100%;background:rgba(0,0,0,.2);border:1px solid rgba(245,234,216,.12);border-radius:3px;padding:14px;color:#f5ead8;font-family:'Crimson Pro',serif;font-size:15px;resize:vertical;min-height:80px;outline:none;line-height:1.65;" placeholder="What needs your attention this afternoon?"></textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:10px;gap:10px;align-items:center;">
+            <span id="dc-midday-saved" style="font-size:12px;color:#7a8c6a;opacity:0;transition:opacity .4s;">Saved ✓</span>
+            <button class="dc-save-btn" onclick="dcSave('midday')">Save Note</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EVENING -->
+    <div class="dc-panel" id="dc-evening">
+      <div style="max-width:660px;margin:0 auto;">
+        <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.25em;color:#c8973a;text-transform:uppercase;margin-bottom:20px;opacity:.8;">Evening Review</div>
+        <div style="border-left:2px solid #c8973a;padding-left:22px;margin-bottom:24px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(18px,3vw,23px);font-weight:300;font-style:italic;line-height:1.55;color:#f5ead8;margin-bottom:10px;" id="dc-evening-quote"></div>
+          <div style="font-size:13px;color:#8c7d6a;" id="dc-evening-source"></div>
+        </div>
+        <div style="font-size:15px;line-height:1.8;color:rgba(245,234,216,.75);margin-bottom:24px;" id="dc-evening-reflection"></div>
+        <div style="background:rgba(245,234,216,.04);border:1px solid rgba(245,234,216,.1);border-radius:4px;padding:24px;margin-bottom:20px;">
+          <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.22em;color:#c8973a;text-transform:uppercase;margin-bottom:14px;opacity:.8;">Evening Review</div>
+          <div id="dc-evening-review" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;"></div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div>
+              <label style="font-size:12px;color:#8c7d6a;display:block;margin-bottom:6px;letter-spacing:.05em;">What went well today...</label>
+              <textarea id="dc-ev-well" style="width:100%;background:rgba(0,0,0,.2);border:1px solid rgba(245,234,216,.12);border-radius:3px;padding:12px;color:#f5ead8;font-family:'Crimson Pro',serif;font-size:15px;resize:vertical;min-height:65px;outline:none;line-height:1.65;" placeholder="What I handled with virtue..."></textarea>
+            </div>
+            <div>
+              <label style="font-size:12px;color:#8c7d6a;display:block;margin-bottom:6px;letter-spacing:.05em;">Where I fell short...</label>
+              <textarea id="dc-ev-short" style="width:100%;background:rgba(0,0,0,.2);border:1px solid rgba(245,234,216,.12);border-radius:3px;padding:12px;color:#f5ead8;font-family:'Crimson Pro',serif;font-size:15px;resize:vertical;min-height:65px;outline:none;line-height:1.65;" placeholder="Where reason didn't lead..."></textarea>
+            </div>
+            <div>
+              <label style="font-size:12px;color:#8c7d6a;display:block;margin-bottom:6px;letter-spacing:.05em;">I am grateful for...</label>
+              <textarea id="dc-ev-grateful" style="width:100%;background:rgba(0,0,0,.2);border:1px solid rgba(245,234,216,.12);border-radius:3px;padding:12px;color:#f5ead8;font-family:'Crimson Pro',serif;font-size:15px;resize:vertical;min-height:65px;outline:none;line-height:1.65;" placeholder="Three things, however small..."></textarea>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-top:12px;gap:10px;align-items:center;">
+            <span id="dc-evening-saved" style="font-size:12px;color:#7a8c6a;opacity:0;transition:opacity .4s;">Saved ✓</span>
+            <button class="dc-save-btn" onclick="dcSaveEvening()">Save Evening Review</button>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:14px;color:#8c7d6a;font-style:italic;padding:10px 0;" id="dc-closing-thought"></div>
+      </div>
+    </div>
+
+    <!-- WISDOM -->
+    <div class="dc-panel" id="dc-wisdom">
+      <div style="max-width:660px;margin:0 auto;">
+        <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.25em;color:#c8973a;text-transform:uppercase;margin-bottom:20px;opacity:.8;">Wisdom Archive</div>
+        <div id="dc-wisdom-list" style="display:flex;flex-direction:column;gap:16px;margin-bottom:36px;"></div>
+        <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.25em;color:#7a8c6a;text-transform:uppercase;margin-bottom:16px;opacity:.8;">Earth & Cosmos</div>
+        <div id="dc-earth-list" style="display:flex;flex-direction:column;gap:16px;"></div>
+      </div>
+    </div>
+
+    <!-- JOURNAL -->
+    <div class="dc-panel" id="dc-dcjournal">
+      <div style="max-width:660px;margin:0 auto;">
+        <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.25em;color:#c8973a;text-transform:uppercase;margin-bottom:20px;opacity:.8;">Free Journal</div>
+        <textarea id="dc-free-journal" style="width:100%;background:rgba(0,0,0,.25);border:1px solid rgba(245,234,216,.12);border-radius:4px;padding:20px;color:#f5ead8;font-family:'Crimson Pro',serif;font-size:16px;resize:vertical;min-height:220px;outline:none;line-height:1.8;" placeholder="Write freely. This page is yours alone."></textarea>
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:12px;align-items:center;">
+          <span id="dc-journal-saved" style="font-size:12px;color:#7a8c6a;opacity:0;transition:opacity .4s;">Entry saved ✓</span>
+          <button class="dc-save-btn" onclick="dcSaveJournal()">Save Entry</button>
+          <button class="dc-save-btn" style="background:transparent;color:#8c7d6a;border-color:rgba(245,234,216,.15);" onclick="if(confirm('Start fresh?'))document.getElementById('dc-free-journal').value=''">Clear</button>
+        </div>
+        <div style="margin-top:32px;">
+          <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.22em;color:#8c7d6a;text-transform:uppercase;margin-bottom:16px;opacity:.8;">Past Entries</div>
+          <div id="dc-past-entries"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">"The impediment to action advances action. What stands in the way becomes the way." — Marcus Aurelius</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+// ===== CLOCK =====
+function updateClock(){
+  const n=new Date();
+  document.getElementById('clock').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('dateDisplay').textContent=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+}
+setInterval(updateClock,1000); updateClock();
+
+// ===== QUOTES =====
+const quotes=[
+  "You have power over your mind — not outside events. Realize this, and you will find strength. — Marcus Aurelius",
+  "The obstacle is the way. — Marcus Aurelius",
+  "Waste no more time arguing what a good man should be. Be one. — Marcus Aurelius",
+  "He suffers more than necessary who suffers before it is necessary. — Seneca",
+  "Make the best use of what is in your power, and take the rest as it happens. — Epictetus",
+  "Begin at once to live, and count each separate day as a separate life. — Seneca",
+  "The happiness of your life depends upon the quality of your thoughts. — Marcus Aurelius",
+  "If it is not right, do not do it; if it is not true, do not say it. — Marcus Aurelius",
+];
+const stoicQuotes=[
+  {text:"You have power over your mind — not outside events. Realize this, and you will find strength.",attr:"Marcus Aurelius, Meditations"},
+  {text:"The obstacle is the way. What stands in the way becomes the way.",attr:"Marcus Aurelius"},
+  {text:"He who is brave is free.",attr:"Seneca"},
+  {text:"Make the best use of what is in your power, and take the rest as it happens.",attr:"Epictetus, Enchiridion"},
+  {text:"Waste no more time arguing what a good man should be. Be one.",attr:"Marcus Aurelius"},
+  {text:"Begin at once to live, and count each day as a separate life.",attr:"Seneca"},
+];
+document.getElementById('dailyQuote').textContent='"'+quotes[new Date().getDay()%quotes.length]+'"';
+
+// ===== PANEL SWITCH =====
+function switchPanel(name,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  const t=document.getElementById('panel-'+name);
+  if(t) t.classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+// Activate first panel on load
+switchPanel('field', document.querySelector('.nav-tab.t-field'));
+
+// ===== CONTACT STATUS =====
+const contactState={cs1:'none',cs2:'none',cs3:'none',cs4:'none',cs5:'none'};
+function setContact(groupId,status){
+  contactState[groupId]=status;
+  const group=document.getElementById(groupId);
+  group.querySelectorAll('.cs-btn').forEach(b=>{
+    b.classList.remove('active-attempted','active-confirmed','active-noresponse');
+  });
+  const clicked=group.querySelector('[onclick*="'+status+'"]');
+  if(clicked) clicked.classList.add('active-'+status);
+  updateDispatchDecision();
+}
+function updateDispatchDecision(){
+  const states=Object.values(contactState);
+  const confirmed=states.filter(s=>s==='confirmed').length;
+  const attempted=states.filter(s=>s==='attempted'||s==='noresponse').length;
+  const banner=document.getElementById('dispatchBanner');
+  const routeStatus=document.getElementById('routeStatus');
+  if(confirmed>0){
+    banner.className='dispatch-flag go';
+    banner.textContent='✅ GO — '+confirmed+' customer(s) confirmed. Dispatch to confirmed stops. Batch remaining by area.';
+    routeStatus.style.color='var(--moss2)';
+    routeStatus.textContent='✅ Active — dispatch to confirmed stops only';
+  } else if(attempted>0){
+    banner.className='dispatch-flag watch';
+    banner.textContent='⏳ HOLD — Contact attempted on all tickets. Stay local until at least one confirms. Document all attempts in ServiceNow.';
+    routeStatus.style.color='var(--gold2)';
+    routeStatus.textContent='⏳ Waiting — update contact status when customers respond';
+  } else {
+    banner.className='dispatch-flag hold';
+    banner.textContent='🚫 HOLD — No contact status set. Mark each ticket as Attempted, Confirmed, or No Response.';
+  }
+}
+
+// ===== TICKET TOGGLE =====
+function toggleTicket(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.style.display=el.style.display==='none'?'block':'none';
+}
+
+// ===== WEATHER =====
+async function fetchWeather(){
+  try{
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.6386&longitude=-120.4579&current=temperature_2m,weathercode,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FLos_Angeles');
+    const d=await r.json();
+    const c=d.current;
+    const icon=c.weathercode===0?'☀️':c.weathercode<=3?'⛅':c.weathercode<=67?'🌧':'⛈';
+    document.getElementById('weatherWidget').textContent=icon+' Lompoc '+Math.round(c.temperature_2m)+'°F · Wind '+Math.round(c.windspeed_10m)+' mph';
+  }catch(e){document.getElementById('weatherWidget').textContent='🌤 Lompoc, CA';}
+}
+fetchWeather(); setInterval(fetchWeather,15*60*1000);
+
+// ===== CHAT =====
+const systemPrompts={
+  field:`You are Matthew's Field Operations AI. He is an IT field engineer in Lompoc, CA working Dell hardware via ServiceNow/Unisys. Territory: Santa Barbara, Ventura, SLO County. PUDO contacts: Bill at Oxnard FedEx, Sean at Goleta FedEx (495 S Fairview). Santa Maria PUDO at 3070 Skyway Dr. His dispatch philosophy: never drive to a site without confirmed customer contact first. Stay local and batch tickets geographically once responses come in. Today's 5 tickets: WOT16501003 AAA Lompoc LOCAL (UPS battery, no parts, phone SLA 12:09pm today, scheduled tomorrow Apr 8 — CALL SHAWN MATZ NOW at 714-850-8250), WOT16483038 Landis+Gyr SB (ProSupport Plus SLA 17:59 - parts in hand), WOT16488814 UCSB SB (SLA 18:00 - PUDO Goleta), WOT16494420 SLO COE (SLA 18:00 - PUDO Santa Maria), WOT16496243 Zone 5 Tech SLO (SLA Apr 13 - LCD in transit). SB/SLO customers unresponsive. Prioritize the local Lompoc ticket. Be concise and tactical.`,
+  trading:`You are Matthew's Trading Desk AI. He is a microcap day trader. Help with setups, volume scans, market moves, and keeping his journal. Be direct and data-focused.`,
+  photo:`You are Matthew's Photography Mentor AI. He shoots coastal landscapes, night sky, golden hour, and macro near Lompoc and Santa Barbara. Help with composition, settings, locations, and editing.`,
+  creative:`You are Matthew's Creative Studio AI. He paints acrylics, runs an Etsy shop, and loves making things. Help with color theory, Etsy copy, pricing, and creative direction.`,
+  stoic:`You are Matthew's Stoic Guide AI. He recently discovered Stoicism and it has become foundational — especially Marcus Aurelius. He has over a year of sobriety. He integrates Stoicism with earth-based spirituality. Speak with warmth and depth.`,
+  garden:`You are Matthew's Garden & Flock Advisor AI. He keeps 3 chickens (Easter Egger, Red, Floppy) and gardens in Lompoc, CA. Mediterranean climate, mild winters. Help with chicken care, planting, soil, and seasonal rhythms.`,
+  journal:`You are Matthew's Field Journal AI. Help him summarize work weeks, draft activity log entries, find past ticket info, write closure notes, and keep documentation clean. Be concise and professional.`,
+};
+const conversations={field:[],trading:[],photo:[],creative:[],stoic:[],garden:[],journal:[]};
+async function sendChat(section){
+  const inputEl=document.getElementById(section+'Input');
+  const chatEl=document.getElementById(section+'Chat');
+  const msg=inputEl.value.trim();
+  if(!msg) return;
+  inputEl.value='';
+  appendMsg(chatEl,'user','You',msg);
+  conversations[section].push({role:'user',content:msg});
+  const loadId='load-'+Date.now();
+  chatEl.insertAdjacentHTML('beforeend',`<div class="chat-msg ai" id="${loadId}"><div class="role">...</div><div class="body"><span class="spinner"></span> Thinking...</div></div>`);
+  chatEl.scrollTop=chatEl.scrollHeight;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:systemPrompts[section],messages:conversations[section]})});
+    const data=await res.json();
+    const reply=data.content?.[0]?.text||'No response.';
+    conversations[section].push({role:'assistant',content:reply});
+    document.getElementById(loadId)?.remove();
+    appendMsg(chatEl,'ai',{field:'Command',trading:'Scout',photo:'Mentor',creative:'Partner',stoic:'Guide',garden:'Advisor',journal:'Journal'}[section],reply);
+  }catch(e){const el=document.getElementById(loadId);if(el)el.innerHTML='<div class="role">Error</div><div class="body" style="color:#c97070;">Connection issue.</div>';}
+}
+function appendMsg(box,type,label,text){
+  const d=document.createElement('div');
+  d.className='chat-msg '+type;
+  d.innerHTML=`<div class="role">${label}</div><div class="body">${text.replace(/\n/g,'<br>')}</div>`;
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
+}
+function handleEnter(e,section){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat(section);}}
+
+// ===== MISC =====
+function refreshFieldAI(){document.getElementById('fieldInput').value='Give me a morning briefing based on today\'s 4 tickets and the fact that all customers are currently unresponsive.';sendChat('field');}
+function newReflection(){const q=stoicQuotes[Math.floor(Math.random()*stoicQuotes.length)];document.getElementById('stoicQuote').innerHTML='"'+q.text+'"<div class="attr">— '+q.attr+'</div>';}
+function addTicker(){const v=document.getElementById('newTicker').value.trim().toUpperCase();if(!v)return;document.getElementById('watchlist').insertAdjacentHTML('beforeend',`<div class="ticker-row"><span class="ticker-sym">${v}</span><span class="ticker-name">—</span><span class="ticker-price">$—</span><span class="ticker-change" style="color:var(--dim)">—</span></div>`);document.getElementById('newTicker').value='';}
+function scanTickers(){document.getElementById('tradingInput').value='Scan for unusual volume or momentum in sub-$2 microcaps today.';sendChat('trading');}
+function filterJournal(){const s=document.getElementById('journalSearch').value.toLowerCase();const f=document.getElementById('journalFilter').value;document.querySelectorAll('.journal-entry').forEach(el=>{const ms=!s||(el.dataset.search||'').includes(s);const mf=f==='all'||el.dataset.type===f;el.style.display=(ms&&mf)?'block':'none';});}
+function addJournalEntry(){const f=document.getElementById('newEntryForm');f.style.display=f.style.display==='none'?'block':'none';}
+function saveJournalEntry(){const wot=document.getElementById('je_wot').value.trim();const note=document.getElementById('je_note').value.trim();if(!wot||!note)return;const entry=document.createElement('div');entry.className='journal-entry';entry.dataset.type=document.getElementById('je_type').value;entry.dataset.search=(wot+' '+document.getElementById('je_site').value+' '+note).toLowerCase();entry.innerHTML=`<div class="je-header"><span class="je-wot">${wot}</span><span class="je-date">${document.getElementById('je_date').value}</span></div><div class="je-site">${document.getElementById('je_site').value}</div><div class="je-note">${note}</div>`;document.getElementById('journalEntries').prepend(entry);['je_wot','je_site','je_date','je_note'].forEach(id=>document.getElementById(id).value='');document.getElementById('newEntryForm').style.display='none';}
+function exportJournal(){const entries=document.querySelectorAll('.journal-entry');let csv='WOT,Site,Date,Type,Notes\n';entries.forEach(el=>{const wot=el.querySelector('.je-wot')?.textContent||'';const site=el.querySelector('.je-site')?.textContent||'';const date=el.querySelector('.je-date')?.textContent||'';const type=el.dataset.type||'';const note=(el.querySelector('.je-note')?.textContent||'').replace(/"/g,'""');csv+=`"${wot}","${site}","${date}","${type}","${note}"\n`;});const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='field-journal.csv';a.click();}
+function logMileage(){const v=document.getElementById('mileageInput').value.trim();if(!v)return;const now=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});document.getElementById('mileageLog').innerHTML+=`<div style="padding:3px 0;border-bottom:1px solid var(--border);font-size:.78rem;">${now} — ${v}</div>`;document.getElementById('mileageInput').value='';}
+
+// ===== SOBRIETY =====
+const sobrietyStart=new Date('2024-04-06');
+document.getElementById('sobrietyDays').textContent=Math.floor((new Date()-sobrietyStart)/(1000*60*60*24));
+
+// ===== REPORTS =====
+const WOT16501003_REPORT = `WORK ORDER CLOSURE REPORT
+Generated: April 8, 2026 · 17:45 PST
+Run by: Matthew Weddington · Field Engineer · Unisys Corporation
+
+─────────────────────────────────────────
+TICKET IDENTIFICATION
+─────────────────────────────────────────
+Work Order:        WOT16501003
+Parent WO:         WO10336733
+Company:           Automobile Club of Southern California
+Business Name:     AAA Altoona — Lompoc, CA
+Assignment Group:  US-66880000-SBD-FES South CA
+Vendor:            Unisys Corporation
+Engineer:          Matthew Weddington
+
+─────────────────────────────────────────
+SITE INFORMATION
+─────────────────────────────────────────
+Address:           525 W Central Ave, Lompoc, CA 93436
+County:            Santa Barbara
+Location Type:     Data Center
+Primary Contact:   Jessica Garcia · 805-740-5209 (corrected from Shawn Matz)
+Secondary Contact: Shawn Matz · 714-850-8250 · Matz.Shawn@ace.aaa.com
+On-Site Contact:   Scott (confirmed part status via three-way call)
+
+─────────────────────────────────────────
+ISSUE SUMMARY
+─────────────────────────────────────────
+Category:          Hardware Problem — UPS / Power Infrastructure
+Description:       CA - Lompoc Data Center UPS Stating Battery Near End of Life
+
+GSOC contacted NOC regarding a possible commercial power issue at the Lompoc, CA data center. NOC investigation confirmed no active commercial power issues. However, the UPS unit was found displaying a warning: "Battery Near End of Life — Order Replacement Battery." UPS Status page confirmed battery health as Near End of Life. Battery replacement date on record was set for 09/14/2026. Ticket opened as a proactive maintenance dispatch.
+
+─────────────────────────────────────────
+TIMELINE OF EVENTS
+─────────────────────────────────────────
+Apr 7 · 11:09am — Ticket WOT16501003 created by Sarika Gupta. Auto-generated as first task for WO10336733. Assigned to Matthew Weddington via assignment rule GEN-US-SBD-CA-Santa Barbara-700-1806. Target phone response: 12:09pm. Target restore: Apr 8 · 3:00pm.
+
+Apr 7 · 11:13am — Ticket rescheduled. Service window set for Apr 8 · 5:00–7:00pm. Estimated travel start 3:44pm, scheduled start 4:44pm, estimated job duration 30 minutes.
+
+Apr 7 · 11:27am — Salesforce scheduling confirmation received. Start time locked: Apr 8 · 4:44pm.
+
+Apr 7 · ~11:45am — Engineer Matthew Weddington initiates contact. Called primary contact Shawn Matz at 714-850-8250. Shawn connected Scott via three-way call.
+
+Apr 7 · ~11:50am — Three-way call: Shawn Matz, Scott, and engineer. Scott confirmed: (1) Part initially reported as returned to sender — INCORRECT, battery is confirmed on-site. (2) Jessica Garcia should be primary contact — entered incorrectly in ServiceNow. (3) Hot-swap procedure confirmed — zero business impact. (4) After-hours 5:00pm window agreed as precautionary measure.
+
+Apr 7 · ~12:05pm — Engineer documented call outcome. Confirmed dispatch for Apr 8 at 4:45pm arrival. Contact correction noted.
+
+Apr 8 · 3:44pm — Engineer departs for site.
+
+Apr 8 · 4:45pm — Engineer arrives on-site at AAA Altoona, 525 W Central Ave, Lompoc.
+
+Apr 8 · 5:00pm — Work begins. UPS battery located on-site, confirmed matching part. Hot-swap procedure initiated per manufacturer protocol.
+
+Apr 8 · 5:28pm — Battery replacement complete. UPS unit powered on. Battery health warning cleared. UPS displaying normal operational status.
+
+Apr 8 · 5:35pm — Engineer verified UPS status page — battery health confirmed green. No alarms present. System stable.
+
+Apr 8 · 5:40pm — Jessica Garcia notified of completion. No disruption to business operations confirmed. Customer satisfaction confirmed.
+
+Apr 8 · 5:45pm — Engineer departs site.
+
+─────────────────────────────────────────
+RESOLUTION SUMMARY
+─────────────────────────────────────────
+Resolution Code:   Hardware Replaced — Successful
+Root Cause:        UPS battery reached end-of-life threshold triggering automated warning. Proactive replacement completed before failure.
+Parts Used:        UPS replacement battery (confirmed on-site prior to dispatch — no PUDO pickup required)
+Returnable Parts:  None
+Business Impact:   Zero — hot-swap procedure, no downtime, no data loss, no service interruption
+SLA Status:        Met ✓
+
+─────────────────────────────────────────
+CONTACT LOG
+─────────────────────────────────────────
+Apr 7 · 11:45am | Phone     | Shawn Matz · 714-850-8250      | Three-way call initiated
+Apr 7 · 11:50am | Phone 3-way | Shawn Matz + Scott           | Part confirmed on-site, window confirmed, contact correction noted
+Apr 8 · 5:40pm  | In-person | Jessica Garcia                  | Completion confirmed, no issues
+
+─────────────────────────────────────────
+ENGINEER NOTES
+─────────────────────────────────────────
+Contact order in ServiceNow was entered incorrectly at ticket creation — Shawn Matz listed as primary, Jessica Garcia as secondary. Correct order per on-site confirmation: Jessica Garcia is primary. Recommend updating contact records in customer profile to prevent future misdirection.
+
+Part was initially reported as returned to sender — this was a miscommunication, confirmed corrected by Scott during Apr 7 call. Part was physically on-site upon arrival Apr 8.
+
+─────────────────────────────────────────
+CLOSURE SIGN-OFF
+─────────────────────────────────────────
+Closed by:                  Matthew Weddington · Field Engineer
+Closed:                     April 8, 2026 · 17:45 PST
+Customer Confirmed:         Yes — Jessica Garcia
+Follow-up Required:         None
+Repeat Dispatch Risk:       Low`;
+
+// Seed initial report if not already in storage
+function reportsInit() {
+  const existing = JSON.parse(localStorage.getItem('cc_reports') || '[]');
+  if (!existing.find(r => r.wot === 'WOT16501003')) {
+    existing.unshift({
+      id: 'rpt_' + Date.now(),
+      wot: 'WOT16501003',
+      customer: 'AAA Altoona — Lompoc, CA',
+      date: 'Apr 8, 2026',
+      arrived: '4:45pm',
+      closed: '5:45pm',
+      status: 'closed',
+      body: WOT16501003_REPORT,
+      created: new Date().toISOString()
+    });
+    localStorage.setItem('cc_reports', JSON.stringify(existing));
+  }
+  renderReportsList();
+}
+
+function renderReportsList() {
+  const reports = JSON.parse(localStorage.getItem('cc_reports') || '[]');
+  const search = (document.getElementById('reportSearch')?.value || '').toLowerCase();
+  const statusFilter = document.getElementById('reportStatusFilter')?.value || 'all';
+  const container = document.getElementById('reportsList');
+  if (!container) return;
+
+  const filtered = reports.filter(r => {
+    const matchSearch = !search || (r.wot + r.customer + r.date).toLowerCase().includes(search);
+    const matchStatus = statusFilter === 'all' || r.status === statusFilter;
+    return matchSearch && matchStatus;
+  });
+
+  if (!filtered.length) {
+    container.innerHTML = '<div style="color:var(--text2);font-style:italic;font-size:.85rem;padding:10px 0;">No reports found.</div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map(r => {
+    const statusColor = r.status === 'closed' ? 'var(--moss2)' : r.status === 'escalated' ? 'var(--rust2)' : 'var(--gold2)';
+    const statusLabel = r.status === 'closed' ? '✅ Closed' : r.status === 'escalated' ? '🔴 Escalated' : '📝 Draft';
+    return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px 16px;margin-bottom:10px;cursor:pointer;border-left:3px solid ${statusColor};" onclick="viewReport('${r.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--gold);">${r.wot}</span>
+        <span style="font-size:.7rem;color:${statusColor};">${statusLabel}</span>
+      </div>
+      <div style="font-size:.88rem;color:var(--cream);margin-bottom:3px;">${r.customer}</div>
+      <div style="font-size:.75rem;color:var(--text2);">${r.date} · Arrived: ${r.arrived} · Closed: ${r.closed}</div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="btn" style="font-size:.55rem;padding:4px 10px;" onclick="event.stopPropagation();copyReport('${r.id}')">📋 Copy</button>
+        <button class="btn" style="font-size:.55rem;padding:4px 10px;" onclick="event.stopPropagation();exportReportPDF('${r.id}')">⬇ Export</button>
+        <button class="btn" style="font-size:.55rem;padding:4px 10px;color:var(--rust2);border-color:var(--rust2);" onclick="event.stopPropagation();deleteReport('${r.id}')">🗑 Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function viewReport(id) {
+  const reports = JSON.parse(localStorage.getItem('cc_reports') || '[]');
+  const r = reports.find(x => x.id === id);
+  if (!r) return;
+  const statusColor = r.status === 'closed' ? 'var(--moss2)' : r.status === 'escalated' ? 'var(--rust2)' : 'var(--gold2)';
+  document.getElementById('reportViewerContent').innerHTML = `
+    <div style="margin-bottom:14px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--gold);margin-bottom:3px;">${r.wot}</div>
+        <div style="font-size:.95rem;color:var(--cream);font-weight:600;">${r.customer}</div>
+        <div style="font-size:.78rem;color:var(--text2);margin-top:2px;">${r.date} · Arrived ${r.arrived} · Closed ${r.closed}</div>
+      </div>
+      <span style="font-size:.72rem;color:${statusColor};border:1px solid ${statusColor};padding:3px 10px;border-radius:4px;">${r.status.toUpperCase()}</span>
+    </div>
+    <div class="divider"></div>
+    <pre style="white-space:pre-wrap;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text);line-height:1.75;max-height:520px;overflow-y:auto;scrollbar-width:thin;">${r.body}</pre>
+    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+      <button class="btn primary" onclick="copyReport('${r.id}')">📋 Copy Full Report</button>
+      <button class="btn" onclick="exportReportPDF('${r.id}')">⬇ Export Text File</button>
+    </div>`;
+}
+
+function showNewReport() {
+  document.getElementById('newReportForm').style.display = 'block';
+  document.getElementById('newReportForm').scrollIntoView({behavior:'smooth'});
+}
+
+function saveReport() {
+  const wot = document.getElementById('rpt_wot').value.trim();
+  const body = document.getElementById('rpt_body').value.trim();
+  if (!wot || !body) { alert('WOT# and report body are required.'); return; }
+  const reports = JSON.parse(localStorage.getItem('cc_reports') || '[]');
+  reports.unshift({
+    id: 'rpt_' + Date.now(),
+    wot,
+    customer: document.getElementById('rpt_customer').value.trim() || '—',
+    date: document.getElementById('rpt_date').value.trim() || new Date().toLocaleDateString(),
+    arrived: document.getElementById('rpt_arrived').value.trim() || '—',
+    closed: document.getElementById('rpt_closed').value.trim() || '—',
+    status: document.getElementById('rpt_status').value,
+    body,
+    created: new Date().toISOString()
+  });
+  localStorage.setItem('cc_reports', JSON.stringify(reports));
+  ['rpt_wot','rpt_customer','rpt_date','rpt_arrived','rpt_closed','rpt_body'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('newReportForm').style.display = 'none';
+  renderReportsList();
+}
+
+function filterReports() { renderReportsList(); }
+
+function copyReport(id) {
+  const reports = JSON.parse(localStorage.getItem('cc_reports') || '[]');
+  const r = reports.find(x => x.id === id);
+  if (!r) return;
+  navigator.clipboard.writeText(r.body).then(() => {
+    alert('Report copied to clipboard — ready to paste into ServiceNow or email.');
+  });
+}
+
+function exportReportPDF(id) {
+  const reports = JSON.parse(localStorage.getItem('cc_reports') || '[]');
+  const r = reports.find(x => x.id === id);
+  if (!r) return;
+  const blob = new Blob([r.body], {type: 'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = r.wot + '_ClosureReport_' + r.date.replace(/[\s,]/g,'') + '.txt';
+  a.click();
+}
+
+function deleteReport(id) {
+  if (!confirm('Delete this report? This cannot be undone.')) return;
+  let reports = JSON.parse(localStorage.getItem('cc_reports') || '[]');
+  reports = reports.filter(r => r.id !== id);
+  localStorage.setItem('cc_reports', JSON.stringify(reports));
+  document.getElementById('reportViewerContent').innerHTML = '<div style="color:var(--text2);font-style:italic;font-size:.85rem;padding:20px 0;text-align:center;">Select a report from the list to view it here</div>';
+  renderReportsList();
+}
+
+function exportAllReports() {
+  const reports = JSON.parse(localStorage.getItem('cc_reports') || '[]');
+  if (!reports.length) { alert('No reports to export.'); return; }
+  let csv = 'WOT,Customer,Date,Arrived,Closed,Status\n';
+  reports.forEach(r => csv += `"${r.wot}","${r.customer}","${r.date}","${r.arrived}","${r.closed}","${r.status}"\n`);
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'closure_reports_index.csv';
+  a.click();
+}
+
+// Patch switchPanel to init reports on first load
+const _origSwitchReports = switchPanel;
+switchPanel = function(name, btn) {
+  _origSwitchReports(name, btn);
+  if (name === 'reports') reportsInit();
+};
+
+// ===== DAILY COMPANION =====
+const dcToday=new Date();
+const dcDay=dcToday.getDay();
+const morningContent=[
+  {quote:"You have power over your mind — not outside events. Realize this, and you will find strength.",source:"Marcus Aurelius, Meditations",reflection:"Today is not promised to be easy. But it is promised to be <strong>yours</strong>. Every engineer who shows up with clarity — who contacts before dispatching, who documents before driving — moves with purpose. That is the Stoic way applied to real life.",question:"What is the one thing I can control completely today?",carry:"The quality of your attention determines the quality of your day.",intentions:["Contact every customer before committing to any drive","Document each action in ServiceNow as I go","Return every returnable part without fail"]},
+  {quote:"The obstacle is the way. What stands in the way becomes the way.",source:"Marcus Aurelius",reflection:"When tickets pile up and customers go quiet, the untrained mind sees chaos. The trained mind sees <strong>sequence</strong>. The delay is not the enemy — it is the space in which preparation happens.",question:"What is standing in my way, and how is it actually guiding me?",carry:"Efficiency over motion. Move with purpose or don't move at all.",intentions:["Batch my stops geographically before I leave home","Treat every customer interaction as the whole of my reputation","Find one thing today to be genuinely grateful for"]},
+  {quote:"Waste no more time arguing what a good man should be. Be one.",source:"Marcus Aurelius",reflection:"There is no perfect time to begin. The ticket either gets worked or it sits. The call either gets made or the SLA slips. <strong>Action, simply taken, is the whole of it.</strong>",question:"What am I putting off that I could simply begin right now?",carry:"Begin. The rest follows.",intentions:["Make the difficult call first","Water something — literally or figuratively","End the day with no undocumented actions"]},
+  {quote:"He suffers more than necessary, who suffers before it is necessary.",source:"Seneca",reflection:"Anticipatory anxiety is the thief of the present. The customer hasn't responded — that's just a fact, not a catastrophe. <strong>Work the present moment.</strong>",question:"What am I dreading that hasn't actually happened yet?",carry:"Stay in what is real. Not what might be.",intentions:["Take one breath before each phone call","Update tickets in real time — no catching up later","Notice one small beautiful thing today"]},
+  {quote:"Make the best use of what is in your power, and take the rest as it happens.",source:"Epictetus",reflection:"The only sane response to a large territory is clarity about what is yours to control: <strong>your effort, your documentation, your character.</strong>",question:"What can I control today, and what must I simply let unfold?",carry:"Do your part completely. Release the rest.",intentions:["Log every mile honestly","Contact before dispatching — every single time","Rest without guilt when the day is done"]},
+  {quote:"A gem cannot be polished without friction, nor a man perfected without trials.",source:"Seneca",reflection:"The hard days — the unresponsive customers, the SLAs pressing down — are the actual curriculum. <strong>The work itself.</strong>",question:"What difficulty am I in the middle of that is actually teaching me something?",carry:"Friction is formation.",intentions:["Name one thing that challenged me and what it taught","Give full effort even when no one is watching","Call it a good day based on effort, not outcome"]},
+  {quote:"Look deep into nature, and then you will understand everything better.",source:"Albert Einstein",reflection:"You tend chickens. You grow things. You watch the sky change over Lompoc. This is not separate from your philosophy — <strong>it is the foundation of it.</strong>",question:"What does the natural world teach me today?",carry:"Ground yourself before you move.",intentions:["Check on Easter Egger, Red, and Floppy","Name three things you are grateful for","Move through today steadily, without rush"]},
+];
+const middayContent=[
+  {quote:"At midday, pause. The morning's intention meets the afternoon's reality.",source:"Stoic practice",reflection:"Half the day is behind you. Take stock and choose how the second half will go.",checks:["Did I contact before dispatching?","Have I documented my actions in ServiceNow?","Am I moving efficiently or just moving?","Have I eaten and had water?","Is there a ticket I've been avoiding?"]},
+  {quote:"Between stimulus and response there is a space. In that space is our power.",source:"Viktor Frankl",reflection:"The midday pause is that space. Use it.",checks:["Are my SLAs still safe?","Have I returned any returnable parts?","Did I make the difficult call I was putting off?","Am I hydrated and present?","What's the next right action?"]},
+  {quote:"First things first.",source:"Epictetus",reflection:"What is the single most important thing you could do in the next two hours?",checks:["What is genuinely urgent versus just loud?","Have I batched my afternoon stops efficiently?","Is there a customer waiting on a callback?","Have I eaten?","What can I close out before day's end?"]},
+  {quote:"Do not hurry. Do not linger.",source:"Chinese proverb",reflection:"Find the steady pace — the one that gets everything done without sacrificing quality.",checks:["Am I rushing because I'm behind or because I'm anxious?","Have all my parts pickups been confirmed?","Is my documentation current?","Have I rested even for five minutes?","What would I tell a fellow engineer to do right now?"]},
+  {quote:"The present moment is where life lives.",source:"Thich Nhat Hanh",reflection:"Not the next ticket. Not tomorrow's route. Right now, this task.",checks:["Am I fully present with the customer in front of me?","Have I updated my ticket notes today?","Is there something I started but haven't finished?","Have I had water?","What would make this afternoon feel complete?"]},
+  {quote:"You become what you repeatedly do.",source:"Aristotle",reflection:"Every contact made before dispatch. Every ticket updated in real time. This is how character is built.",checks:["Did I follow my own rules this morning?","What habit am I building today?","Have I documented everything?","Am I tired or genuinely done?","What's one thing I did well today?"]},
+  {quote:"Not what we have, but what we enjoy, constitutes our abundance.",source:"Epictetus",reflection:"You have chickens and a garden and tea and photographs. And a job that takes you through beautiful country.",checks:["Have I noticed anything beautiful today?","Am I grateful for this moment?","Have I been kind — to customers, to myself?","Is there something I can let go of?","What is actually going well?"]},
+];
+const eveningContent=[
+  {quote:"When you arise in the morning, think of what a privilege it is to be alive.",source:"Marcus Aurelius",reflection:"The day is closing. Whatever it held, you held it. That is enough.",review:[{q:"Did I act with integrity in every customer interaction?"},{q:"Did I document honestly and completely?"},{q:"Did I contact before dispatching?"},{q:"Did I treat myself with patience?"},{q:"Is there anything I need to address tomorrow?"}],closing:"Sleep well. Tomorrow is its own day."},
+  {quote:"The evening is the time to review the day, not to judge it.",source:"Stoic practice",reflection:"Seneca reviewed his day each evening — not to punish himself, but to understand.",review:[{q:"What went better than expected?"},{q:"Where did I struggle and why?"},{q:"What would I do differently?"},{q:"Did I move with efficiency and purpose?"},{q:"What am I most proud of from today?"}],closing:"Put it down. The night is for rest."},
+  {quote:"Finish each day and be done with it.",source:"Ralph Waldo Emerson",reflection:"You have done what you could. Forget the blunders as soon as you can.",review:[{q:"Did I close out every ticket properly?"},{q:"Are there follow-ups for tomorrow?"},{q:"Did I make at least one person's day easier?"},{q:"Did I stay true to my dispatch philosophy?"},{q:"What am I grateful for specifically from today?"}],closing:"Tomorrow is a new day. You shall begin it well."},
+  {quote:"He is a wise man who does not grieve for what he has not, but rejoices for what he has.",source:"Epictetus",reflection:"Count the wins. The call you made. The ticket you closed. The moment you chose correctly.",review:[{q:"What did I accomplish that I can be proud of?"},{q:"Did I reach out to someone who needed to hear from me?"},{q:"Am I leaving anything unfinished that I shouldn't?"},{q:"How did I show up for my own wellbeing today?"},{q:"What small thing made today worthwhile?"}],closing:"Abundance is a practice. Practice it now."},
+  {quote:"In the end, it's not the years in your life that count. It's the life in your years.",source:"Abraham Lincoln",reflection:"Another day lived on your own terms. Not chasing wealth. Living deliberately.",review:[{q:"Did I live today deliberately?"},{q:"Was there a moment I was fully present?"},{q:"Did I take care of Easter Egger, Red, and Floppy?"},{q:"Did I water something that needed it?"},{q:"What would I tell my best self about today?"}],closing:"A life in your years. That's the whole thing."},
+  {quote:"The day is done. Be still.",source:"Earth wisdom",reflection:"You carry a lot. Field work, creativity, gardening, philosophy, sobriety. Lay it down gently now.",review:[{q:"What weight can I release before sleep?"},{q:"Did I honor my sobriety today?"},{q:"Was there a moment of real beauty I noticed?"},{q:"Did I laugh or smile at something today?"},{q:"What does tomorrow need from me?"}],closing:"The stars are out. Rest under them."},
+  {quote:"Sleep is the golden chain that ties health and our bodies together.",source:"Thomas Dekker",reflection:"Recovery is part of the work. The garden rests. The chickens roost. You too.",review:[{q:"Am I ending this day with acceptance?"},{q:"Did I do what I said I would do?"},{q:"What habit did I strengthen today?"},{q:"Is there anyone I should reach out to tomorrow?"},{q:"What one word describes today?"}],closing:"Tomorrow, again, you choose."},
+];
+const wisdomArchive=[
+  {quote:"If it is not right, do not do it; if it is not true, do not say it.",source:"Marcus Aurelius"},
+  {quote:"The first rule is to keep an untroubled spirit.",source:"Marcus Aurelius"},
+  {quote:"Make the best use of what is in your power, and take the rest as it happens.",source:"Epictetus"},
+  {quote:"We suffer more in imagination than in reality.",source:"Seneca"},
+  {quote:"A gem cannot be polished without friction, nor a man perfected without trials.",source:"Seneca"},
+  {quote:"No man is free who is not master of himself.",source:"Epictetus"},
+  {quote:"First say to yourself what you would be; then do what you have to do.",source:"Epictetus"},
+  {quote:"Luck is what happens when preparation meets opportunity.",source:"Seneca"},
+  {quote:"He suffers more than necessary, who suffers before it is necessary.",source:"Seneca"},
+];
+const earthWisdom=[
+  {quote:"The goal of life is to live in agreement with Nature.",source:"Zeno of Citium, founder of Stoicism"},
+  {quote:"In every walk with nature, one receives far more than he seeks.",source:"John Muir"},
+  {quote:"The cosmos is within us. We are made of star-stuff.",source:"Carl Sagan"},
+  {quote:"To forget how to dig the earth and tend the soil is to forget ourselves.",source:"Gandhi"},
+  {quote:"Look at the stars. See how they shine and burn. They do not ask permission.",source:"Earth wisdom"},
+];
+
+let dcInitialized=false;
+function dcInit(){
+  const d=morningContent[dcDay%morningContent.length];
+  const m=middayContent[dcDay%middayContent.length];
+  const e=eveningContent[dcDay%eveningContent.length];
+  document.getElementById('dc-morning-quote').textContent='"'+d.quote+'"';
+  document.getElementById('dc-morning-source').textContent='— '+d.source;
+  document.getElementById('dc-morning-reflection').innerHTML=d.reflection;
+  document.getElementById('dc-morning-question').textContent=d.question;
+  document.getElementById('dc-carry-thought').textContent=d.carry;
+  document.getElementById('dc-intentions').innerHTML=d.intentions.map(i=>`<li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:rgba(245,234,216,.75);line-height:1.5;"><span style="color:#c8973a;font-size:10px;margin-top:5px;flex-shrink:0;">✦</span>${i}</li>`).join('');
+  document.getElementById('dc-midday-quote').textContent='"'+m.quote+'"';
+  document.getElementById('dc-midday-source').textContent='— '+m.source;
+  document.getElementById('dc-midday-reflection').textContent=m.reflection;
+  document.getElementById('dc-midday-checks').innerHTML=m.checks.map(c=>`<div class="dc-check-row" onclick="dcToggleCheck(this)"><div class="dc-check-circle"></div><div class="dc-check-text">${c}</div></div>`).join('');
+  document.getElementById('dc-evening-quote').textContent='"'+e.quote+'"';
+  document.getElementById('dc-evening-source').textContent='— '+e.source;
+  document.getElementById('dc-evening-reflection').textContent=e.reflection;
+  document.getElementById('dc-closing-thought').textContent=e.closing;
+  document.getElementById('dc-evening-review').innerHTML=e.review.map(r=>`<div class="dc-check-row" onclick="dcToggleCheck(this)"><div class="dc-check-circle"></div><div class="dc-check-text">${r.q}</div></div>`).join('');
+  document.getElementById('dc-wisdom-list').innerHTML=wisdomArchive.map(w=>`<div class="dc-wisdom-item" style="margin-bottom:12px;"><div class="dc-wisdom-quote">"${w.quote}"</div><div class="dc-wisdom-meta">— ${w.source}</div></div>`).join('');
+  document.getElementById('dc-earth-list').innerHTML=earthWisdom.map(w=>`<div class="dc-wisdom-item" style="margin-bottom:12px;"><div class="dc-wisdom-quote">"${w.quote}"</div><div class="dc-wisdom-meta">— ${w.source}</div></div>`).join('');
+  const date=dcToday.toDateString();
+  const draft=localStorage.getItem('dc_journal_draft');
+  if(draft) document.getElementById('dc-free-journal').value=draft;
+  document.getElementById('dc-free-journal').addEventListener('input',()=>localStorage.setItem('dc_journal_draft',document.getElementById('dc-free-journal').value));
+  ['well','short','grateful'].forEach(k=>{const v=localStorage.getItem('dc_ev_'+k+'_'+date);if(v)document.getElementById('dc-ev-'+k).value=v;});
+  const mn=localStorage.getItem('dc_note_morning_'+date); if(mn) document.getElementById('dc-morning-note').value=mn;
+  const mid=localStorage.getItem('dc_note_midday_'+date); if(mid) document.getElementById('dc-midday-note').value=mid;
+  dcRenderPastEntries();
+  const h=dcToday.getHours();
+  document.getElementById('dc-phase-label').textContent=h<12?'Morning Reflection':h<17?'Midday Pause':'Evening Review';
+  dcInitialized=true;
+}
+function dcTab(name,btn){
+  document.querySelectorAll('.dc-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.dc-tab').forEach(b=>b.classList.remove('active'));
+  const p=document.getElementById('dc-'+name); if(p) p.classList.add('active');
+  btn.classList.add('active');
+}
+function dcToggleCheck(row){
+  row.querySelector('.dc-check-circle').classList.toggle('done');
+  row.querySelector('.dc-check-text').classList.toggle('done');
+}
+function dcFlash(id){const el=document.getElementById(id);el.style.opacity='1';setTimeout(()=>el.style.opacity='0',2000);}
+function dcSave(phase){const v=document.getElementById('dc-'+phase+'-note').value;if(!v.trim())return;localStorage.setItem('dc_note_'+phase+'_'+dcToday.toDateString(),v);dcFlash('dc-'+phase+'-saved');}
+function dcSaveEvening(){const date=dcToday.toDateString();['well','short','grateful'].forEach(k=>localStorage.setItem('dc_ev_'+k+'_'+date,document.getElementById('dc-ev-'+k).value));dcFlash('dc-evening-saved');}
+function dcSaveJournal(){const text=document.getElementById('dc-free-journal').value.trim();if(!text)return;const entries=JSON.parse(localStorage.getItem('dc_journal_entries')||'[]');entries.unshift({date:dcToday.toISOString(),text});if(entries.length>30)entries.pop();localStorage.setItem('dc_journal_entries',JSON.stringify(entries));dcFlash('dc-journal-saved');dcRenderPastEntries();}
+function dcRenderPastEntries(){const entries=JSON.parse(localStorage.getItem('dc_journal_entries')||'[]');const el=document.getElementById('dc-past-entries');if(!el)return;if(!entries.length){el.innerHTML='<div style="color:#8c7d6a;font-style:italic;font-size:14px;">Your entries will appear here.</div>';return;}el.innerHTML=entries.slice(0,5).map(e=>`<div class="dc-wisdom-item" style="margin-bottom:12px;"><div class="dc-wisdom-meta" style="margin-bottom:5px;">${new Date(e.date).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</div><div class="dc-wisdom-quote" style="font-size:14px;color:rgba(245,234,216,.6);">${e.text.slice(0,200)}${e.text.length>200?'…':''}
+</div>
+</div>
+}
+// Patch switchPanel to lazy-init Daily Companion
+const _origSwitch=switchPanel;
+switchPanel=function(name,btn){_origSwitch(name,btn);if(name==='daily'&&!dcInitialized)dcInit();};
+
+});
+</script>
+</body>
+</html>
