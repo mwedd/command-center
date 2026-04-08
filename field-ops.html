@@ -20,7 +20,6 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-/* HEADER */
 .header{padding:16px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(13,15,14,.97);}
 .title-group{display:flex;align-items:baseline;gap:14px;}
 .site-title{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:600;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;}
@@ -28,7 +27,6 @@ body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--te
 .header-right{text-align:right;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--dim);line-height:1.9;}
 .header-right .time{color:var(--gold);font-size:.9rem;}
 
-/* NAV */
 .nav{display:flex;gap:2px;padding:12px 32px 0;background:rgba(13,15,14,.8);border-bottom:1px solid var(--border2);overflow-x:auto;scrollbar-width:none;}
 .nav::-webkit-scrollbar{display:none;}
 .nav-btn{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:8px 18px;border:1px solid transparent;border-bottom:none;border-radius:5px 5px 0 0;background:transparent;color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap;position:relative;}
@@ -36,28 +34,26 @@ body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--te
 .nav-btn.active{color:var(--slate2);background:var(--surface);border-color:var(--border2);border-bottom-color:var(--surface);}
 .nav-btn.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--slate2);}
 
-/* CONTENT */
 .content{background:var(--surface);border:1px solid var(--border2);border-top:none;margin:0 32px;border-radius:0 0 8px 8px;min-height:calc(100vh - 160px);}
 .panel{display:none;padding:24px 28px;}
 .panel.active{display:block;}
 
-/* CARDS */
 .card{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden;}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--slate);opacity:.5;}
 .card.gold::before{background:var(--gold);}
 .card.green::before{background:var(--moss2);}
 .card.red::before{background:var(--rust);}
+.card.closed::before{background:var(--sage);}
 .card-title{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--slate2);margin-bottom:11px;display:flex;align-items:center;gap:6px;}
 .card.gold .card-title{color:var(--gold2);}
 .card.green .card-title{color:var(--moss2);}
 .card.red .card-title{color:var(--rust2);}
+.card.closed .card-title{color:var(--sage2);}
 
-/* GRID */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .g21{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
 @media(max-width:800px){.g2,.g21{grid-template-columns:1fr;}.header,.nav,.content{margin-left:0;margin-right:0;padding-left:14px;padding-right:14px;}}
 
-/* STATUS */
 .row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.87rem;}
 .row:last-child{border-bottom:none;}
 .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:7px;flex-shrink:0;}
@@ -65,15 +61,15 @@ body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--te
 .dot-y{background:var(--gold);box-shadow:0 0 5px rgba(201,168,76,.5);}
 .dot-g{background:#5a9e6a;box-shadow:0 0 5px rgba(90,158,106,.5);}
 .dot-b{background:var(--slate);box-shadow:0 0 5px rgba(107,143,168,.5);}
+.dot-s{background:var(--sage);box-shadow:0 0 5px rgba(122,158,126,.5);}
 
-/* BADGES */
 .badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:3px;white-space:nowrap;}
 .b-ok{background:rgba(90,122,74,.25);color:var(--moss2);}
 .b-warn{background:rgba(201,168,76,.2);color:var(--gold2);}
 .b-red{background:rgba(184,96,42,.25);color:var(--rust2);}
 .b-blue{background:rgba(107,143,168,.2);color:var(--slate2);}
+.b-closed{background:rgba(122,158,126,.2);color:var(--sage2);}
 
-/* CONTACT STATUS */
 .cs{display:flex;gap:5px;align-items:center;flex-wrap:wrap;padding:6px 0 8px;border-bottom:1px solid var(--border);}
 .cs-label{font-size:.7rem;color:var(--text2);font-family:'JetBrains Mono',monospace;}
 .cs-btn{font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:3px 9px;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .18s;}
@@ -82,13 +78,11 @@ body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--te
 .cs-btn.a-confirmed{background:rgba(90,122,74,.28);border-color:var(--moss2);color:var(--moss2);}
 .cs-btn.a-noresponse{background:rgba(184,90,74,.18);border-color:var(--rust2);color:var(--rust2);}
 
-/* DISPATCH BANNER */
 .banner{padding:9px 14px;border-radius:5px;margin-bottom:14px;font-size:.83rem;line-height:1.5;}
 .banner.hold{background:rgba(184,90,74,.1);color:var(--rust2);border-left:2px solid var(--rust);}
 .banner.watch{background:rgba(201,168,76,.1);color:var(--gold2);border-left:2px solid var(--gold);}
 .banner.go{background:rgba(90,122,74,.15);color:var(--moss2);border-left:2px solid var(--moss2);}
 
-/* TICKET DETAIL */
 .ticket-detail{display:none;background:var(--surface3);border:1px solid var(--border2);border-radius:6px;padding:14px 16px;margin-bottom:12px;}
 .ticket-detail.open{display:block;}
 .td-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;font-size:.82rem;}
@@ -102,15 +96,12 @@ body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--te
 .parts-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:.78rem;}
 .part-item{padding:4px 8px;background:var(--surface);border-radius:3px;}
 
-/* CHECKLIST */
 .check-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:.87rem;}
 .check-item:last-child{border-bottom:none;}
 .check-item input{margin-top:3px;accent-color:var(--gold);}
 
-/* DIVIDER */
 .div{border:none;border-top:1px solid var(--border);margin:11px 0;}
 
-/* INPUTS */
 .note{width:100%;background:var(--surface3);border:1px solid var(--border);border-radius:5px;padding:11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:.92rem;resize:vertical;min-height:90px;outline:none;line-height:1.6;}
 .note::placeholder{color:var(--text2);font-style:italic;}
 .chat-box{background:var(--surface3);border:1px solid var(--border);border-radius:5px;padding:12px;min-height:160px;max-height:300px;overflow-y:auto;margin-bottom:9px;font-size:.87rem;line-height:1.65;scrollbar-width:thin;}
@@ -124,22 +115,47 @@ body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--te
 .spinner{display:inline-block;width:11px;height:11px;border:2px solid var(--border);border-top-color:var(--sage);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:5px;}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* BUTTONS */
 .btn{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;padding:6px 14px;border-radius:4px;border:1px solid var(--border2);background:var(--surface3);color:var(--text2);cursor:pointer;transition:all .18s;}
 .btn:hover{color:var(--cream);border-color:var(--gold);}
 .btn.primary{background:rgba(201,168,76,.1);border-color:var(--gold);color:var(--gold2);}
 .btn.primary:hover{background:rgba(201,168,76,.2);}
+.btn.sage{background:rgba(122,158,126,.1);border-color:var(--sage);color:var(--sage2);}
+.btn.sage:hover{background:rgba(122,158,126,.2);}
 
-/* STAT */
 .stat-val{font-family:'JetBrains Mono',monospace;font-size:1.4rem;color:var(--cream2);}
 .stat-label{font-size:.72rem;color:var(--text2);margin-top:2px;}
 
-/* FOOTER */
 .footer{text-align:center;padding:16px;color:var(--text2);font-size:.72rem;font-style:italic;}
-
-/* LINKS */
 a{color:var(--slate2);text-decoration:none;}
 a:hover{color:var(--cream);}
+
+/* ── COMPLETED LOG STYLES ── */
+.wot-log-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;border-radius:4px;gap:10px;flex-wrap:wrap;}
+.wot-log-row:hover{background:var(--surface3);}
+.wot-log-row:last-child{border-bottom:none;}
+.wot-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--sage2);white-space:nowrap;}
+.wot-customer{font-size:.88rem;color:var(--cream);flex:1;min-width:120px;}
+.wot-date{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text2);white-space:nowrap;}
+.wot-type{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:3px;background:rgba(122,158,126,.15);color:var(--sage2);white-space:nowrap;}
+
+.wot-detail{display:none;background:var(--surface3);border:1px solid var(--border2);border-radius:6px;padding:16px 18px;margin-bottom:14px;white-space:pre-wrap;font-size:.82rem;line-height:1.8;color:var(--cream);font-family:'Crimson Pro',serif;}
+.wot-detail.open{display:block;}
+.wot-detail-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.wot-detail-title{font-family:'Cinzel',serif;font-size:.65rem;color:var(--sage2);letter-spacing:.12em;}
+
+.log-add-form{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:16px 18px;margin-top:14px;}
+.log-form-title{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sage2);margin-bottom:12px;}
+.log-fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;}
+.log-field{display:flex;flex-direction:column;gap:4px;}
+.log-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text2);}
+.log-input{background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:6px 9px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.75rem;outline:none;}
+.log-input:focus{border-color:var(--sage);}
+.log-body{width:100%;background:var(--surface3);border:1px solid var(--border);border-radius:5px;padding:10px;color:var(--text);font-family:'Crimson Pro',serif;font-size:.88rem;resize:vertical;min-height:180px;outline:none;line-height:1.7;margin-bottom:10px;}
+.log-body:focus{border-color:var(--sage);}
+.log-body::placeholder{color:var(--text2);font-style:italic;}
+.log-actions{display:flex;gap:8px;align-items:center;}
+.log-hint{font-size:.72rem;color:var(--text2);font-style:italic;}
+.empty-log{text-align:center;padding:32px;color:var(--text2);font-style:italic;font-size:.87rem;}
 </style>
 </head>
 <body>
@@ -157,27 +173,22 @@ a:hover{color:var(--cream);}
 </div>
 
 <nav class="nav">
-  <button class="nav-btn active" onclick="show('tickets',this)">🎟 Tickets & Route</button>
-  <button class="nav-btn" onclick="show('pudo',this)">📦 PUDO & Parts</button>
+  <button class="nav-btn active" onclick="show('tickets',this)">🎟 Tickets &amp; Route</button>
+  <button class="nav-btn" onclick="show('pudo',this)">📦 PUDO &amp; Parts</button>
   <button class="nav-btn" onclick="show('ai',this)">🤖 AI Briefing</button>
+  <button class="nav-btn" onclick="show('log',this)">📋 Completed WOTs</button>
 </nav>
 
 <div class="content">
 
 <!-- TICKETS & ROUTE -->
 <div class="panel active" id="panel-tickets">
-
-  <!-- Dispatch Banner -->
   <div class="banner hold" id="dispatchBanner">🚫 HOLD — Update contact status for each ticket below before dispatching.</div>
-
   <div class="g21">
     <div>
-
-      <!-- Ticket Summary Card -->
       <div class="card">
         <div class="card-title">🎟 Active Tickets — Apr 7/8</div>
 
-        <!-- WOT16501003 AAA LOCAL -->
         <div style="background:rgba(90,122,74,.1);border:1px solid var(--moss2);border-radius:5px;padding:8px 10px;margin-bottom:10px;">
           <div style="font-family:'Cinzel',serif;font-size:.57rem;letter-spacing:.14em;color:var(--moss2);margin-bottom:5px;">⭐ LOCAL · LOMPOC · NO PARTS · APR 8 @ 5PM</div>
           <div class="row" style="border:none;padding:0;cursor:pointer;" onclick="toggleTicket('d5')">
@@ -190,7 +201,6 @@ a:hover{color:var(--cream);}
           </div>
         </div>
 
-        <!-- WOT16483038 -->
         <div class="row" style="cursor:pointer;flex-wrap:wrap;gap:5px;" onclick="toggleTicket('d1')">
           <span><span class="dot dot-r"></span>WOT16483038 · Landis+Gyr SB · Lat 5550</span>
           <span class="badge b-red">⚠ ProSupport Plus</span>
@@ -202,7 +212,6 @@ a:hover{color:var(--cream);}
           <button class="cs-btn" onclick="setContact('cs1','noresponse')">🔇 No Response</button>
         </div>
 
-        <!-- WOT16488814 -->
         <div class="row" style="cursor:pointer;flex-wrap:wrap;gap:5px;margin-top:4px;" onclick="toggleTicket('d2')">
           <span><span class="dot dot-y"></span>WOT16488814 · UCSB SB · Lat 5440</span>
           <span class="badge b-warn">PUDO Goleta</span>
@@ -214,7 +223,6 @@ a:hover{color:var(--cream);}
           <button class="cs-btn" onclick="setContact('cs2','noresponse')">🔇 No Response</button>
         </div>
 
-        <!-- WOT16494420 -->
         <div class="row" style="cursor:pointer;flex-wrap:wrap;gap:5px;margin-top:4px;" onclick="toggleTicket('d3')">
           <span><span class="dot dot-y"></span>WOT16494420 · SLO COE · Precision 3460</span>
           <span class="badge b-warn">PUDO Santa Maria</span>
@@ -226,7 +234,6 @@ a:hover{color:var(--cream);}
           <button class="cs-btn" onclick="setContact('cs3','noresponse')">🔇 No Response</button>
         </div>
 
-        <!-- WOT16496243 -->
         <div class="row" style="cursor:pointer;flex-wrap:wrap;gap:5px;margin-top:4px;" onclick="toggleTicket('d4')">
           <span><span class="dot dot-b"></span>WOT16496243 · Zone 5 Tech SLO · Pro AIO</span>
           <span class="badge b-blue">SLA Apr 13</span>
@@ -240,8 +247,6 @@ a:hover{color:var(--cream);}
 
         <div style="margin-top:9px;font-size:.72rem;color:var(--text2);font-style:italic;">↑ Click ticket name to expand details + activity log</div>
       </div>
-
-      <!-- TICKET DETAILS -->
 
       <!-- AAA -->
       <div class="ticket-detail" id="d5">
@@ -260,7 +265,8 @@ a:hover{color:var(--cream);}
         </div>
         <div class="div"></div>
         <div style="font-size:.75rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">ACTIVITY LOG</div>
-        <div class="al-entry"><span class="al-time">04/07 11:50</span> · <span class="al-me">Matthew Weddington</span> — Three-way call with Shawn Matz + Scott. Part confirmed on-site. Jessica Garcia is correct primary contact (was entered incorrectly). Hot-swap confirmed, no business impact. Scheduled Apr 8 @ 5pm.</div>
+        <div class="al-entry"><span class="al-time">04/08 08:18</span> · <span class="al-me">Matthew Weddington</span> — On-site appointment confirmed. Scheduled arrival 4:44 PM, work window 5:00–7:00 PM. UPS battery confirmed on-site. Hot-swap replacement, no downtime expected. Est. 30 min.</div>
+        <div class="al-entry"><span class="al-time">04/07 12:05</span> · <span class="al-me">Matthew Weddington</span> — Three-way call with Shawn Matz + Scott Pierson. Part confirmed on-site. Jessica Garcia is correct primary contact. Hot-swap confirmed, no business impact. Scheduled Apr 8 @ 5pm.</div>
         <div class="al-entry"><span class="al-time">04/07 11:27</span> · <span class="al-sys">AZ Integration Dell</span> — Scheduled for 04/08 16:44. Window 04/08 17:00–19:00.</div>
         <div class="al-entry"><span class="al-time">04/07 11:09</span> · <span class="al-sys">Sarika Gupta</span> — Ticket created. Assigned Matthew Weddington. Target phone response 12:09pm.</div>
       </div>
@@ -300,13 +306,13 @@ a:hover{color:var(--cream);}
         </div>
         <div class="div"></div>
         <div style="font-size:.75rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">ACTIVITY LOG</div>
+        <div class="al-entry"><span class="al-time">04/08</span> · <span class="al-me">Matthew Weddington</span> — Customer response received via EMAIL from Fleur Phelps 04/07 2:35 PM — not visible in inbox at time of receipt due to suspected external sender filtering, discovered 04/08. Customer advised she is hospitalized, will be discharged 04/10. Proposed Monday 04/13 after 8:30 AM. GFO reschedule to 04/13 submitted.</div>
         <div class="al-entry"><span class="al-time">04/07</span> · <span class="al-me">Matthew Weddington</span> — Email sent to Fleur Phelps requesting appointment confirmation for 04/08. Awaiting response.</div>
         <div class="al-entry"><span class="al-time">04/06 22:40</span> · <span class="al-me">Matthew Weddington</span> — Completed DC training. Sent email to Fleur with cell. Will be in area tomorrow.</div>
         <div class="al-entry"><span class="al-time">04/06 12:05</span> · <span class="al-me">Matthew Weddington</span> — Ticket pulled from tank, replaced by SLO. Parts in hand. Waiting for reassignment.</div>
         <div class="al-entry"><span class="al-time">04/02 08:46</span> · <span class="al-sys">FS GFO Bulk Updates</span> — Tracking # 519871131410 confirmed.</div>
-        <div class="al-entry"><span class="al-time">04/01 16:57</span> · <span class="al-me">Matthew Weddington</span> — Called, left message. Asked about working tomorrow.</div>
         <div class="al-entry"><span class="al-time">04/01 09:01</span> · <span class="al-me">Matthew Weddington</span> — Ticket assigned. No tracking visible. Called Dell — got tracking #.</div>
-        <div class="al-entry"><span class="al-time">03/31 09:52</span> · <span class="al-sys">AZ Integration Dell</span> — Ticket created. Assigned US-66880000-SBD-FES South CA.</div>
+        <div class="al-entry"><span class="al-time">03/31 09:52</span> · <span class="al-sys">AZ Integration Dell</span> — Ticket created.</div>
       </div>
 
       <!-- UCSB -->
@@ -326,7 +332,7 @@ a:hover{color:var(--cream);}
           <div><div class="td-label">Email</div><div class="td-val">tchabolla@ucsb.edu</div></div>
           <div><div class="td-label">Window</div><div class="td-val">9am–4pm · schedule via email</div></div>
         </div>
-        <div style="background:rgba(201,168,76,.08);padding:7px 11px;border-radius:4px;border-left:2px solid var(--gold);margin:10px 0;font-size:.8rem;color:var(--gold2);">⚠ 2 VMs + 1 email 04/06 — no response. Email sent 04/07 requesting 04/08 appt. Awaiting reply.</div>
+        <div style="background:rgba(201,168,76,.08);padding:7px 11px;border-radius:4px;border-left:2px solid var(--gold);margin:10px 0;font-size:.8rem;color:var(--gold2);">⚠ Tony replied 04/07 proposing 04/08 9:30am — email not visible in inbox at time of receipt. Discovered 04/08. Window passed. Follow-up sent requesting reschedule to 04/09. GFO reschedule submitted.</div>
         <div class="div"></div>
         <div style="margin-bottom:10px;">
           <div style="font-size:.72rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">PARTS — GOLETA PUDO · SEAN · 495 S FAIRVIEW</div>
@@ -338,11 +344,10 @@ a:hover{color:var(--cream);}
         </div>
         <div class="div"></div>
         <div style="font-size:.75rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">ACTIVITY LOG</div>
+        <div class="al-entry"><span class="al-time">04/08</span> · <span class="al-me">Matthew Weddington</span> — Customer response received (04/07, exact time unknown). Tony proposed 04/08 9:30 AM. Email not in inbox at time of receipt — located 04/08 via search. Window passed. Sent apology and reschedule request for 04/09. GFO reschedule to 04/09 submitted.</div>
         <div class="al-entry"><span class="al-time">04/07</span> · <span class="al-me">Matthew Weddington</span> — Email sent to Tony Chabolla requesting 04/08 appointment. Awaiting response.</div>
-        <div class="al-entry"><span class="al-time">04/07 05:05</span> · <span class="al-sys">AZ Integration Dell</span> — Call assigned 04/07 10:14. ETA window 08:00–18:00.</div>
-        <div class="al-entry"><span class="al-time">04/06 10:32</span> · <span class="al-me">Matthew Weddington</span> — Sent email to Tony. 2 VMs left, no reply. Part in hand. Will call Dell if no response.</div>
+        <div class="al-entry"><span class="al-time">04/06 10:32</span> · <span class="al-me">Matthew Weddington</span> — Sent email to Tony. 2 VMs left, no reply. Part in hand.</div>
         <div class="al-entry"><span class="al-time">04/06 08:47</span> · <span class="al-me">Matthew Weddington</span> — Called customer, left message.</div>
-        <div class="al-entry"><span class="al-time">04/03 16:29</span> · <span class="al-sys">Prem Prakash S</span> — Part arrived 4/3. FE emailed customer. Rescheduled to 4/6.</div>
         <div class="al-entry"><span class="al-time">04/01 14:07</span> · <span class="al-sys">AZ Integration Dell</span> — Ticket created.</div>
       </div>
 
@@ -357,13 +362,12 @@ a:hover{color:var(--cream);}
           <div><div class="td-label">Serial</div><div class="td-val" style="font-family:'JetBrains Mono',monospace;font-size:.72rem;">CN0XV49JFCW0035A</div></div>
           <div><div class="td-label">Asset Tag</div><div class="td-val" style="font-family:'JetBrains Mono',monospace;">95M3SY3</div></div>
           <div><div class="td-label">Issue</div><div class="td-val" style="color:var(--gold2);">Hard drive failure — SSD</div></div>
-          <div><div class="td-label">SLA</div><div class="td-val" style="color:var(--gold2);">Apr 7 · 18:00 PST</div></div>
+          <div><div class="td-label">SLA</div><div class="td-val" style="color:var(--gold2);">Apr 8 · 18:00 PST</div></div>
           <div><div class="td-label">Location</div><div class="td-val">3350 Education Dr, SLO</div></div>
           <div><div class="td-label">Contact</div><div class="td-val">Glen McColm · <a href="tel:8053055286">805-305-5286</a></div></div>
           <div><div class="td-label">Email</div><div class="td-val">gmccolm@slocoe.org</div></div>
-          <div><div class="td-label">Note</div><div class="td-val" style="color:var(--gold2);">Said he'd call back 04/06 — no callback</div></div>
         </div>
-        <div style="background:rgba(201,168,76,.08);padding:7px 11px;border-radius:4px;border-left:2px solid var(--gold);margin:10px 0;font-size:.8rem;color:var(--gold2);">⚠ Email sent 04/07 requesting 04/08 appt. Awaiting response. RD risk 43.87% — SSD RCA flag.</div>
+        <div style="background:rgba(201,168,76,.08);padding:7px 11px;border-radius:4px;border-left:2px solid var(--gold);margin:10px 0;font-size:.8rem;color:var(--gold2);">⚠ Text sent 04/08 8:21 AM — no response to prior call (04/06) or email (04/07). Awaiting reply. RD risk 43.87% — SSD RCA flag.</div>
         <div class="div"></div>
         <div style="margin-bottom:10px;">
           <div style="font-size:.72rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">PART — SANTA MARIA PUDO · 3070 SKYWAY DR</div>
@@ -373,11 +377,10 @@ a:hover{color:var(--cream);}
         </div>
         <div class="div"></div>
         <div style="font-size:.75rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">ACTIVITY LOG</div>
+        <div class="al-entry"><span class="al-time">04/08 08:21</span> · <span class="al-me">Matthew Weddington</span> — Text sent to Glen McColm 805-305-5286. Introduced self, referenced prior email, asked about availability and proposed next day if today doesn't work. Awaiting response.</div>
         <div class="al-entry"><span class="al-time">04/07</span> · <span class="al-me">Matthew Weddington</span> — Email sent to Glen McColm requesting 04/08 appointment. Awaiting response.</div>
-        <div class="al-entry"><span class="al-time">04/06 16:18</span> · <span class="al-sys">Prem Prakash S</span> — FE spoke to Glen. Customer will get back with window. Rescheduled to 4/7.</div>
-        <div class="al-entry"><span class="al-time">04/06 11:54</span> · <span class="al-me">Matthew Weddington</span> — Touched base with Glen. Said he'd call back later.</div>
-        <div class="al-entry"><span class="al-time">04/06 08:49</span> · <span class="al-me">Matthew Weddington</span> — Checked tracking — part arriving tomorrow. Will monitor.</div>
-        <div class="al-entry"><span class="al-time">04/03 16:20</span> · <span class="al-sys">AZ Integration Dell</span> — Ticket created. Rescheduled to 04/06.</div>
+        <div class="al-entry"><span class="al-time">04/06 11:54</span> · <span class="al-me">Matthew Weddington</span> — Touched base with Glen. Said he'd call back later — no callback received.</div>
+        <div class="al-entry"><span class="al-time">04/03 16:20</span> · <span class="al-sys">AZ Integration Dell</span> — Ticket created.</div>
       </div>
 
       <!-- Zone 5 -->
@@ -407,8 +410,7 @@ a:hover{color:var(--cream);}
         </div>
         <div class="div"></div>
         <div style="font-size:.75rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">ACTIVITY LOG</div>
-        <div class="al-entry"><span class="al-time">04/07</span> · <span class="al-me">Matthew Weddington</span> — Email sent to Tristan Soares. Flexible scheduling through Apr 13. Awaiting response.</div>
-        <div class="al-entry"><span class="al-time">04/07 06:28</span> · <span class="al-sys">AZ Integration Dell</span> — Call assigned 04/07 14:00.</div>
+        <div class="al-entry"><span class="al-time">04/07</span> · <span class="al-me">Matthew Weddington</span> — Email sent to Tristan Soares. Flexible scheduling through Apr 13.</div>
         <div class="al-entry"><span class="al-time">04/06 10:45</span> · <span class="al-sys">AZ Integration Dell</span> — Ticket created. LCD part TO6100909 to Santa Maria PUDO.</div>
       </div>
 
@@ -425,15 +427,12 @@ a:hover{color:var(--cream);}
         <div class="check-item"><input type="checkbox" id="r7"><label for="r7">7. WOT16496243 — Zone 5 Tech 827 Buckley Rd SLO · Call Tristan first · SLA Apr 13</label></div>
       </div>
 
-      <!-- Notes -->
       <div class="card">
         <div class="card-title">📝 Field Notes</div>
         <textarea class="note" placeholder="Customer notes, access codes, part numbers..."></textarea>
       </div>
-
     </div>
 
-    <!-- Right column -->
     <div>
       <div class="card" style="margin-bottom:14px;">
         <div class="card-title">📊 Today at a Glance</div>
@@ -496,7 +495,7 @@ a:hover{color:var(--cream);}
         <div class="chat-box" id="fieldChat">
           <div class="chat-msg ai">
             <div class="role">Command</div>
-            <div class="body">Good morning Matthew. You have 5 active tickets. AAA Lompoc is confirmed for tomorrow Apr 8 at 5pm — that's your anchor. The SB tickets (Landis+Gyr, UCSB) and SLO tickets (SLO COE, Zone 5) are all awaiting customer email replies. Ask me anything about routing, SLA priority, or parts.</div>
+            <div class="body">Good morning Matthew. You have 5 active tickets. AAA Lompoc is confirmed for today Apr 8 at 5pm — that's your anchor. The SB tickets (Landis+Gyr rescheduled to 04/13, UCSB rescheduled to 04/09) and SLO tickets (SLO COE, Zone 5) are in various states. Ask me anything about routing, SLA priority, or parts.</div>
           </div>
         </div>
         <div class="chat-row">
@@ -518,21 +517,93 @@ a:hover{color:var(--cream);}
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════ -->
+<!-- COMPLETED WOTs LOG                        -->
+<!-- ══════════════════════════════════════════ -->
+<div class="panel" id="panel-log">
+
+  <div class="g21">
+    <div>
+
+      <!-- Log header -->
+      <div class="card closed">
+        <div class="card-title">📋 Completed Work Order Log</div>
+        <div style="font-size:.78rem;color:var(--text2);margin-bottom:12px;font-style:italic;">Click any ticket to expand the full journal entry. Add new entries below.</div>
+
+        <!-- Log list -->
+        <div id="wotLogList"></div>
+      </div>
+
+      <!-- Expanded detail view area -->
+      <div id="wotDetailArea"></div>
+
+      <!-- Add new entry form -->
+      <div class="log-add-form">
+        <div class="log-form-title">➕ Add Completed Ticket</div>
+        <div class="log-fields">
+          <div class="log-field">
+            <span class="log-label">WOT Number</span>
+            <input class="log-input" id="newWotNum" placeholder="WOT16501003" />
+          </div>
+          <div class="log-field">
+            <span class="log-label">Customer</span>
+            <input class="log-input" id="newWotCustomer" placeholder="AAA Altoona — Lompoc" />
+          </div>
+          <div class="log-field">
+            <span class="log-label">Job Type</span>
+            <input class="log-input" id="newWotType" placeholder="UPS Battery Swap" />
+          </div>
+        </div>
+        <div class="log-field" style="margin-bottom:10px;">
+          <span class="log-label" style="margin-bottom:4px;display:block;">Date Closed</span>
+          <input class="log-input" id="newWotDate" placeholder="April 8, 2026" style="width:200px;" />
+        </div>
+        <textarea class="log-body" id="newWotBody" placeholder="Paste or type the full journal entry here...&#10;&#10;Include: customer, issue, timeline, parts, contacts, on-site notes, resolution."></textarea>
+        <div class="log-actions">
+          <button class="btn sage" onclick="addWotEntry()">💾 Save Entry</button>
+          <span class="log-hint" id="saveHint"></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right column — stats -->
+    <div>
+      <div class="card closed">
+        <div class="card-title">📊 Log Summary</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
+          <div><div class="stat-val" style="color:var(--sage2)" id="logCount">0</div><div class="stat-label">Tickets Closed</div></div>
+          <div><div class="stat-val" style="color:var(--moss2)" id="logMonth">0</div><div class="stat-label">This Month</div></div>
+        </div>
+        <div class="div"></div>
+        <div style="font-size:.75rem;color:var(--text2);margin-top:8px;line-height:1.7;">
+          Entries are saved locally in your browser.<br>
+          They persist between sessions on this device.<br>
+          To back up: copy entries from the form area.
+        </div>
+        <div class="div"></div>
+        <button class="btn" style="width:100%;margin-top:4px;text-align:center;" onclick="clearLog()">🗑 Clear All Entries</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- /COMPLETED WOTs LOG -->
+
 </div><!-- /content -->
 
 <div class="footer">"The impediment to action advances action." — Marcus Aurelius &nbsp;·&nbsp; <a href="stoic.html" style="color:var(--sage2);">🌿 Stoic Corner →</a></div>
 
 <script>
-// CLOCK
+// ── CLOCK ──
 function tick(){
   var n=new Date();
   document.getElementById('clock').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
   document.getElementById('dateDisp').textContent=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
 }
-setInterval(tick,1000);
-tick();
+setInterval(tick,1000);tick();
 
-// WEATHER
+// ── WEATHER ──
 fetch('https://api.open-meteo.com/v1/forecast?latitude=34.6386&longitude=-120.4579&current=temperature_2m,weathercode,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FLos_Angeles')
   .then(function(r){return r.json();})
   .then(function(d){
@@ -541,7 +612,7 @@ fetch('https://api.open-meteo.com/v1/forecast?latitude=34.6386&longitude=-120.45
     document.getElementById('weather').textContent=icon+' '+Math.round(c.temperature_2m)+'°F · '+Math.round(c.windspeed_10m)+' mph';
   }).catch(function(){});
 
-// TABS
+// ── TABS ──
 function show(name,btn){
   document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
@@ -549,14 +620,14 @@ function show(name,btn){
   btn.classList.add('active');
 }
 
-// TICKET TOGGLE
+// ── TICKET TOGGLE ──
 function toggleTicket(id){
   var el=document.getElementById(id);
   if(!el)return;
   el.classList.toggle('open');
 }
 
-// CONTACT STATUS
+// ── CONTACT STATUS ──
 var contactState={cs1:'none',cs2:'none',cs3:'none',cs4:'none',cs5:'confirmed'};
 function setContact(groupId,status){
   contactState[groupId]=status;
@@ -564,8 +635,7 @@ function setContact(groupId,status){
   group.querySelectorAll('.cs-btn').forEach(function(b){
     b.classList.remove('a-attempted','a-confirmed','a-noresponse');
   });
-  var btns=group.querySelectorAll('.cs-btn');
-  btns.forEach(function(b){
+  group.querySelectorAll('.cs-btn').forEach(function(b){
     if(b.textContent.includes('Attempted')&&status==='attempted') b.classList.add('a-attempted');
     if(b.textContent.includes('Confirmed')&&status==='confirmed') b.classList.add('a-confirmed');
     if(b.textContent.includes('No Response')&&status==='noresponse') b.classList.add('a-noresponse');
@@ -585,7 +655,7 @@ function updateBanner(){
     route.textContent='✅ Active — dispatch to confirmed stops only';
   } else if(confirmed===1){
     banner.className='banner watch';
-    banner.textContent='⭐ AAA Lompoc confirmed for Apr 8 @ 5pm. Waiting on remaining 4 customers. Stay local until more confirm.';
+    banner.textContent='⭐ AAA Lompoc confirmed for Apr 8 @ 5pm. Waiting on remaining customers. Stay local until more confirm.';
     route.style.color='var(--gold2)';
     route.textContent='⏳ Partial — AAA confirmed, others pending';
   } else if(attempted>0){
@@ -598,9 +668,9 @@ function updateBanner(){
 }
 updateBanner();
 
-// AI CHAT
+// ── AI CHAT ──
 var messages=[];
-var sysPrompt='You are Matthew\'s Field Operations AI. He is an IT field engineer in Lompoc, CA working Dell hardware via Unisys. His 5 active tickets: WOT16501003 AAA Lompoc (UPS battery, confirmed Apr 8 5pm, LOCAL), WOT16483038 Landis+Gyr SB (ProSupport Plus, parts in hand, awaiting customer email reply), WOT16488814 UCSB SB (motherboard, parts at Goleta PUDO, awaiting reply), WOT16494420 SLO COE (SSD, parts at Santa Maria PUDO, awaiting reply), WOT16496243 Zone 5 SLO (LCD, parts at Santa Maria PUDO, SLA Apr 13, awaiting reply). His rule: never dispatch without confirmed customer contact first. Be concise and tactical.';
+var sysPrompt='You are Matthew\'s Field Operations AI. He is an IT field engineer in Lompoc, CA working Dell hardware via Unisys. His 5 active tickets: WOT16501003 AAA Lompoc (UPS battery, confirmed Apr 8 5pm, LOCAL), WOT16483038 Landis+Gyr SB (ProSupport Plus, parts in hand, rescheduled to 04/13 — customer hospitalized), WOT16488814 UCSB SB (motherboard, parts at Goleta PUDO, rescheduled to 04/09), WOT16494420 SLO COE (SSD, parts at Santa Maria PUDO, text sent 04/08, awaiting reply), WOT16496243 Zone 5 SLO (LCD, parts at Santa Maria PUDO, SLA Apr 13, awaiting reply). His rule: never dispatch without confirmed customer contact first. Be concise and tactical.';
 
 function sendChat(){
   var input=document.getElementById('fieldInput');
@@ -629,7 +699,6 @@ function sendChat(){
     if(el)el.innerHTML='<div class="role">Error</div><div class="body" style="color:#c97070;">Connection issue — try again.</div>';
   });
 }
-
 function appendMsg(box,type,label,text){
   var d=document.createElement('div');
   d.className='chat-msg '+type;
@@ -637,19 +706,200 @@ function appendMsg(box,type,label,text){
   box.appendChild(d);
   box.scrollTop=box.scrollHeight;
 }
+function briefing(){document.getElementById('fieldInput').value='Give me a morning briefing on today\'s tickets and best plan given my 5pm AAA commitment.';sendChat();}
+function slaCheck(){document.getElementById('fieldInput').value='Which tickets have the most urgent SLAs right now?';sendChat();}
+function routeAdvice(){document.getElementById('fieldInput').value='Given AAA is confirmed for 5pm in Lompoc today, what is the best route if I get more customer confirmations?';sendChat();}
 
-function briefing(){
-  document.getElementById('fieldInput').value='Give me a morning briefing on today\'s 5 tickets and best plan given my 5pm AAA commitment.';
-  sendChat();
+// ══════════════════════════════════════════════
+// COMPLETED WOT LOG — localStorage persistence
+// ══════════════════════════════════════════════
+var WOT_KEY='mw_wot_log_v1';
+
+// Seed with WOT16501003 if log is empty
+function seedLog(){
+  var existing=JSON.parse(localStorage.getItem(WOT_KEY)||'[]');
+  if(existing.length===0){
+    var seed=[{
+      id:'wot_'+Date.now(),
+      num:'WOT16501003',
+      customer:'AAA Altoona — Lompoc',
+      type:'UPS Battery Hot-Swap',
+      date:'April 8, 2026',
+      body:`COMPLETED WORK ORDER JOURNAL ENTRY
+WOT16501003 | INC000003112064
+Date Closed: April 8, 2026
+
+CUSTOMER & SITE
+Customer: Automobile Club of Southern California (AAA)
+Business: AAA Altoona — Lompoc Data Center
+Address: 525 W Central Avenue, Lompoc, CA 93436
+Primary Contact: Jessica Garcia, Associate Supervisor — 805.740.5209
+Secondary Contact: Shawn Matz — 714-850-8250
+Client Services Tech (Unisys/AAA Account): Scott Pierson — 562-383-3026
+
+ISSUE
+UPS battery near end of life warning on APC Smart-UPS 3000 at the Lompoc data center. GSOC flagged a possible commercial power issue; NOC investigated and found no power problems but confirmed the UPS was displaying a "Battery Near End of Life — Order Replacement Battery" warning.
+
+TICKET ORIGIN & ASSIGNMENT
+04/07/2026 ~10:43 PM — Scott Pierson emailed Sarika Gupta and Lavanya Dasim requesting a WOT be created to send a tech on-site 04/08 at approximately 5:00 PM local time. Battery confirmed already on-site. Hot-swap — no UPS shutdown required. Contact: Jessica Garcia.
+
+04/07/2026 — GFO (Muralidharan V, SDA) responded confirming FE assignment: Matthew Weddington.
+
+04/07/2026 11:09 AM PT — WOT16501003 created and assigned to Matthew Weddington. Target restore: 04/08/2026 3:00 PM.
+
+FE CONTACT & COORDINATION
+04/07/2026 ~12:05 PM PT — Matthew called Shawn Matz (listed primary contact). Got Scott Pierson on a three-way call.
+- Jessica Garcia confirmed as correct primary on-site contact (ServiceNow entry was incorrect)
+- Battery confirmed on-site — earlier report of it being sent back to sender was incorrect
+- Job type: hot-swap battery replacement, zero downtime, no business impact
+- Dispatch: 04/08, arriving ~4:45 PM, work window 5:00–7:00 PM
+- Estimated duration: 30 minutes
+
+04/08/2026 8:18 AM PT — Appointment confirmation logged in ServiceNow.
+04/08/2026 8:20 AM PT — Ticket accepted by Matthew Weddington.
+
+ON-SITE WORK
+Date: April 8, 2026 | Arrival: ~4:44 PM | Work Start: 5:00 PM
+Location: AAA Lompoc Data Center, 525 W Central Avenue
+On-site Contact: Jessica Garcia
+Device: APC Smart-UPS 3000 Rack Mount
+
+Procedure — Hot-Swap Battery Replacement:
+1. Removed front bezel
+2. Disconnected battery connector via pull string
+3. Removed retaining screws, slid out old battery tray
+4. Installed new battery tray, reconnected Anderson connector
+5. Replaced screws and reinstalled bezel
+6. Confirmed battery replacement on UPS front panel (toggled Yes, saved)
+7. Initiated self-test — PASSED
+No downtime. Connected equipment remained live throughout.
+Estimated completion: ~5:30 PM | Total time on-site: ~30 minutes
+
+CLOSE-OUT
+Resolution: UPS battery successfully replaced via hot-swap. No impact to business operations. Self-test confirmed successful. UPS returned to full operational status.`
+    }];
+    localStorage.setItem(WOT_KEY,JSON.stringify(seed));
+  }
 }
-function slaCheck(){
-  document.getElementById('fieldInput').value='Which tickets have the most urgent SLAs right now?';
-  sendChat();
+
+function loadLog(){
+  return JSON.parse(localStorage.getItem(WOT_KEY)||'[]');
 }
-function routeAdvice(){
-  document.getElementById('fieldInput').value='Given AAA is confirmed for 5pm in Lompoc tomorrow, what is the best route if I get 1-2 more customer confirmations for SB or SLO?';
-  sendChat();
+function saveLog(entries){
+  localStorage.setItem(WOT_KEY,JSON.stringify(entries));
 }
+
+function renderLog(){
+  var entries=loadLog();
+  var list=document.getElementById('wotLogList');
+  var area=document.getElementById('wotDetailArea');
+
+  // Update stats
+  document.getElementById('logCount').textContent=entries.length;
+  var thisMonth=entries.filter(function(e){
+    var d=new Date();
+    return e.date&&e.date.indexOf(d.toLocaleString('en-US',{month:'long'}))>=0&&e.date.indexOf(d.getFullYear())>=0;
+  }).length;
+  document.getElementById('logMonth').textContent=thisMonth;
+
+  if(entries.length===0){
+    list.innerHTML='<div class="empty-log">No completed tickets yet. Add your first entry below.</div>';
+    area.innerHTML='';
+    return;
+  }
+
+  list.innerHTML='';
+  area.innerHTML='';
+
+  entries.slice().reverse().forEach(function(entry){
+    // Row
+    var row=document.createElement('div');
+    row.className='wot-log-row';
+    row.onclick=function(){toggleDetail(entry.id);};
+    row.innerHTML=
+      '<span class="wot-num">'+entry.num+'</span>'+
+      '<span class="wot-customer">'+entry.customer+'</span>'+
+      '<span class="wot-type">'+entry.type+'</span>'+
+      '<span class="wot-date">'+entry.date+'</span>'+
+      '<span class="badge b-closed">✓ Closed</span>';
+    list.appendChild(row);
+
+    // Detail block
+    var detail=document.createElement('div');
+    detail.className='wot-detail';
+    detail.id='detail_'+entry.id;
+    detail.innerHTML=
+      '<div class="wot-detail-header">'+
+        '<span class="wot-detail-title">'+entry.num+' · '+entry.customer+'</span>'+
+        '<button class="btn" onclick="toggleDetail(\''+entry.id+'\')" style="padding:2px 9px;font-size:.55rem;">Close ✕</button>'+
+      '</div>'+
+      '<div style="white-space:pre-wrap;font-size:.82rem;line-height:1.8;color:var(--cream);">'+escHtml(entry.body)+'</div>';
+    area.appendChild(detail);
+  });
+}
+
+function toggleDetail(id){
+  var el=document.getElementById('detail_'+id);
+  if(!el)return;
+  // Close all others
+  document.querySelectorAll('.wot-detail').forEach(function(d){
+    if(d.id!=='detail_'+id) d.classList.remove('open');
+  });
+  el.classList.toggle('open');
+  if(el.classList.contains('open')) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function addWotEntry(){
+  var num=document.getElementById('newWotNum').value.trim();
+  var customer=document.getElementById('newWotCustomer').value.trim();
+  var type=document.getElementById('newWotType').value.trim();
+  var date=document.getElementById('newWotDate').value.trim();
+  var body=document.getElementById('newWotBody').value.trim();
+  var hint=document.getElementById('saveHint');
+
+  if(!num||!customer||!body){
+    hint.textContent='⚠ WOT number, customer, and entry body are required.';
+    hint.style.color='var(--rust2)';
+    return;
+  }
+
+  var entries=loadLog();
+  entries.push({
+    id:'wot_'+Date.now(),
+    num:num,
+    customer:customer,
+    type:type||'Field Service',
+    date:date||new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),
+    body:body
+  });
+  saveLog(entries);
+  renderLog();
+
+  // Clear form
+  document.getElementById('newWotNum').value='';
+  document.getElementById('newWotCustomer').value='';
+  document.getElementById('newWotType').value='';
+  document.getElementById('newWotDate').value='';
+  document.getElementById('newWotBody').value='';
+  hint.textContent='✅ Entry saved.';
+  hint.style.color='var(--sage2)';
+  setTimeout(function(){hint.textContent='';},3000);
+}
+
+function clearLog(){
+  if(confirm('Clear all completed WOT entries? This cannot be undone.')){
+    localStorage.removeItem(WOT_KEY);
+    renderLog();
+  }
+}
+
+function escHtml(str){
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Init
+seedLog();
+renderLog();
 </script>
 </body>
 </html>
