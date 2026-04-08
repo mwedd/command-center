@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stoic Corner · Matthew</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0f0e;--surface:#141816;--surface2:#1a1f1c;--surface3:#1f2621;
+  --border:#2a332d;--border2:#354039;
+  --gold:#c9a84c;--gold2:#e8c97a;
+  --sage:#7a9e7e;--sage2:#9bbfa0;
+  --cream:#e8e0cc;--cream2:#f5f0e8;
+  --text:#d4cfc4;--text2:#a8a49a;--dim:#8a9490;
+  --stone:#8c7d6a;--parch:rgba(245,234,216,.75);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+.header{padding:16px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(13,15,14,.97);}
+.site-title{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:600;color:var(--sage2);letter-spacing:.12em;text-transform:uppercase;}
+.site-sub{font-style:italic;color:var(--dim);font-size:.85rem;margin-left:14px;}
+.header-right{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--dim);text-align:right;line-height:1.9;}
+.header-right .time{color:var(--gold);font-size:.9rem;}
+
+.nav{display:flex;gap:2px;padding:12px 32px 0;background:rgba(13,15,14,.8);border-bottom:1px solid var(--border2);}
+.nav-btn{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:8px 18px;border:1px solid transparent;border-bottom:none;border-radius:5px 5px 0 0;background:transparent;color:var(--text2);cursor:pointer;transition:all .2s;position:relative;}
+.nav-btn:hover{color:var(--cream);background:var(--surface2);border-color:var(--border);}
+.nav-btn.active{color:var(--sage2);background:var(--surface);border-color:var(--border2);border-bottom-color:var(--surface);}
+.nav-btn.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--sage2);}
+
+.content{background:var(--surface);border:1px solid var(--border2);border-top:none;margin:0 32px;border-radius:0 0 8px 8px;min-height:calc(100vh - 160px);}
+.panel{display:none;padding:28px 32px;}
+.panel.active{display:block;}
+
+/* REFLECTION STYLES */
+.phase-label{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;opacity:.8;}
+.quote-block{border-left:2px solid var(--gold);padding-left:22px;margin-bottom:20px;}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2.8vw,23px);font-weight:300;font-style:italic;line-height:1.55;color:var(--cream2);margin-bottom:8px;}
+.quote-source{font-size:13px;color:var(--stone);}
+.reflection-text{font-size:15px;line-height:1.8;color:var(--parch);margin-bottom:20px;}
+.morning-question{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,2.5vw,21px);font-style:italic;font-weight:300;color:var(--gold2);line-height:1.6;text-align:center;padding:10px 0;margin-bottom:20px;}
+.cosmos{font-size:1.8rem;text-align:center;margin:10px 0;opacity:.4;letter-spacing:8px;}
+
+/* CHECK ROWS */
+.check-row{display:flex;align-items:flex-start;gap:11px;padding:8px 0;cursor:pointer;border-bottom:1px solid rgba(245,234,216,.06);}
+.check-row:last-child{border-bottom:none;}
+.check-circle{width:18px;height:18px;border-radius:50%;border:1px solid rgba(200,151,58,.4);flex-shrink:0;margin-top:2px;transition:all .25s;display:flex;align-items:center;justify-content:center;font-size:10px;}
+.check-circle.done{background:var(--gold);border-color:var(--gold);color:#1a1208;}
+.check-circle.done::after{content:'✓';}
+.check-text{font-size:14px;color:var(--parch);line-height:1.5;}
+.check-text.done{text-decoration:line-through;color:rgba(245,234,216,.35);}
+
+/* CARDS */
+.card{background:rgba(245,234,216,.04);border:1px solid rgba(245,234,216,.1);border-radius:4px;padding:24px 28px;margin-bottom:20px;position:relative;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(200,151,58,.4),transparent);}
+
+/* TEXTAREA */
+.note{width:100%;background:rgba(0,0,0,.2);border:1px solid rgba(245,234,216,.12);border-radius:3px;padding:14px;color:var(--cream2);font-family:'Crimson Pro',serif;font-size:15px;resize:vertical;min-height:90px;outline:none;line-height:1.7;}
+.note::placeholder{color:var(--stone);font-style:italic;}
+
+/* SAVE BTN */
+.save-btn{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;padding:7px 16px;border-radius:3px;border:1px solid rgba(200,151,58,.35);background:rgba(200,151,58,.08);color:var(--gold);cursor:pointer;transition:all .2s;}
+.save-btn:hover{background:rgba(200,151,58,.18);color:var(--gold2);}
+.saved-flash{font-size:12px;color:var(--sage2);opacity:0;transition:opacity .3s;}
+
+/* SOBRIETY */
+.sober-num{font-family:'JetBrains Mono',monospace;font-size:3.2rem;color:var(--sage2);line-height:1;}
+
+/* WISDOM */
+.wisdom-item{background:rgba(245,234,216,.03);border:1px solid rgba(245,234,216,.08);border-radius:3px;padding:18px 20px;margin-bottom:12px;}
+.wisdom-q{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;font-weight:300;color:rgba(245,234,216,.8);line-height:1.6;margin-bottom:7px;}
+.wisdom-src{font-size:12px;color:var(--stone);}
+
+/* CHAT */
+.chat-box{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:12px;min-height:160px;max-height:280px;overflow-y:auto;margin-bottom:9px;font-size:.87rem;line-height:1.65;scrollbar-width:thin;}
+.chat-msg{margin-bottom:10px;}
+.chat-msg .role{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:3px;}
+.chat-msg.user .role{color:var(--gold);}
+.chat-msg.ai .role{color:var(--sage);}
+.chat-msg.ai .body{color:var(--cream2);}
+.chat-input{flex:1;background:var(--surface3);border:1px solid var(--border);border-radius:5px;padding:8px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:.9rem;outline:none;resize:none;min-height:38px;}
+.chat-row{display:flex;gap:8px;align-items:flex-end;}
+.btn{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;padding:6px 14px;border-radius:4px;border:1px solid var(--border2);background:var(--surface3);color:var(--text2);cursor:pointer;transition:all .18s;}
+.btn:hover{color:var(--cream);border-color:var(--gold);}
+.btn.primary{background:rgba(122,158,126,.15);border-color:var(--sage);color:var(--sage2);}
+.spinner{display:inline-block;width:11px;height:11px;border:2px solid var(--border);border-top-color:var(--sage);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:5px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:800px){.g2{grid-template-columns:1fr;}.header,.nav,.content{margin-left:0;margin-right:0;padding-left:14px;padding-right:14px;}}
+
+.footer{text-align:center;padding:16px;color:var(--text2);font-size:.72rem;font-style:italic;}
+a{color:var(--sage2);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="display:flex;align-items:baseline;">
+    <div class="site-title">🌿 Stoic Corner</div>
+    <div class="site-sub">Matthew · Lompoc, CA</div>
+  </div>
+  <div class="header-right">
+    <div class="time" id="clock">--:-- --</div>
+    <div id="dateDisp">Loading...</div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="show('reflection',this)">☀ Reflection</button>
+  <button class="nav-btn" onclick="show('sobriety',this)">🌟 Sobriety</button>
+  <button class="nav-btn" onclick="show('wisdom',this)">✦ Wisdom</button>
+</nav>
+
+<div class="content">
+
+<!-- REFLECTION -->
+<div class="panel active" id="panel-reflection">
+  <div class="g2">
+    <div>
+      <div class="phase-label" id="phaseLabel">Morning Reflection</div>
+
+      <div class="quote-block">
+        <div class="quote-text" id="quoteText">Loading...</div>
+        <div class="quote-source" id="quoteSource"></div>
+      </div>
+
+      <div class="reflection-text" id="reflectionText"></div>
+
+      <div class="morning-question" id="morningQ"></div>
+
+      <div class="card">
+        <div class="phase-label" style="margin-bottom:12px;">Today I Intend To</div>
+        <ul id="intentionsList" style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:16px;"></ul>
+        <div style="font-size:13px;color:var(--stone);font-style:italic;margin-bottom:14px;" id="carryThought"></div>
+        <textarea class="note" id="morningNote" placeholder="Add your own intention for today..."></textarea>
+        <div style="display:flex;justify-content:flex-end;gap:10px;align-items:center;margin-top:10px;">
+          <span class="saved-flash" id="morningSaved">Saved ✓</span>
+          <button class="save-btn" onclick="saveNote('morning')">Save Intention</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="phase-label" style="margin-bottom:12px;">Midday Check-In</div>
+        <div id="middayChecks" style="margin-bottom:14px;"></div>
+        <textarea class="note" id="middayNote" placeholder="What needs your attention this afternoon?"></textarea>
+        <div style="display:flex;justify-content:flex-end;gap:10px;align-items:center;margin-top:10px;">
+          <span class="saved-flash" id="middaySaved">Saved ✓</span>
+          <button class="save-btn" onclick="saveNote('midday')">Save Note</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="phase-label" style="margin-bottom:12px;">Evening Review</div>
+        <div id="eveningReview" style="margin-bottom:16px;"></div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <div style="font-size:12px;color:var(--stone);margin-bottom:5px;">What went well today...</div>
+            <textarea class="note" id="evWell" style="min-height:60px;" placeholder="What I handled with virtue..."></textarea>
+          </div>
+          <div>
+            <div style="font-size:12px;color:var(--stone);margin-bottom:5px;">Where I fell short...</div>
+            <textarea class="note" id="evShort" style="min-height:60px;" placeholder="Where reason didn't lead..."></textarea>
+          </div>
+          <div>
+            <div style="font-size:12px;color:var(--stone);margin-bottom:5px;">I am grateful for...</div>
+            <textarea class="note" id="evGrateful" style="min-height:60px;" placeholder="Three things, however small..."></textarea>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;align-items:center;margin-top:10px;">
+          <span class="saved-flash" id="eveningSaved">Saved ✓</span>
+          <button class="save-btn" onclick="saveEvening()">Save Evening Review</button>
+        </div>
+        <div style="text-align:center;font-size:14px;color:var(--stone);font-style:italic;padding:12px 0;" id="closingThought"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="cosmos">☽ ✦ ☾</div>
+      <div class="card" style="margin-top:16px;">
+        <div class="phase-label" style="margin-bottom:12px;">🤖 Stoic Guide</div>
+        <div class="chat-box" id="stoicChat">
+          <div class="chat-msg ai">
+            <div class="role">Guide</div>
+            <div class="body">How are you showing up today, Matthew? Ask me about any passage, Stoic concept, or share what is weighing on you.</div>
+          </div>
+        </div>
+        <div class="chat-row">
+          <textarea class="chat-input" id="stoicInput" placeholder="What does Marcus mean when he says..." rows="2" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendStoic();}"></textarea>
+          <button class="btn primary" onclick="sendStoic()">Send</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:4px;">
+        <div class="phase-label" style="margin-bottom:10px;">Free Journal</div>
+        <textarea class="note" id="freeJournal" style="min-height:160px;" placeholder="Write freely. This page is yours alone."></textarea>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px;align-items:center;">
+          <span class="saved-flash" id="journalSaved">Entry saved ✓</span>
+          <button class="save-btn" onclick="saveJournal()">Save Entry</button>
+          <button class="save-btn" style="background:transparent;color:var(--stone);border-color:rgba(245,234,216,.15);" onclick="if(confirm('Clear the page?'))document.getElementById('freeJournal').value=''">Clear</button>
+        </div>
+        <div id="pastEntries" style="margin-top:16px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOBRIETY -->
+<div class="panel" id="panel-sobriety">
+  <div style="max-width:580px;margin:0 auto;text-align:center;padding:20px 0;">
+    <div class="cosmos">✦ ☽ ✦</div>
+    <div class="phase-label" style="margin:20px 0 10px;">Days of Clarity</div>
+    <div class="sober-num" id="soberDays">0</div>
+    <div style="font-size:14px;color:var(--stone);margin:10px 0 30px;" id="soberMsg"></div>
+    <div class="quote-block" style="text-align:left;max-width:440px;margin:0 auto 30px;">
+      <div class="quote-text">"He who is brave is free."</div>
+      <div class="quote-source">— Seneca</div>
+    </div>
+    <div class="quote-block" style="text-align:left;max-width:440px;margin:0 auto 30px;">
+      <div class="quote-text">"No man is free who is not master of himself."</div>
+      <div class="quote-source">— Epictetus</div>
+    </div>
+    <div class="quote-block" style="text-align:left;max-width:440px;margin:0 auto;">
+      <div class="quote-text">"Every day is a new life to a wise man."</div>
+      <div class="quote-source">— Seneca</div>
+    </div>
+  </div>
+</div>
+
+<!-- WISDOM -->
+<div class="panel" id="panel-wisdom">
+  <div class="g2">
+    <div>
+      <div class="phase-label" style="margin-bottom:16px;">Stoic Archive</div>
+      <div class="wisdom-item"><div class="wisdom-q">"You have power over your mind, not outside events. Realize this, and you will find strength."</div><div class="wisdom-src">— Marcus Aurelius, Meditations</div></div>
+      <div class="wisdom-item"><div class="wisdom-q">"The obstacle is the way. What stands in the way becomes the way."</div><div class="wisdom-src">— Marcus Aurelius</div></div>
+      <div class="wisdom-item"><div class="wisdom-q">"Waste no more time arguing what a good man should be. Be one."</div><div class="wisdom-src">— Marcus Aurelius</div></div>
+      <div class="wisdom-item"><div class="wisdom-q">"We suffer more in imagination than in reality."</div><div class="wisdom-src">— Seneca</div></div>
+      <div class="wisdom-item"><div class="wisdom-q">"A gem cannot be polished without friction, nor a man perfected without trials."</div><div class="wisdom-src">— Seneca</div></div>
+      <div class="wisdom-item"><div class="wisdom-q">"He suffers more than necessary, who suffers before it is necessary."</div><div class="wisdom-src">— Seneca</div></div>
+      <div class="wisdom-item"><div class="wisdom-q">"Make the best use of what is in your power, and take the rest as it happens."</div><div class="wisdom-src">— Epictetus</div></div>
+      <div class="wisdom-item"><div class="wisdom-q">"No man is free who is not master of himself."</div><div class="wisdom-src">— Epictetus</div></div>
+      <div class="wisdom-item"><div class="wisdom-q">"First say to yourself what you would be; then do what you have to do."</div><div class="wisdom-src">— Epictetus</div></div>
+    </div>
+    <div>
+      <div class="phase-label" style="margin-bottom:16px;">Earth and Cosmos</div>
+      <div class="wisdom-item"><div class="wisdom-q">"The goal of life is to live in agreement with Nature."</div><div class="wisdom-src">— Zeno of Citium, founder of Stoicism</div></div>
+      <div class="wisdom-item"><div class="wisdom-q">"In every walk with nature, one receives far more than he seeks."</div><div class="wisdom-src">— John Muir</div></div>
+      <div class="wisdom-item"><div class="wisdom-q">"The cosmos is within us. We are made of star-stuff. We are a way for the universe to know itself."</div><div class="wisdom-src">— Carl Sagan</div></div>
+      <div class="wisdom-item"><div class="wisdom-q">"To forget how to dig the earth and tend the soil is to forget ourselves."</div><div class="wisdom-src">— Gandhi</div></div>
+      <div class="wisdom-item"><div class="wisdom-q">"Look at the stars. See how they shine and burn. They do not ask permission."</div><div class="wisdom-src">— Earth wisdom</div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">"The impediment to action advances action." — Marcus Aurelius &nbsp;·&nbsp; <a href="field-ops.html">🛠 Field Ops →</a></div>
+
+<script>
+// CLOCK
+function tick(){
+  var n=new Date();
+  document.getElementById('clock').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('dateDisp').textContent=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+}
+setInterval(tick,1000);
+tick();
+
+// TABS
+function show(name,btn){
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('panel-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// CONTENT DATA
+var day=new Date().getDay();
+var morning=[
+  {q:'You have power over your mind, not outside events. Realize this, and you will find strength.',src:'Marcus Aurelius, Meditations',r:'Today is not promised to be easy. But it is promised to be yours. Every action taken with clarity and intention — contacting before dispatching, documenting before driving — moves with purpose. That is the Stoic way applied to real life.',q2:'What is the one thing I can control completely today?',carry:'The quality of your attention determines the quality of your day.',i:['Contact every customer before committing to any drive','Document each action as I go','Return every returnable part without fail']},
+  {q:'The obstacle is the way. What stands in the way becomes the way.',src:'Marcus Aurelius',r:'When tickets pile up and customers go quiet, the untrained mind sees chaos. The trained mind sees sequence. The delay is not the enemy — it is the space in which preparation happens.',q2:'What is standing in my way, and how is it actually guiding me?',carry:'Efficiency over motion. Move with purpose or do not move at all.',i:['Batch my stops geographically before I leave home','Treat every customer interaction as the whole of my reputation','Find one thing today to be genuinely grateful for']},
+  {q:'Waste no more time arguing what a good man should be. Be one.',src:'Marcus Aurelius',r:'There is no perfect time to begin. The ticket either gets worked or it sits. The call either gets made or the SLA slips. Action, simply taken, is the whole of it.',q2:'What am I putting off that I could simply begin right now?',carry:'Begin. The rest follows.',i:['Make the difficult call first','Water something — literally or figuratively','End the day with no undocumented actions']},
+  {q:'He suffers more than necessary, who suffers before it is necessary.',src:'Seneca',r:'Anticipatory anxiety is the thief of the present. The customer has not responded — that is just a fact, not a catastrophe. Work the present moment.',q2:'What am I dreading that has not actually happened yet?',carry:'Stay in what is real. Not what might be.',i:['Take one breath before each phone call','Update tickets in real time — no catching up later','Notice one small beautiful thing today']},
+  {q:'Make the best use of what is in your power, and take the rest as it happens.',src:'Epictetus',r:'The only sane response is clarity about what is yours to control: your effort, your documentation, your character. The rest — traffic, response times, parts delays — you receive with equanimity.',q2:'What can I control today, and what must I simply let unfold?',carry:'Do your part completely. Release the rest.',i:['Log every mile honestly','Contact before dispatching — every single time','Rest without guilt when the day is done']},
+  {q:'A gem cannot be polished without friction, nor a man perfected without trials.',src:'Seneca',r:'The hard days — the unresponsive customers, the SLAs pressing down — these are the actual curriculum. Not obstacles to the work. The work itself.',q2:'What difficulty am I in the middle of that is actually teaching me something?',carry:'Friction is formation.',i:['Name one thing that challenged me and what it taught','Give full effort even when no one is watching','Call it a good day based on effort, not outcome']},
+  {q:'Look deep into nature, and then you will understand everything better.',src:'Albert Einstein',r:'You tend chickens. You grow things. You watch the sky change over Lompoc. This is not separate from your philosophy — it is the foundation of it.',q2:'What does the natural world teach me today?',carry:'Ground yourself before you move.',i:['Check on Easter Egger, Red, and Floppy','Name three things you are grateful for','Move through today steadily, without rush']},
+];
+var midChecks=[
+  ['Did I contact before dispatching?','Have I documented my actions?','Am I moving efficiently or just moving?','Have I eaten and had water?','Is there a ticket I have been avoiding?'],
+  ['Are my SLAs still safe?','Have I returned any returnable parts?','Did I make the difficult call?','Am I hydrated?','What is the next right action?'],
+  ['What is genuinely urgent versus just loud?','Have I batched my afternoon stops?','Is there a customer waiting on a callback?','Have I eaten?','What can I close before end of day?'],
+  ['Am I rushing because behind or because anxious?','Have all parts pickups been confirmed?','Is my documentation current?','Have I rested even five minutes?','What would I tell a fellow engineer right now?'],
+  ['Am I fully present with the customer in front of me?','Have I updated my ticket notes?','Is there something I started but not finished?','Have I had water?','What would make this afternoon feel complete?'],
+  ['Did I follow my own rules this morning?','What habit am I building today?','Have I documented everything?','What is one thing I did well today?','Am I tired or genuinely done?'],
+  ['Have I noticed anything beautiful today?','Am I grateful for this moment?','Have I been kind — to customers, to myself?','Is there something I can let go of?','What is actually going well?'],
+];
+var eveningReviews=[
+  ['Did I act with integrity in every customer interaction?','Did I document honestly and completely?','Did I contact before dispatching?','Did I treat myself with patience?','Is there anything I need to address tomorrow?'],
+  ['What went better than expected?','Where did I struggle and why?','What would I do differently?','Did I move with efficiency and purpose?','What am I most proud of from today?'],
+  ['Did I close out every ticket properly?','Are there follow-ups for tomorrow?','Did I make at least one person\'s day easier?','Did I stay true to my dispatch philosophy?','What am I grateful for specifically from today?'],
+  ['What did I accomplish that I can be proud of?','Did I reach out to someone who needed to hear from me?','Am I leaving anything unfinished that I should not?','How did I show up for my own wellbeing?','What small thing made today worthwhile?'],
+  ['Did I live today deliberately?','Was there a moment I was fully present?','Did I take care of the flock?','Did I water something that needed it?','What would I tell my best self about today?'],
+  ['What weight can I release before sleep?','Did I honor my sobriety today?','Was there a moment of real beauty I noticed?','Did I laugh or smile at something?','What does tomorrow need from me?'],
+  ['Am I ending this day with acceptance?','Did I do what I said I would do?','What habit did I strengthen today?','Is there anyone I should reach out to tomorrow?','What one word describes today?'],
+];
+var closings=['Sleep well. Tomorrow is its own day.','Put it down. The night is for rest.','Tomorrow is a new day. You shall begin it well.','Abundance is a practice. Practice it now.','A life in your years. That is the whole thing.','The stars are out. Rest under them.','Tomorrow, again, you choose.'];
+
+var d=morning[day%morning.length];
+var mc=midChecks[day%midChecks.length];
+var er=eveningReviews[day%eveningReviews.length];
+
+// Set phase label
+var h=new Date().getHours();
+var phaseLabel=h<12?'Morning Reflection':h<17?'Midday Pause':'Evening Review';
+document.getElementById('phaseLabel').textContent=phaseLabel;
+
+// Fill morning content
+document.getElementById('quoteText').textContent='"'+d.q+'"';
+document.getElementById('quoteSource').textContent='— '+d.src;
+document.getElementById('reflectionText').innerHTML=d.r;
+document.getElementById('morningQ').textContent=d.q2;
+document.getElementById('carryThought').textContent=d.carry;
+var il=document.getElementById('intentionsList');
+d.i.forEach(function(intention){
+  var li=document.createElement('li');
+  li.style.cssText='display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--parch);line-height:1.5;';
+  li.innerHTML='<span style="color:var(--gold);font-size:10px;margin-top:5px;flex-shrink:0;">✦</span>'+intention;
+  il.appendChild(li);
+});
+
+// Fill midday checks
+var mc_el=document.getElementById('middayChecks');
+mc.forEach(function(check){
+  var row=document.createElement('div');
+  row.className='check-row';
+  row.innerHTML='<div class="check-circle"></div><div class="check-text">'+check+'</div>';
+  row.onclick=function(){
+    var c=row.querySelector('.check-circle');
+    var t=row.querySelector('.check-text');
+    c.classList.toggle('done');
+    t.classList.toggle('done');
+  };
+  mc_el.appendChild(row);
+});
+
+// Fill evening review
+var er_el=document.getElementById('eveningReview');
+er.forEach(function(q){
+  var row=document.createElement('div');
+  row.className='check-row';
+  row.innerHTML='<div class="check-circle"></div><div class="check-text">'+q+'</div>';
+  row.onclick=function(){
+    var c=row.querySelector('.check-circle');
+    var t=row.querySelector('.check-text');
+    c.classList.toggle('done');
+    t.classList.toggle('done');
+  };
+  er_el.appendChild(row);
+});
+
+document.getElementById('closingThought').textContent=closings[day%closings.length];
+
+// SOBRIETY
+var soberStart=new Date('2024-04-06');
+var soberDays=Math.floor((new Date()-soberStart)/(1000*60*60*24));
+document.getElementById('soberDays').textContent=soberDays;
+var msgs=['Every single day, chosen deliberately. That is the work.','Not luck. Not accident. Pure, daily courage.','The hardest battle, won quietly, every morning.','This number represents every morning you chose yourself.','One day at a time, chosen with intention.'];
+document.getElementById('soberMsg').textContent=msgs[day%msgs.length];
+
+// SAVE / LOAD NOTES
+var dateKey=new Date().toDateString();
+function flash(id){var el=document.getElementById(id);el.style.opacity='1';setTimeout(function(){el.style.opacity='0';},2000);}
+function saveNote(phase){
+  var val=document.getElementById(phase+'Note').value;
+  if(!val.trim())return;
+  localStorage.setItem('sc_note_'+phase+'_'+dateKey,val);
+  flash(phase+'Saved');
+}
+function saveEvening(){
+  localStorage.setItem('sc_ev_well_'+dateKey,document.getElementById('evWell').value);
+  localStorage.setItem('sc_ev_short_'+dateKey,document.getElementById('evShort').value);
+  localStorage.setItem('sc_ev_grateful_'+dateKey,document.getElementById('evGrateful').value);
+  flash('eveningSaved');
+}
+function saveJournal(){
+  var text=document.getElementById('freeJournal').value.trim();
+  if(!text)return;
+  var entries=JSON.parse(localStorage.getItem('sc_journal')||'[]');
+  entries.unshift({date:new Date().toISOString(),text:text});
+  if(entries.length>30)entries.pop();
+  localStorage.setItem('sc_journal',JSON.stringify(entries));
+  flash('journalSaved');
+  renderPastEntries();
+}
+function renderPastEntries(){
+  var entries=JSON.parse(localStorage.getItem('sc_journal')||'[]');
+  var el=document.getElementById('pastEntries');
+  if(!entries.length){el.innerHTML='';return;}
+  el.innerHTML='<div style="font-family:\'Cinzel\',serif;font-size:.6rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;opacity:.7;">Past Entries</div>'+
+  entries.slice(0,5).map(function(e){
+    return '<div class="wisdom-item"><div class="wisdom-src" style="margin-bottom:4px;">'+new Date(e.date).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+'</div><div class="wisdom-q" style="font-size:14px;color:rgba(245,234,216,.55);">'+e.text.slice(0,200)+(e.text.length>200?'...':'')+'</div></div>';
+  }).join('');
+}
+
+// Load saved
+var mn=localStorage.getItem('sc_note_morning_'+dateKey);
+if(mn)document.getElementById('morningNote').value=mn;
+var mid=localStorage.getItem('sc_note_midday_'+dateKey);
+if(mid)document.getElementById('middayNote').value=mid;
+var ew=localStorage.getItem('sc_ev_well_'+dateKey);
+if(ew)document.getElementById('evWell').value=ew;
+var es=localStorage.getItem('sc_ev_short_'+dateKey);
+if(es)document.getElementById('evShort').value=es;
+var eg=localStorage.getItem('sc_ev_grateful_'+dateKey);
+if(eg)document.getElementById('evGrateful').value=eg;
+var draft=localStorage.getItem('sc_journal_draft');
+if(draft)document.getElementById('freeJournal').value=draft;
+document.getElementById('freeJournal').addEventListener('input',function(){
+  localStorage.setItem('sc_journal_draft',document.getElementById('freeJournal').value);
+});
+renderPastEntries();
+
+// STOIC AI CHAT
+var stoicMsgs=[];
+var stoicSys='You are Matthew\'s Stoic Guide. He recently discovered Stoicism and it has become foundational — especially Marcus Aurelius. He has over a year of sobriety from alcohol and drugs, which he is proud of. He integrates Stoicism with earth-based spirituality, nature, and meditation. He keeps chickens and gardens in Lompoc, CA. Speak with warmth, depth, and wisdom. Never be preachy. Be genuinely helpful with Stoic philosophy.';
+function sendStoic(){
+  var input=document.getElementById('stoicInput');
+  var box=document.getElementById('stoicChat');
+  var msg=input.value.trim();
+  if(!msg)return;
+  input.value='';
+  appendMsg(box,'user','You',msg);
+  stoicMsgs.push({role:'user',content:msg});
+  var lid='l'+Date.now();
+  box.insertAdjacentHTML('beforeend','<div class="chat-msg ai" id="'+lid+'"><div class="role">Guide</div><div class="body"><span class="spinner"></span> Reflecting...</div></div>');
+  box.scrollTop=box.scrollHeight;
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:stoicSys,messages:stoicMsgs})
+  }).then(function(r){return r.json();})
+  .then(function(data){
+    var reply=data.content&&data.content[0]?data.content[0].text:'No response.';
+    stoicMsgs.push({role:'assistant',content:reply});
+    var el=document.getElementById(lid);
+    if(el)el.remove();
+    appendMsg(box,'ai','Guide',reply);
+  }).catch(function(){
+    var el=document.getElementById(lid);
+    if(el)el.innerHTML='<div class="role">Error</div><div class="body" style="color:#c97070;">Connection issue.</div>';
+  });
+}
+function appendMsg(box,type,label,text){
+  var d=document.createElement('div');
+  d.className='chat-msg '+type;
+  d.innerHTML='<div class="role">'+label+'</div><div class="body">'+text.replace(/\n/g,'<br>')+'</div>';
+  box.appendChild(d);
+  box.scrollTop=box.scrollHeight;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Ops · Matthew</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0d0f0e;--surface:#141816;--surface2:#1a1f1c;--surface3:#1f2621;
+  --border:#2a332d;--border2:#354039;
+  --gold:#c9a84c;--gold2:#e8c97a;
+  --sage:#7a9e7e;--sage2:#9bbfa0;
+  --rust:#b8602a;--rust2:#d4784a;
+  --slate:#6b8fa8;--slate2:#8ab2cc;
+  --moss:#5a7a4a;--moss2:#7a9f68;
+  --cream:#e8e0cc;--cream2:#f5f0e8;
+  --text:#d4cfc4;--text2:#a8a49a;--dim:#8a9490;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* HEADER */
+.header{padding:16px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(13,15,14,.97);}
+.title-group{display:flex;align-items:baseline;gap:14px;}
+.site-title{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:600;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;}
+.site-sub{font-style:italic;color:var(--dim);font-size:.85rem;}
+.header-right{text-align:right;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--dim);line-height:1.9;}
+.header-right .time{color:var(--gold);font-size:.9rem;}
+
+/* NAV */
+.nav{display:flex;gap:2px;padding:12px 32px 0;background:rgba(13,15,14,.8);border-bottom:1px solid var(--border2);overflow-x:auto;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-btn{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:8px 18px;border:1px solid transparent;border-bottom:none;border-radius:5px 5px 0 0;background:transparent;color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap;position:relative;}
+.nav-btn:hover{color:var(--cream);background:var(--surface2);border-color:var(--border);}
+.nav-btn.active{color:var(--slate2);background:var(--surface);border-color:var(--border2);border-bottom-color:var(--surface);}
+.nav-btn.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--slate2);}
+
+/* CONTENT */
+.content{background:var(--surface);border:1px solid var(--border2);border-top:none;margin:0 32px;border-radius:0 0 8px 8px;min-height:calc(100vh - 160px);}
+.panel{display:none;padding:24px 28px;}
+.panel.active{display:block;}
+
+/* CARDS */
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--slate);opacity:.5;}
+.card.gold::before{background:var(--gold);}
+.card.green::before{background:var(--moss2);}
+.card.red::before{background:var(--rust);}
+.card-title{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--slate2);margin-bottom:11px;display:flex;align-items:center;gap:6px;}
+.card.gold .card-title{color:var(--gold2);}
+.card.green .card-title{color:var(--moss2);}
+.card.red .card-title{color:var(--rust2);}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
+@media(max-width:800px){.g2,.g21{grid-template-columns:1fr;}.header,.nav,.content{margin-left:0;margin-right:0;padding-left:14px;padding-right:14px;}}
+
+/* STATUS */
+.row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.87rem;}
+.row:last-child{border-bottom:none;}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:7px;flex-shrink:0;}
+.dot-r{background:#b85a4a;box-shadow:0 0 5px rgba(184,90,74,.6);}
+.dot-y{background:var(--gold);box-shadow:0 0 5px rgba(201,168,76,.5);}
+.dot-g{background:#5a9e6a;box-shadow:0 0 5px rgba(90,158,106,.5);}
+.dot-b{background:var(--slate);box-shadow:0 0 5px rgba(107,143,168,.5);}
+
+/* BADGES */
+.badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:3px;white-space:nowrap;}
+.b-ok{background:rgba(90,122,74,.25);color:var(--moss2);}
+.b-warn{background:rgba(201,168,76,.2);color:var(--gold2);}
+.b-red{background:rgba(184,96,42,.25);color:var(--rust2);}
+.b-blue{background:rgba(107,143,168,.2);color:var(--slate2);}
+
+/* CONTACT STATUS */
+.cs{display:flex;gap:5px;align-items:center;flex-wrap:wrap;padding:6px 0 8px;border-bottom:1px solid var(--border);}
+.cs-label{font-size:.7rem;color:var(--text2);font-family:'JetBrains Mono',monospace;}
+.cs-btn{font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:3px 9px;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .18s;}
+.cs-btn:hover{border-color:var(--gold);color:var(--cream);}
+.cs-btn.a-attempted{background:rgba(201,168,76,.18);border-color:var(--gold);color:var(--gold2);}
+.cs-btn.a-confirmed{background:rgba(90,122,74,.28);border-color:var(--moss2);color:var(--moss2);}
+.cs-btn.a-noresponse{background:rgba(184,90,74,.18);border-color:var(--rust2);color:var(--rust2);}
+
+/* DISPATCH BANNER */
+.banner{padding:9px 14px;border-radius:5px;margin-bottom:14px;font-size:.83rem;line-height:1.5;}
+.banner.hold{background:rgba(184,90,74,.1);color:var(--rust2);border-left:2px solid var(--rust);}
+.banner.watch{background:rgba(201,168,76,.1);color:var(--gold2);border-left:2px solid var(--gold);}
+.banner.go{background:rgba(90,122,74,.15);color:var(--moss2);border-left:2px solid var(--moss2);}
+
+/* TICKET DETAIL */
+.ticket-detail{display:none;background:var(--surface3);border:1px solid var(--border2);border-radius:6px;padding:14px 16px;margin-bottom:12px;}
+.ticket-detail.open{display:block;}
+.td-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;font-size:.82rem;}
+.td-label{font-size:.68rem;color:var(--text2);margin-bottom:3px;font-family:'JetBrains Mono',monospace;}
+.td-val{color:var(--cream);}
+.al-entry{padding:5px 0;border-bottom:1px solid var(--border);font-size:.76rem;line-height:1.6;}
+.al-entry:last-child{border-bottom:none;}
+.al-time{color:var(--gold);font-family:'JetBrains Mono',monospace;}
+.al-me{color:var(--slate2);}
+.al-sys{color:var(--text2);}
+.parts-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:.78rem;}
+.part-item{padding:4px 8px;background:var(--surface);border-radius:3px;}
+
+/* CHECKLIST */
+.check-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:.87rem;}
+.check-item:last-child{border-bottom:none;}
+.check-item input{margin-top:3px;accent-color:var(--gold);}
+
+/* DIVIDER */
+.div{border:none;border-top:1px solid var(--border);margin:11px 0;}
+
+/* INPUTS */
+.note{width:100%;background:var(--surface3);border:1px solid var(--border);border-radius:5px;padding:11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:.92rem;resize:vertical;min-height:90px;outline:none;line-height:1.6;}
+.note::placeholder{color:var(--text2);font-style:italic;}
+.chat-box{background:var(--surface3);border:1px solid var(--border);border-radius:5px;padding:12px;min-height:160px;max-height:300px;overflow-y:auto;margin-bottom:9px;font-size:.87rem;line-height:1.65;scrollbar-width:thin;}
+.chat-input{flex:1;background:var(--surface3);border:1px solid var(--border);border-radius:5px;padding:8px 11px;color:var(--text);font-family:'Crimson Pro',serif;font-size:.9rem;outline:none;resize:none;min-height:38px;line-height:1.5;}
+.chat-row{display:flex;gap:8px;align-items:flex-end;}
+.chat-msg{margin-bottom:10px;}
+.chat-msg .role{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:3px;}
+.chat-msg.user .role{color:var(--gold);}
+.chat-msg.ai .role{color:var(--sage);}
+.chat-msg.ai .body{color:var(--cream);}
+.spinner{display:inline-block;width:11px;height:11px;border:2px solid var(--border);border-top-color:var(--sage);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:5px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* BUTTONS */
+.btn{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;padding:6px 14px;border-radius:4px;border:1px solid var(--border2);background:var(--surface3);color:var(--text2);cursor:pointer;transition:all .18s;}
+.btn:hover{color:var(--cream);border-color:var(--gold);}
+.btn.primary{background:rgba(201,168,76,.1);border-color:var(--gold);color:var(--gold2);}
+.btn.primary:hover{background:rgba(201,168,76,.2);}
+
+/* STAT */
+.stat-val{font-family:'JetBrains Mono',monospace;font-size:1.4rem;color:var(--cream2);}
+.stat-label{font-size:.72rem;color:var(--text2);margin-top:2px;}
+
+/* FOOTER */
+.footer{text-align:center;padding:16px;color:var(--text2);font-size:.72rem;font-style:italic;}
+
+/* LINKS */
+a{color:var(--slate2);text-decoration:none;}
+a:hover{color:var(--cream);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="title-group">
+    <div class="site-title">⚙ Field Ops</div>
+    <div class="site-sub">Matthew · Lompoc, CA · Unisys</div>
+  </div>
+  <div class="header-right">
+    <div class="time" id="clock">--:-- --</div>
+    <div id="dateDisp">Loading...</div>
+    <div id="weather" style="color:var(--sage2);">🌤 Lompoc...</div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="show('tickets',this)">🎟 Tickets & Route</button>
+  <button class="nav-btn" onclick="show('pudo',this)">📦 PUDO & Parts</button>
+  <button class="nav-btn" onclick="show('ai',this)">🤖 AI Briefing</button>
+</nav>
+
+<div class="content">
+
+<!-- TICKETS & ROUTE -->
+<div class="panel active" id="panel-tickets">
+
+  <!-- Dispatch Banner -->
+  <div class="banner hold" id="dispatchBanner">🚫 HOLD — Update contact status for each ticket below before dispatching.</div>
+
+  <div class="g21">
+    <div>
+
+      <!-- Ticket Summary Card -->
+      <div class="card">
+        <div class="card-title">🎟 Active Tickets — Apr 7/8</div>
+
+        <!-- WOT16501003 AAA LOCAL -->
+        <div style="background:rgba(90,122,74,.1);border:1px solid var(--moss2);border-radius:5px;padding:8px 10px;margin-bottom:10px;">
+          <div style="font-family:'Cinzel',serif;font-size:.57rem;letter-spacing:.14em;color:var(--moss2);margin-bottom:5px;">⭐ LOCAL · LOMPOC · NO PARTS · APR 8 @ 5PM</div>
+          <div class="row" style="border:none;padding:0;cursor:pointer;" onclick="toggleTicket('d5')">
+            <span><span class="dot dot-g"></span>WOT16501003 · AAA Altoona · UPS Battery</span>
+            <span class="badge b-ok">✓ Confirmed</span>
+          </div>
+          <div class="cs" id="cs5">
+            <span class="cs-label">Contact:</span>
+            <button class="cs-btn a-confirmed" onclick="setContact('cs5','confirmed')">✅ Confirmed</button>
+          </div>
+        </div>
+
+        <!-- WOT16483038 -->
+        <div class="row" style="cursor:pointer;flex-wrap:wrap;gap:5px;" onclick="toggleTicket('d1')">
+          <span><span class="dot dot-r"></span>WOT16483038 · Landis+Gyr SB · Lat 5550</span>
+          <span class="badge b-red">⚠ ProSupport Plus</span>
+        </div>
+        <div class="cs" id="cs1">
+          <span class="cs-label">Contact:</span>
+          <button class="cs-btn" onclick="setContact('cs1','attempted')">📧 Attempted</button>
+          <button class="cs-btn" onclick="setContact('cs1','confirmed')">✅ Confirmed</button>
+          <button class="cs-btn" onclick="setContact('cs1','noresponse')">🔇 No Response</button>
+        </div>
+
+        <!-- WOT16488814 -->
+        <div class="row" style="cursor:pointer;flex-wrap:wrap;gap:5px;margin-top:4px;" onclick="toggleTicket('d2')">
+          <span><span class="dot dot-y"></span>WOT16488814 · UCSB SB · Lat 5440</span>
+          <span class="badge b-warn">PUDO Goleta</span>
+        </div>
+        <div class="cs" id="cs2">
+          <span class="cs-label">Contact:</span>
+          <button class="cs-btn" onclick="setContact('cs2','attempted')">📧 Attempted</button>
+          <button class="cs-btn" onclick="setContact('cs2','confirmed')">✅ Confirmed</button>
+          <button class="cs-btn" onclick="setContact('cs2','noresponse')">🔇 No Response</button>
+        </div>
+
+        <!-- WOT16494420 -->
+        <div class="row" style="cursor:pointer;flex-wrap:wrap;gap:5px;margin-top:4px;" onclick="toggleTicket('d3')">
+          <span><span class="dot dot-y"></span>WOT16494420 · SLO COE · Precision 3460</span>
+          <span class="badge b-warn">PUDO Santa Maria</span>
+        </div>
+        <div class="cs" id="cs3">
+          <span class="cs-label">Contact:</span>
+          <button class="cs-btn" onclick="setContact('cs3','attempted')">📧 Attempted</button>
+          <button class="cs-btn" onclick="setContact('cs3','confirmed')">✅ Confirmed</button>
+          <button class="cs-btn" onclick="setContact('cs3','noresponse')">🔇 No Response</button>
+        </div>
+
+        <!-- WOT16496243 -->
+        <div class="row" style="cursor:pointer;flex-wrap:wrap;gap:5px;margin-top:4px;" onclick="toggleTicket('d4')">
+          <span><span class="dot dot-b"></span>WOT16496243 · Zone 5 Tech SLO · Pro AIO</span>
+          <span class="badge b-blue">SLA Apr 13</span>
+        </div>
+        <div class="cs" id="cs4">
+          <span class="cs-label">Contact:</span>
+          <button class="cs-btn" onclick="setContact('cs4','attempted')">📧 Attempted</button>
+          <button class="cs-btn" onclick="setContact('cs4','confirmed')">✅ Confirmed</button>
+          <button class="cs-btn" onclick="setContact('cs4','noresponse')">🔇 No Response</button>
+        </div>
+
+        <div style="margin-top:9px;font-size:.72rem;color:var(--text2);font-style:italic;">↑ Click ticket name to expand details + activity log</div>
+      </div>
+
+      <!-- TICKET DETAILS -->
+
+      <!-- AAA -->
+      <div class="ticket-detail" id="d5">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--moss2);">⭐ WOT16501003 · AAA ALTOONA · LOMPOC LOCAL</span>
+          <button class="btn" onclick="toggleTicket('d5')" style="padding:2px 9px;font-size:.55rem;">Close ✕</button>
+        </div>
+        <div style="background:rgba(90,122,74,.12);padding:7px 11px;border-radius:4px;border-left:2px solid var(--moss2);margin-bottom:10px;font-size:.8rem;color:var(--moss2);">⭐ 525 W Central Ave, Lompoc — zero drive time. UPS hot-swap, 30 min job. Apr 8 @ 5:00pm. Part confirmed on-site per Scott (3-way call Apr 7).</div>
+        <div class="td-grid">
+          <div><div class="td-label">Issue</div><div class="td-val" style="color:var(--gold2);">UPS Battery Near End of Life</div></div>
+          <div><div class="td-label">Parts</div><div class="td-val" style="color:var(--moss2);">None — On-Site ✓</div></div>
+          <div><div class="td-label">SLA</div><div class="td-val" style="color:var(--gold2);">Apr 8 · 3:00pm restore</div></div>
+          <div><div class="td-label">Scheduled</div><div class="td-val">Apr 8 · 5:00pm (30 min)</div></div>
+          <div><div class="td-label">Primary Contact</div><div class="td-val">Jessica Garcia · <a href="tel:8057405209">805-740-5209</a></div></div>
+          <div><div class="td-label">Secondary</div><div class="td-val">Shawn Matz · <a href="tel:7148508250">714-850-8250</a></div></div>
+        </div>
+        <div class="div"></div>
+        <div style="font-size:.75rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">ACTIVITY LOG</div>
+        <div class="al-entry"><span class="al-time">04/07 11:50</span> · <span class="al-me">Matthew Weddington</span> — Three-way call with Shawn Matz + Scott. Part confirmed on-site. Jessica Garcia is correct primary contact (was entered incorrectly). Hot-swap confirmed, no business impact. Scheduled Apr 8 @ 5pm.</div>
+        <div class="al-entry"><span class="al-time">04/07 11:27</span> · <span class="al-sys">AZ Integration Dell</span> — Scheduled for 04/08 16:44. Window 04/08 17:00–19:00.</div>
+        <div class="al-entry"><span class="al-time">04/07 11:09</span> · <span class="al-sys">Sarika Gupta</span> — Ticket created. Assigned Matthew Weddington. Target phone response 12:09pm.</div>
+      </div>
+
+      <!-- Landis+Gyr -->
+      <div class="ticket-detail" id="d1">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--rust2);">🔴 WOT16483038 · LANDIS+GYR · PROSUPPORT PLUS</span>
+          <button class="btn" onclick="toggleTicket('d1')" style="padding:2px 9px;font-size:.55rem;">Close ✕</button>
+        </div>
+        <div style="background:rgba(107,191,122,.08);padding:7px 11px;border-radius:4px;border-left:2px solid #6bbf7a;margin-bottom:10px;font-size:.8rem;color:#6bbf7a;">✅ Tracking 519871131410 — Delivered 04/06 10:13am Goleta FedEx. Signed M. Weddington. All 8 parts in hand.</div>
+        <div style="background:rgba(201,168,76,.08);padding:7px 11px;border-radius:4px;border-left:2px solid var(--gold);margin-bottom:10px;font-size:.8rem;color:var(--gold2);">⚠ DC Access: Training complete ✓ (04/06). Still need DC Access Request form submitted → contact Fleur to shepherd. Do NOT self-schedule.</div>
+        <div class="td-grid">
+          <div><div class="td-label">Device</div><div class="td-val">Dell Latitude 5550</div></div>
+          <div><div class="td-label">Serial</div><div class="td-val" style="font-family:'JetBrains Mono',monospace;font-size:.72rem;">VN0MMGXXWSV0056D</div></div>
+          <div><div class="td-label">Asset Tag</div><div class="td-val" style="font-family:'JetBrains Mono',monospace;">1ST5F94</div></div>
+          <div><div class="td-label">Issue</div><div class="td-val" style="color:var(--rust2);">Fan noise — accidental drop</div></div>
+          <div><div class="td-label">SLA</div><div class="td-val" style="color:var(--rust2);">Apr 7 · 17:59 PST · N1</div></div>
+          <div><div class="td-label">Location</div><div class="td-val">3323 Cliff Dr, Santa Barbara</div></div>
+          <div><div class="td-label">Primary</div><div class="td-val">Fleur Phelps · <a href="tel:4705386571">470-538-6571</a></div></div>
+          <div><div class="td-label">Alternate</div><div class="td-val">Jordache Joseph · <a href="tel:7622443423">762-244-3423</a></div></div>
+          <div><div class="td-label">Email</div><div class="td-val">fleur1.phelps@landisgyr.com</div></div>
+        </div>
+        <div class="div"></div>
+        <div style="margin-bottom:10px;">
+          <div style="font-size:.72rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">PARTS (8) — ALL IN HAND</div>
+          <div class="parts-grid">
+            <div class="part-item"><span style="color:var(--text2);">012DJ</span> · Fan Assy</div>
+            <div class="part-item"><span style="color:var(--text2);">835MH</span> · Keyboard Backlit</div>
+            <div class="part-item"><span style="color:var(--text2);">27XMJ</span> · Heatsink</div>
+            <div class="part-item"><span style="color:var(--text2);">2V9WX</span> · SVC AlsoShip</div>
+            <div class="part-item"><span style="color:var(--text2);">7KFD6</span> · Antenna Cover</div>
+            <div class="part-item"><span style="color:var(--text2);">RXDYH</span> · Bezel</div>
+            <div class="part-item"><span style="color:var(--text2);">X7KPJ</span> · Door UMA</div>
+            <div class="part-item"><span style="color:var(--text2);">WY3X9</span> · Palmrest ↩ Return</div>
+          </div>
+        </div>
+        <div class="div"></div>
+        <div style="font-size:.75rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">ACTIVITY LOG</div>
+        <div class="al-entry"><span class="al-time">04/07</span> · <span class="al-me">Matthew Weddington</span> — Email sent to Fleur Phelps requesting appointment confirmation for 04/08. Awaiting response.</div>
+        <div class="al-entry"><span class="al-time">04/06 22:40</span> · <span class="al-me">Matthew Weddington</span> — Completed DC training. Sent email to Fleur with cell. Will be in area tomorrow.</div>
+        <div class="al-entry"><span class="al-time">04/06 12:05</span> · <span class="al-me">Matthew Weddington</span> — Ticket pulled from tank, replaced by SLO. Parts in hand. Waiting for reassignment.</div>
+        <div class="al-entry"><span class="al-time">04/02 08:46</span> · <span class="al-sys">FS GFO Bulk Updates</span> — Tracking # 519871131410 confirmed.</div>
+        <div class="al-entry"><span class="al-time">04/01 16:57</span> · <span class="al-me">Matthew Weddington</span> — Called, left message. Asked about working tomorrow.</div>
+        <div class="al-entry"><span class="al-time">04/01 09:01</span> · <span class="al-me">Matthew Weddington</span> — Ticket assigned. No tracking visible. Called Dell — got tracking #.</div>
+        <div class="al-entry"><span class="al-time">03/31 09:52</span> · <span class="al-sys">AZ Integration Dell</span> — Ticket created. Assigned US-66880000-SBD-FES South CA.</div>
+      </div>
+
+      <!-- UCSB -->
+      <div class="ticket-detail" id="d2">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--gold2);">🟡 WOT16488814 · UCSB · LATITUDE 5440</span>
+          <button class="btn" onclick="toggleTicket('d2')" style="padding:2px 9px;font-size:.55rem;">Close ✕</button>
+        </div>
+        <div class="td-grid">
+          <div><div class="td-label">Device</div><div class="td-val">Dell Latitude 5440</div></div>
+          <div><div class="td-label">Serial</div><div class="td-val" style="font-family:'JetBrains Mono',monospace;font-size:.72rem;">CN0TC3NGCMK0036B</div></div>
+          <div><div class="td-label">Asset Tag</div><div class="td-val" style="font-family:'JetBrains Mono',monospace;">HK4TCY3</div></div>
+          <div><div class="td-label">Issue</div><div class="td-val" style="color:var(--gold2);">Power/startup — motherboard</div></div>
+          <div><div class="td-label">SLA</div><div class="td-val" style="color:var(--gold2);">Apr 7 · 18:00 PST</div></div>
+          <div><div class="td-label">Location</div><div class="td-val">UCSB Social Sciences Rm 1101</div></div>
+          <div><div class="td-label">Contact</div><div class="td-val">Tony Chabolla · <a href="tel:8058932731">805-893-2731</a></div></div>
+          <div><div class="td-label">Email</div><div class="td-val">tchabolla@ucsb.edu</div></div>
+          <div><div class="td-label">Window</div><div class="td-val">9am–4pm · schedule via email</div></div>
+        </div>
+        <div style="background:rgba(201,168,76,.08);padding:7px 11px;border-radius:4px;border-left:2px solid var(--gold);margin:10px 0;font-size:.8rem;color:var(--gold2);">⚠ 2 VMs + 1 email 04/06 — no response. Email sent 04/07 requesting 04/08 appt. Awaiting reply.</div>
+        <div class="div"></div>
+        <div style="margin-bottom:10px;">
+          <div style="font-size:.72rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">PARTS — GOLETA PUDO · SEAN · 495 S FAIRVIEW</div>
+          <div class="parts-grid">
+            <div class="part-item"><span style="color:var(--text2);">FF74N</span> · Motherboard ↩ Return · <span style="color:#6bbf7a;">Received ✓</span></div>
+            <div class="part-item"><span style="color:var(--text2);">0PYG4</span> · SVC AlsoShip · <span style="color:#6bbf7a;">Received ✓</span></div>
+          </div>
+          <div style="margin-top:5px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);">Tracking: 519871207430</div>
+        </div>
+        <div class="div"></div>
+        <div style="font-size:.75rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">ACTIVITY LOG</div>
+        <div class="al-entry"><span class="al-time">04/07</span> · <span class="al-me">Matthew Weddington</span> — Email sent to Tony Chabolla requesting 04/08 appointment. Awaiting response.</div>
+        <div class="al-entry"><span class="al-time">04/07 05:05</span> · <span class="al-sys">AZ Integration Dell</span> — Call assigned 04/07 10:14. ETA window 08:00–18:00.</div>
+        <div class="al-entry"><span class="al-time">04/06 10:32</span> · <span class="al-me">Matthew Weddington</span> — Sent email to Tony. 2 VMs left, no reply. Part in hand. Will call Dell if no response.</div>
+        <div class="al-entry"><span class="al-time">04/06 08:47</span> · <span class="al-me">Matthew Weddington</span> — Called customer, left message.</div>
+        <div class="al-entry"><span class="al-time">04/03 16:29</span> · <span class="al-sys">Prem Prakash S</span> — Part arrived 4/3. FE emailed customer. Rescheduled to 4/6.</div>
+        <div class="al-entry"><span class="al-time">04/01 14:07</span> · <span class="al-sys">AZ Integration Dell</span> — Ticket created.</div>
+      </div>
+
+      <!-- SLO COE -->
+      <div class="ticket-detail" id="d3">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--gold2);">🟡 WOT16494420 · SLO COUNTY OFFICE OF EDUCATION</span>
+          <button class="btn" onclick="toggleTicket('d3')" style="padding:2px 9px;font-size:.55rem;">Close ✕</button>
+        </div>
+        <div class="td-grid">
+          <div><div class="td-label">Device</div><div class="td-val">Dell Precision 3460</div></div>
+          <div><div class="td-label">Serial</div><div class="td-val" style="font-family:'JetBrains Mono',monospace;font-size:.72rem;">CN0XV49JFCW0035A</div></div>
+          <div><div class="td-label">Asset Tag</div><div class="td-val" style="font-family:'JetBrains Mono',monospace;">95M3SY3</div></div>
+          <div><div class="td-label">Issue</div><div class="td-val" style="color:var(--gold2);">Hard drive failure — SSD</div></div>
+          <div><div class="td-label">SLA</div><div class="td-val" style="color:var(--gold2);">Apr 7 · 18:00 PST</div></div>
+          <div><div class="td-label">Location</div><div class="td-val">3350 Education Dr, SLO</div></div>
+          <div><div class="td-label">Contact</div><div class="td-val">Glen McColm · <a href="tel:8053055286">805-305-5286</a></div></div>
+          <div><div class="td-label">Email</div><div class="td-val">gmccolm@slocoe.org</div></div>
+          <div><div class="td-label">Note</div><div class="td-val" style="color:var(--gold2);">Said he'd call back 04/06 — no callback</div></div>
+        </div>
+        <div style="background:rgba(201,168,76,.08);padding:7px 11px;border-radius:4px;border-left:2px solid var(--gold);margin:10px 0;font-size:.8rem;color:var(--gold2);">⚠ Email sent 04/07 requesting 04/08 appt. Awaiting response. RD risk 43.87% — SSD RCA flag.</div>
+        <div class="div"></div>
+        <div style="margin-bottom:10px;">
+          <div style="font-size:.72rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">PART — SANTA MARIA PUDO · 3070 SKYWAY DR</div>
+          <div class="parts-grid">
+            <div class="part-item"><span style="color:var(--text2);">XK2JV</span> · 1TB SSD Encrypted ↩ Return · <span style="color:#6bbf7a;">Received ✓ 04/06</span></div>
+          </div>
+        </div>
+        <div class="div"></div>
+        <div style="font-size:.75rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">ACTIVITY LOG</div>
+        <div class="al-entry"><span class="al-time">04/07</span> · <span class="al-me">Matthew Weddington</span> — Email sent to Glen McColm requesting 04/08 appointment. Awaiting response.</div>
+        <div class="al-entry"><span class="al-time">04/06 16:18</span> · <span class="al-sys">Prem Prakash S</span> — FE spoke to Glen. Customer will get back with window. Rescheduled to 4/7.</div>
+        <div class="al-entry"><span class="al-time">04/06 11:54</span> · <span class="al-me">Matthew Weddington</span> — Touched base with Glen. Said he'd call back later.</div>
+        <div class="al-entry"><span class="al-time">04/06 08:49</span> · <span class="al-me">Matthew Weddington</span> — Checked tracking — part arriving tomorrow. Will monitor.</div>
+        <div class="al-entry"><span class="al-time">04/03 16:20</span> · <span class="al-sys">AZ Integration Dell</span> — Ticket created. Rescheduled to 04/06.</div>
+      </div>
+
+      <!-- Zone 5 -->
+      <div class="ticket-detail" id="d4">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--slate2);">🔵 WOT16496243 · ZONE 5 TECHNOLOGIES · SLA APR 13</span>
+          <button class="btn" onclick="toggleTicket('d4')" style="padding:2px 9px;font-size:.55rem;">Close ✕</button>
+        </div>
+        <div class="td-grid">
+          <div><div class="td-label">Device</div><div class="td-val">Dell Pro 24 AIO QC24250</div></div>
+          <div><div class="td-label">Serial</div><div class="td-val" style="font-family:'JetBrains Mono',monospace;font-size:.72rem;">CN09W8F5WS20054M</div></div>
+          <div><div class="td-label">Asset Tag</div><div class="td-val" style="font-family:'JetBrains Mono',monospace;">7ZV1DB4</div></div>
+          <div><div class="td-label">Issue</div><div class="td-val" style="color:var(--slate2);">Cracked LCD — replace assembly</div></div>
+          <div><div class="td-label">SLA</div><div class="td-val" style="color:var(--slate2);">Apr 13 · 17:59 PST · 5-Day</div></div>
+          <div><div class="td-label">Location</div><div class="td-val">827 Buckley Rd, SLO</div></div>
+          <div><div class="td-label">Contact</div><div class="td-val">Tristan Soares · <a href="tel:8055488663">805-548-8663</a></div></div>
+          <div><div class="td-label">Email</div><div class="td-val">tristansoares@zone5tech.com</div></div>
+          <div><div class="td-label">Note</div><div class="td-val">Best: M/W/F 9am–2pm · Billable</div></div>
+        </div>
+        <div style="background:rgba(201,168,76,.08);padding:7px 11px;border-radius:4px;border-left:2px solid var(--gold);margin:10px 0;font-size:.8rem;color:var(--gold2);">Email sent 04/07 — flexible scheduling through Apr 13. Awaiting response. Verify part at Santa Maria PUDO before dispatch.</div>
+        <div class="div"></div>
+        <div style="margin-bottom:10px;">
+          <div style="font-size:.72rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">PART — SANTA MARIA PUDO · 3070 SKYWAY DR</div>
+          <div class="parts-grid">
+            <div class="part-item"><span style="color:var(--text2);">XHW1N</span> · 23.8" Touch LCD ↩ Return · <span style="color:#6bbf7a;">Received ✓ 04/07 02:11</span></div>
+          </div>
+        </div>
+        <div class="div"></div>
+        <div style="font-size:.75rem;color:var(--text2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;">ACTIVITY LOG</div>
+        <div class="al-entry"><span class="al-time">04/07</span> · <span class="al-me">Matthew Weddington</span> — Email sent to Tristan Soares. Flexible scheduling through Apr 13. Awaiting response.</div>
+        <div class="al-entry"><span class="al-time">04/07 06:28</span> · <span class="al-sys">AZ Integration Dell</span> — Call assigned 04/07 14:00.</div>
+        <div class="al-entry"><span class="al-time">04/06 10:45</span> · <span class="al-sys">AZ Integration Dell</span> — Ticket created. LCD part TO6100909 to Santa Maria PUDO.</div>
+      </div>
+
+      <!-- Route -->
+      <div class="card green">
+        <div class="card-title">🗺 Route (activates on confirmed contact)</div>
+        <div id="routeStatus" style="font-size:.8rem;color:var(--rust2);font-style:italic;margin-bottom:10px;">⏸ Holding — confirm customer contact before dispatching</div>
+        <div class="check-item"><input type="checkbox" id="r1"><label for="r1">1. AAA Lompoc — 525 W Central Ave · Apr 8 @ 4:45pm · Hot-swap UPS battery · 30 min ✓</label></div>
+        <div class="check-item"><input type="checkbox" id="r2"><label for="r2">2. WOT16483038 — Landis+Gyr 3323 Cliff Dr SB · Parts in hand · ProSupport Plus</label></div>
+        <div class="check-item"><input type="checkbox" id="r3"><label for="r3">3. Goleta PUDO — 495 S Fairview · FF74N + 0PYG4 for UCSB · Sean</label></div>
+        <div class="check-item"><input type="checkbox" id="r4"><label for="r4">4. WOT16488814 — UCSB Rm 1101 SB · Call Tony before arrival</label></div>
+        <div class="check-item"><input type="checkbox" id="r5"><label for="r5">5. Santa Maria PUDO — 3070 Skyway Dr · XK2JV (SLO COE) + XHW1N (Zone 5)</label></div>
+        <div class="check-item"><input type="checkbox" id="r6"><label for="r6">6. WOT16494420 — SLO COE 3350 Education Dr · Call Glen first</label></div>
+        <div class="check-item"><input type="checkbox" id="r7"><label for="r7">7. WOT16496243 — Zone 5 Tech 827 Buckley Rd SLO · Call Tristan first · SLA Apr 13</label></div>
+      </div>
+
+      <!-- Notes -->
+      <div class="card">
+        <div class="card-title">📝 Field Notes</div>
+        <textarea class="note" placeholder="Customer notes, access codes, part numbers..."></textarea>
+      </div>
+
+    </div>
+
+    <!-- Right column -->
+    <div>
+      <div class="card" style="margin-bottom:14px;">
+        <div class="card-title">📊 Today at a Glance</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
+          <div><div class="stat-val" style="color:var(--gold2)">5</div><div class="stat-label">Active Tickets</div></div>
+          <div><div class="stat-val" style="color:var(--moss2)">1</div><div class="stat-label">Confirmed Today</div></div>
+          <div><div class="stat-val">2</div><div class="stat-label">PUDO Stops</div></div>
+          <div><div class="stat-val" style="color:var(--rust2)">3</div><div class="stat-label">Awaiting Reply</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PUDO & PARTS -->
+<div class="panel" id="panel-pudo">
+  <div class="g2">
+    <div>
+      <div class="card">
+        <div class="card-title">📦 Goleta FedEx · Sean · 495 S Fairview Ave</div>
+        <div class="row"><span>WOT16488814 — FF74N Motherboard</span><span class="badge b-ok">Received ✓</span></div>
+        <div class="row"><span>WOT16488814 — 0PYG4 SVC AlsoShip</span><span class="badge b-ok">Received ✓</span></div>
+        <div class="row"><span>Tracking 519871207430</span><span class="badge b-ok">Received ✓</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📦 Santa Maria FedEx · 3070 Skyway Dr, 93454</div>
+        <div class="row"><span>WOT16494420 — XK2JV 1TB SSD</span><span class="badge b-ok">Received ✓ 04/06</span></div>
+        <div class="row"><span>WOT16496243 — XHW1N LCD Assembly</span><span class="badge b-ok">Received ✓ 04/07</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📦 Oxnard FedEx · Bill</div>
+        <div class="row"><span>Bill Confirmed</span><span class="badge b-ok">Yes</span></div>
+        <div class="row"><span>No active pickups at this location</span><span class="badge b-blue">Standby</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">✅ Parts In Hand</div>
+        <div class="row"><span>WOT16483038 — All 8 parts</span><span class="badge b-ok">In Hand ✓</span></div>
+        <div class="row"><span>Tracking 519871131410</span><span class="badge b-ok">Delivered 04/06</span></div>
+        <div class="row"><span>Signed by M. Weddington</span><span class="badge b-ok">Confirmed</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚠ Returnable Parts</div>
+        <div class="row"><span>WOT16483038 — WY3X9 Palmrest</span><span class="badge b-warn">Return Required</span></div>
+        <div class="row"><span>WOT16488814 — FF74N Motherboard</span><span class="badge b-warn">Return Required</span></div>
+        <div class="row"><span>WOT16494420 — XK2JV SSD</span><span class="badge b-warn">Return Required</span></div>
+        <div class="row"><span>WOT16496243 — XHW1N LCD</span><span class="badge b-warn">Return Required</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI BRIEFING -->
+<div class="panel" id="panel-ai">
+  <div class="g21">
+    <div>
+      <div class="card">
+        <div class="card-title">🤖 AI Field Briefing</div>
+        <div class="chat-box" id="fieldChat">
+          <div class="chat-msg ai">
+            <div class="role">Command</div>
+            <div class="body">Good morning Matthew. You have 5 active tickets. AAA Lompoc is confirmed for tomorrow Apr 8 at 5pm — that's your anchor. The SB tickets (Landis+Gyr, UCSB) and SLO tickets (SLO COE, Zone 5) are all awaiting customer email replies. Ask me anything about routing, SLA priority, or parts.</div>
+          </div>
+        </div>
+        <div class="chat-row">
+          <textarea class="chat-input" id="fieldInput" placeholder="Ask about routing, SLA priority, or today's plan..." rows="2" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
+          <button class="btn primary" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">⚡ Quick Actions</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <button class="btn" style="text-align:left;padding:9px 12px;" onclick="briefing()">📋 Morning Briefing</button>
+          <button class="btn" style="text-align:left;padding:9px 12px;" onclick="slaCheck()">⏰ SLA Status Check</button>
+          <button class="btn" style="text-align:left;padding:9px 12px;" onclick="routeAdvice()">🗺 Best Route Today</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">"The impediment to action advances action." — Marcus Aurelius &nbsp;·&nbsp; <a href="stoic.html" style="color:var(--sage2);">🌿 Stoic Corner →</a></div>
+
+<script>
+// CLOCK
+function tick(){
+  var n=new Date();
+  document.getElementById('clock').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('dateDisp').textContent=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+}
+setInterval(tick,1000);
+tick();
+
+// WEATHER
+fetch('https://api.open-meteo.com/v1/forecast?latitude=34.6386&longitude=-120.4579&current=temperature_2m,weathercode,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FLos_Angeles')
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var c=d.current;
+    var icon=c.weathercode===0?'☀️':c.weathercode<=3?'⛅':c.weathercode<=67?'🌧':'⛈';
+    document.getElementById('weather').textContent=icon+' '+Math.round(c.temperature_2m)+'°F · '+Math.round(c.windspeed_10m)+' mph';
+  }).catch(function(){});
+
+// TABS
+function show(name,btn){
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('panel-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// TICKET TOGGLE
+function toggleTicket(id){
+  var el=document.getElementById(id);
+  if(!el)return;
+  el.classList.toggle('open');
+}
+
+// CONTACT STATUS
+var contactState={cs1:'none',cs2:'none',cs3:'none',cs4:'none',cs5:'confirmed'};
+function setContact(groupId,status){
+  contactState[groupId]=status;
+  var group=document.getElementById(groupId);
+  group.querySelectorAll('.cs-btn').forEach(function(b){
+    b.classList.remove('a-attempted','a-confirmed','a-noresponse');
+  });
+  var btns=group.querySelectorAll('.cs-btn');
+  btns.forEach(function(b){
+    if(b.textContent.includes('Attempted')&&status==='attempted') b.classList.add('a-attempted');
+    if(b.textContent.includes('Confirmed')&&status==='confirmed') b.classList.add('a-confirmed');
+    if(b.textContent.includes('No Response')&&status==='noresponse') b.classList.add('a-noresponse');
+  });
+  updateBanner();
+}
+function updateBanner(){
+  var states=Object.values(contactState);
+  var confirmed=states.filter(function(s){return s==='confirmed';}).length;
+  var attempted=states.filter(function(s){return s==='attempted'||s==='noresponse';}).length;
+  var banner=document.getElementById('dispatchBanner');
+  var route=document.getElementById('routeStatus');
+  if(confirmed>1){
+    banner.className='banner go';
+    banner.textContent='✅ GO — '+confirmed+' customers confirmed. Dispatch to confirmed stops. Batch by area.';
+    route.style.color='var(--moss2)';
+    route.textContent='✅ Active — dispatch to confirmed stops only';
+  } else if(confirmed===1){
+    banner.className='banner watch';
+    banner.textContent='⭐ AAA Lompoc confirmed for Apr 8 @ 5pm. Waiting on remaining 4 customers. Stay local until more confirm.';
+    route.style.color='var(--gold2)';
+    route.textContent='⏳ Partial — AAA confirmed, others pending';
+  } else if(attempted>0){
+    banner.className='banner watch';
+    banner.textContent='⏳ HOLD — Contact attempted. Stay local until customers respond. Document all attempts.';
+  } else {
+    banner.className='banner hold';
+    banner.textContent='🚫 HOLD — Update contact status for each ticket before dispatching.';
+  }
+}
+updateBanner();
+
+// AI CHAT
+var messages=[];
+var sysPrompt='You are Matthew\'s Field Operations AI. He is an IT field engineer in Lompoc, CA working Dell hardware via Unisys. His 5 active tickets: WOT16501003 AAA Lompoc (UPS battery, confirmed Apr 8 5pm, LOCAL), WOT16483038 Landis+Gyr SB (ProSupport Plus, parts in hand, awaiting customer email reply), WOT16488814 UCSB SB (motherboard, parts at Goleta PUDO, awaiting reply), WOT16494420 SLO COE (SSD, parts at Santa Maria PUDO, awaiting reply), WOT16496243 Zone 5 SLO (LCD, parts at Santa Maria PUDO, SLA Apr 13, awaiting reply). His rule: never dispatch without confirmed customer contact first. Be concise and tactical.';
+
+function sendChat(){
+  var input=document.getElementById('fieldInput');
+  var box=document.getElementById('fieldChat');
+  var msg=input.value.trim();
+  if(!msg)return;
+  input.value='';
+  appendMsg(box,'user','You',msg);
+  messages.push({role:'user',content:msg});
+  var lid='l'+Date.now();
+  box.insertAdjacentHTML('beforeend','<div class="chat-msg ai" id="'+lid+'"><div class="role">Command</div><div class="body"><span class="spinner"></span> Thinking...</div></div>');
+  box.scrollTop=box.scrollHeight;
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sysPrompt,messages:messages})
+  }).then(function(r){return r.json();})
+  .then(function(d){
+    var reply=d.content&&d.content[0]?d.content[0].text:'No response.';
+    messages.push({role:'assistant',content:reply});
+    var el=document.getElementById(lid);
+    if(el)el.remove();
+    appendMsg(box,'ai','Command',reply);
+  }).catch(function(){
+    var el=document.getElementById(lid);
+    if(el)el.innerHTML='<div class="role">Error</div><div class="body" style="color:#c97070;">Connection issue — try again.</div>';
+  });
+}
+
+function appendMsg(box,type,label,text){
+  var d=document.createElement('div');
+  d.className='chat-msg '+type;
+  d.innerHTML='<div class="role">'+label+'</div><div class="body">'+text.replace(/\n/g,'<br>')+'</div>';
+  box.appendChild(d);
+  box.scrollTop=box.scrollHeight;
+}
+
+function briefing(){
+  document.getElementById('fieldInput').value='Give me a morning briefing on today\'s 5 tickets and best plan given my 5pm AAA commitment.';
+  sendChat();
+}
+function slaCheck(){
+  document.getElementById('fieldInput').value='Which tickets have the most urgent SLAs right now?';
+  sendChat();
+}
+function routeAdvice(){
+  document.getElementById('fieldInput').value='Given AAA is confirmed for 5pm in Lompoc tomorrow, what is the best route if I get 1-2 more customer confirmations for SB or SLO?';
+  sendChat();
+}
+</script>
+</body>
+</html>
