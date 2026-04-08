@@ -16,6 +16,7 @@
   --moss:#5a7a4a;--moss2:#7a9f68;
   --cream:#e8e0cc;--cream2:#f5f0e8;
   --text:#d4cfc4;--text2:#a8a49a;--dim:#8a9490;
+  --amber:#c97a2a;--amber2:#e09a4a;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--text);min-height:100vh;}
@@ -33,6 +34,9 @@ body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--te
 .nav-btn:hover{color:var(--cream);background:var(--surface2);border-color:var(--border);}
 .nav-btn.active{color:var(--slate2);background:var(--surface);border-color:var(--border2);border-bottom-color:var(--surface);}
 .nav-btn.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--slate2);}
+.nav-btn.fusions-btn.active{color:var(--amber2);}
+.nav-btn.fusions-btn.active::after{background:var(--amber2);}
+.nav-btn.fusions-btn:hover{color:var(--amber2);}
 
 .content{background:var(--surface);border:1px solid var(--border2);border-top:none;margin:0 32px;border-radius:0 0 8px 8px;min-height:calc(100vh - 160px);}
 .panel{display:none;padding:24px 28px;}
@@ -44,11 +48,13 @@ body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--te
 .card.green::before{background:var(--moss2);}
 .card.red::before{background:var(--rust);}
 .card.closed::before{background:var(--sage);}
+.card.amber::before{background:var(--amber);}
 .card-title{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--slate2);margin-bottom:11px;display:flex;align-items:center;gap:6px;}
 .card.gold .card-title{color:var(--gold2);}
 .card.green .card-title{color:var(--moss2);}
 .card.red .card-title{color:var(--rust2);}
 .card.closed .card-title{color:var(--sage2);}
+.card.amber .card-title{color:var(--amber2);}
 
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .g21{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
@@ -62,6 +68,7 @@ body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--te
 .dot-g{background:#5a9e6a;box-shadow:0 0 5px rgba(90,158,106,.5);}
 .dot-b{background:var(--slate);box-shadow:0 0 5px rgba(107,143,168,.5);}
 .dot-s{background:var(--sage);box-shadow:0 0 5px rgba(122,158,126,.5);}
+.dot-a{background:var(--amber);box-shadow:0 0 5px rgba(201,122,42,.5);}
 
 .badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:3px;white-space:nowrap;}
 .b-ok{background:rgba(90,122,74,.25);color:var(--moss2);}
@@ -69,6 +76,10 @@ body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--te
 .b-red{background:rgba(184,96,42,.25);color:var(--rust2);}
 .b-blue{background:rgba(107,143,168,.2);color:var(--slate2);}
 .b-closed{background:rgba(122,158,126,.2);color:var(--sage2);}
+.b-amber{background:rgba(201,122,42,.2);color:var(--amber2);}
+.b-resolved{background:rgba(90,122,74,.2);color:var(--moss2);}
+.b-open{background:rgba(201,122,42,.2);color:var(--amber2);}
+.b-pending{background:rgba(201,168,76,.18);color:var(--gold2);}
 
 .cs{display:flex;gap:5px;align-items:center;flex-wrap:wrap;padding:6px 0 8px;border-bottom:1px solid var(--border);}
 .cs-label{font-size:.7rem;color:var(--text2);font-family:'JetBrains Mono',monospace;}
@@ -121,6 +132,8 @@ body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--te
 .btn.primary:hover{background:rgba(201,168,76,.2);}
 .btn.sage{background:rgba(122,158,126,.1);border-color:var(--sage);color:var(--sage2);}
 .btn.sage:hover{background:rgba(122,158,126,.2);}
+.btn.amber{background:rgba(201,122,42,.1);border-color:var(--amber);color:var(--amber2);}
+.btn.amber:hover{background:rgba(201,122,42,.2);}
 
 .stat-val{font-family:'JetBrains Mono',monospace;font-size:1.4rem;color:var(--cream2);}
 .stat-label{font-size:.72rem;color:var(--text2);margin-top:2px;}
@@ -156,6 +169,46 @@ a:hover{color:var(--cream);}
 .log-actions{display:flex;gap:8px;align-items:center;}
 .log-hint{font-size:.72rem;color:var(--text2);font-style:italic;}
 .empty-log{text-align:center;padding:32px;color:var(--text2);font-style:italic;font-size:.87rem;}
+
+/* ── FUSIONS STYLES ── */
+.city-tabs{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap;}
+.city-tab{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;padding:5px 14px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .18s;}
+.city-tab:hover{color:var(--amber2);border-color:var(--amber);}
+.city-tab.active{background:rgba(201,122,42,.12);border-color:var(--amber);color:var(--amber2);}
+.city-panel{display:none;}
+.city-panel.active{display:block;}
+
+.fusion-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;border-radius:4px;flex-wrap:wrap;}
+.fusion-row:hover{background:var(--surface3);}
+.fusion-row:last-child{border-bottom:none;}
+.fusion-wot{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--amber2);white-space:nowrap;min-width:110px;}
+.fusion-customer{font-size:.88rem;color:var(--cream);flex:1;min-width:120px;}
+.fusion-issue{font-size:.78rem;color:var(--text2);flex:2;min-width:160px;font-style:italic;}
+.fusion-date{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--dim);white-space:nowrap;}
+
+.fusion-detail{display:none;background:var(--surface3);border:1px solid var(--amber);border-left-width:3px;border-radius:6px;padding:16px 18px;margin-bottom:14px;}
+.fusion-detail.open{display:block;}
+.fusion-detail-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.fusion-detail-title{font-family:'Cinzel',serif;font-size:.65rem;color:var(--amber2);letter-spacing:.12em;}
+.fusion-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;font-size:.82rem;}
+.fusion-meta-block .td-label{color:var(--text2);}
+.fusion-meta-block .td-val{color:var(--cream);}
+.fusion-section{margin-bottom:12px;}
+.fusion-section-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.12em;color:var(--amber);margin-bottom:6px;text-transform:uppercase;}
+.fusion-section-body{font-size:.84rem;line-height:1.75;color:var(--cream2);}
+.fusion-response-box{background:rgba(107,143,168,.07);border:1px solid var(--slate);border-radius:5px;padding:10px 13px;font-size:.82rem;line-height:1.7;color:var(--slate2);white-space:pre-wrap;}
+
+.fusion-add-form{background:var(--surface2);border:1px solid var(--amber);border-radius:7px;padding:16px 18px;margin-top:14px;position:relative;overflow:hidden;}
+.fusion-add-form::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--amber);opacity:.6;}
+.fusion-form-title{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--amber2);margin-bottom:12px;}
+.fusion-fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;}
+.fusion-fields-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.fusion-select{background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:6px 9px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.75rem;outline:none;width:100%;}
+.fusion-select:focus{border-color:var(--amber);}
+.log-input.fusion-focus:focus{border-color:var(--amber);}
+.fusion-textarea{width:100%;background:var(--surface3);border:1px solid var(--border);border-radius:5px;padding:10px;color:var(--text);font-family:'Crimson Pro',serif;font-size:.88rem;resize:vertical;min-height:100px;outline:none;line-height:1.7;margin-bottom:10px;}
+.fusion-textarea:focus{border-color:var(--amber);}
+.fusion-textarea::placeholder{color:var(--text2);font-style:italic;}
 </style>
 </head>
 <body>
@@ -177,6 +230,7 @@ a:hover{color:var(--cream);}
   <button class="nav-btn" onclick="show('pudo',this)">📦 PUDO &amp; Parts</button>
   <button class="nav-btn" onclick="show('ai',this)">🤖 AI Briefing</button>
   <button class="nav-btn" onclick="show('log',this)">📋 Completed WOTs</button>
+  <button class="nav-btn fusions-btn" onclick="show('fusions',this)">⚡ Fusions</button>
 </nav>
 
 <div class="content">
@@ -517,27 +571,16 @@ a:hover{color:var(--cream);}
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════ -->
-<!-- COMPLETED WOTs LOG                        -->
-<!-- ══════════════════════════════════════════ -->
+<!-- COMPLETED WOTs LOG -->
 <div class="panel" id="panel-log">
-
   <div class="g21">
     <div>
-
-      <!-- Log header -->
       <div class="card closed">
         <div class="card-title">📋 Completed Work Order Log</div>
         <div style="font-size:.78rem;color:var(--text2);margin-bottom:12px;font-style:italic;">Click any ticket to expand the full journal entry. Add new entries below.</div>
-
-        <!-- Log list -->
         <div id="wotLogList"></div>
       </div>
-
-      <!-- Expanded detail view area -->
       <div id="wotDetailArea"></div>
-
-      <!-- Add new entry form -->
       <div class="log-add-form">
         <div class="log-form-title">➕ Add Completed Ticket</div>
         <div class="log-fields">
@@ -564,10 +607,7 @@ a:hover{color:var(--cream);}
           <span class="log-hint" id="saveHint"></span>
         </div>
       </div>
-
     </div>
-
-    <!-- Right column — stats -->
     <div>
       <div class="card closed">
         <div class="card-title">📊 Log Summary</div>
@@ -586,9 +626,149 @@ a:hover{color:var(--cream);}
       </div>
     </div>
   </div>
-
 </div>
-<!-- /COMPLETED WOTs LOG -->
+
+<!-- ══════════════════════════════════════════ -->
+<!-- FUSIONS                                    -->
+<!-- ══════════════════════════════════════════ -->
+<div class="panel" id="panel-fusions">
+  <div class="g21">
+    <div>
+
+      <!-- Header card -->
+      <div class="card amber">
+        <div class="card-title">⚡ Fusions — Field Issue Log</div>
+        <div style="font-size:.78rem;color:var(--text2);margin-bottom:14px;font-style:italic;">Reworks, escalations, disputes, and anomalies. Organized by city. Click any entry to expand full detail.</div>
+
+        <!-- City tabs -->
+        <div class="city-tabs">
+          <button class="city-tab active" onclick="showCity('all',this)">All Cities</button>
+          <button class="city-tab" onclick="showCity('ventura',this)">Ventura</button>
+          <button class="city-tab" onclick="showCity('santa-barbara',this)">Santa Barbara</button>
+          <button class="city-tab" onclick="showCity('slo',this)">SLO</button>
+          <button class="city-tab" onclick="showCity('lompoc',this)">Lompoc</button>
+          <button class="city-tab" onclick="showCity('other',this)">Other</button>
+        </div>
+
+        <!-- Fusion list -->
+        <div id="fusionList"></div>
+      </div>
+
+      <!-- Expanded detail area -->
+      <div id="fusionDetailArea"></div>
+
+      <!-- Add Fusion form -->
+      <div class="fusion-add-form">
+        <div class="fusion-form-title">➕ Log New Fusion</div>
+        <div class="fusion-fields">
+          <div class="log-field">
+            <span class="log-label">WOT Number</span>
+            <input class="log-input fusion-focus" id="fWot" placeholder="WOT16425470" />
+          </div>
+          <div class="log-field">
+            <span class="log-label">DPS Number</span>
+            <input class="log-input fusion-focus" id="fDps" placeholder="465586722" />
+          </div>
+          <div class="log-field">
+            <span class="log-label">Date</span>
+            <input class="log-input fusion-focus" id="fDate" placeholder="April 8, 2026" />
+          </div>
+        </div>
+        <div class="fusion-fields">
+          <div class="log-field">
+            <span class="log-label">Customer</span>
+            <input class="log-input fusion-focus" id="fCustomer" placeholder="Ventura County Hall of Admin" />
+          </div>
+          <div class="log-field">
+            <span class="log-label">Device</span>
+            <input class="log-input fusion-focus" id="fDevice" placeholder="PowerEdge R760 · Tag 7503CW3" />
+          </div>
+          <div class="log-field">
+            <span class="log-label">City</span>
+            <select class="fusion-select" id="fCity">
+              <option value="ventura">Ventura</option>
+              <option value="santa-barbara">Santa Barbara</option>
+              <option value="slo">SLO</option>
+              <option value="lompoc">Lompoc</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="fusion-fields-2">
+          <div class="log-field">
+            <span class="log-label">Fusion Type</span>
+            <select class="fusion-select" id="fType">
+              <option value="Rework">Rework / Repeat Dispatch</option>
+              <option value="Escalation">Escalation</option>
+              <option value="Parts Dispute">Parts Dispute</option>
+              <option value="Documentation">Documentation Issue</option>
+              <option value="Feedback">FE Feedback Received</option>
+              <option value="SLA Breach">SLA Breach</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="log-field">
+            <span class="log-label">Status</span>
+            <select class="fusion-select" id="fStatus">
+              <option value="open">Open</option>
+              <option value="pending">Pending Response</option>
+              <option value="resolved">Resolved</option>
+            </select>
+          </div>
+        </div>
+        <div class="log-field" style="margin-bottom:8px;">
+          <span class="log-label" style="margin-bottom:4px;display:block;">Issue Summary</span>
+          <textarea class="fusion-textarea" id="fIssue" placeholder="Describe what happened — what the ticket says, what Dell / PMO flagged, and the context from the field..." style="min-height:80px;"></textarea>
+        </div>
+        <div class="log-field" style="margin-bottom:10px;">
+          <span class="log-label" style="margin-bottom:4px;display:block;">My Response / Notes</span>
+          <textarea class="fusion-textarea" id="fResponse" placeholder="Your written response, assessment, or follow-up actions taken..."></textarea>
+        </div>
+        <div class="log-actions">
+          <button class="btn amber" onclick="addFusion()">💾 Save Fusion</button>
+          <span class="log-hint" id="fusionSaveHint"></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right column -->
+    <div>
+      <div class="card amber">
+        <div class="card-title">📊 Fusions Summary</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
+          <div><div class="stat-val" style="color:var(--amber2)" id="fusionTotal">0</div><div class="stat-label">Total Logged</div></div>
+          <div><div class="stat-val" style="color:var(--rust2)" id="fusionOpen">0</div><div class="stat-label">Open</div></div>
+          <div><div class="stat-val" style="color:var(--gold2)" id="fusionPending">0</div><div class="stat-label">Pending</div></div>
+          <div><div class="stat-val" style="color:var(--moss2)" id="fusionResolved">0</div><div class="stat-label">Resolved</div></div>
+        </div>
+        <div class="div"></div>
+        <div style="font-size:.75rem;color:var(--text2);margin-top:8px;line-height:1.7;">
+          Fusions are saved locally in your browser.<br>
+          Organized by city, sorted newest first.<br>
+          Use for reworks, escalations &amp; disputes.
+        </div>
+        <div class="div"></div>
+        <button class="btn" style="width:100%;margin-top:4px;text-align:center;font-size:.56rem;" onclick="clearFusions()">🗑 Clear All Fusions</button>
+      </div>
+
+      <div class="card amber" style="margin-top:0;">
+        <div class="card-title">📖 What Is a Fusion?</div>
+        <div style="font-size:.8rem;color:var(--text2);line-height:1.8;">
+          A <span style="color:var(--amber2);">Fusion</span> is any field ticket that generated an issue beyond normal close-out:<br><br>
+          · <span style="color:var(--cream);">Rework</span> — return dispatch due to missed step<br>
+          · <span style="color:var(--cream);">Escalation</span> — PMO / Dell / management involved<br>
+          · <span style="color:var(--cream);">Parts Dispute</span> — missing, wrong, or return issue<br>
+          · <span style="color:var(--cream);">Feedback</span> — FE feedback note received<br>
+          · <span style="color:var(--cream);">SLA Breach</span> — missed response or restore window<br>
+          · <span style="color:var(--cream);">Documentation</span> — ticket notes challenged<br><br>
+          Log them here as they happen. Over time this becomes your field history — patterns, proof, and precedent.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /FUSIONS -->
 
 </div><!-- /content -->
 
@@ -711,11 +891,10 @@ function slaCheck(){document.getElementById('fieldInput').value='Which tickets h
 function routeAdvice(){document.getElementById('fieldInput').value='Given AAA is confirmed for 5pm in Lompoc today, what is the best route if I get more customer confirmations?';sendChat();}
 
 // ══════════════════════════════════════════════
-// COMPLETED WOT LOG — localStorage persistence
+// COMPLETED WOT LOG
 // ══════════════════════════════════════════════
 var WOT_KEY='mw_wot_log_v1';
 
-// Seed with WOT16501003 if log is empty
 function seedLog(){
   var existing=JSON.parse(localStorage.getItem(WOT_KEY)||'[]');
   if(existing.length===0){
@@ -725,115 +904,37 @@ function seedLog(){
       customer:'AAA Altoona — Lompoc',
       type:'UPS Battery Hot-Swap',
       date:'April 8, 2026',
-      body:`COMPLETED WORK ORDER JOURNAL ENTRY
-WOT16501003 | INC000003112064
-Date Closed: April 8, 2026
-
-CUSTOMER & SITE
-Customer: Automobile Club of Southern California (AAA)
-Business: AAA Altoona — Lompoc Data Center
-Address: 525 W Central Avenue, Lompoc, CA 93436
-Primary Contact: Jessica Garcia, Associate Supervisor — 805.740.5209
-Secondary Contact: Shawn Matz — 714-850-8250
-Client Services Tech (Unisys/AAA Account): Scott Pierson — 562-383-3026
-
-ISSUE
-UPS battery near end of life warning on APC Smart-UPS 3000 at the Lompoc data center. GSOC flagged a possible commercial power issue; NOC investigated and found no power problems but confirmed the UPS was displaying a "Battery Near End of Life — Order Replacement Battery" warning.
-
-TICKET ORIGIN & ASSIGNMENT
-04/07/2026 ~10:43 PM — Scott Pierson emailed Sarika Gupta and Lavanya Dasim requesting a WOT be created to send a tech on-site 04/08 at approximately 5:00 PM local time. Battery confirmed already on-site. Hot-swap — no UPS shutdown required. Contact: Jessica Garcia.
-
-04/07/2026 — GFO (Muralidharan V, SDA) responded confirming FE assignment: Matthew Weddington.
-
-04/07/2026 11:09 AM PT — WOT16501003 created and assigned to Matthew Weddington. Target restore: 04/08/2026 3:00 PM.
-
-FE CONTACT & COORDINATION
-04/07/2026 ~12:05 PM PT — Matthew called Shawn Matz (listed primary contact). Got Scott Pierson on a three-way call.
-- Jessica Garcia confirmed as correct primary on-site contact (ServiceNow entry was incorrect)
-- Battery confirmed on-site — earlier report of it being sent back to sender was incorrect
-- Job type: hot-swap battery replacement, zero downtime, no business impact
-- Dispatch: 04/08, arriving ~4:45 PM, work window 5:00–7:00 PM
-- Estimated duration: 30 minutes
-
-04/08/2026 8:18 AM PT — Appointment confirmation logged in ServiceNow.
-04/08/2026 8:20 AM PT — Ticket accepted by Matthew Weddington.
-
-ON-SITE WORK
-Date: April 8, 2026 | Arrival: ~4:44 PM | Work Start: 5:00 PM
-Location: AAA Lompoc Data Center, 525 W Central Avenue
-On-site Contact: Jessica Garcia
-Device: APC Smart-UPS 3000 Rack Mount
-
-Procedure — Hot-Swap Battery Replacement:
-1. Removed front bezel
-2. Disconnected battery connector via pull string
-3. Removed retaining screws, slid out old battery tray
-4. Installed new battery tray, reconnected Anderson connector
-5. Replaced screws and reinstalled bezel
-6. Confirmed battery replacement on UPS front panel (toggled Yes, saved)
-7. Initiated self-test — PASSED
-No downtime. Connected equipment remained live throughout.
-Estimated completion: ~5:30 PM | Total time on-site: ~30 minutes
-
-CLOSE-OUT
-Resolution: UPS battery successfully replaced via hot-swap. No impact to business operations. Self-test confirmed successful. UPS returned to full operational status.`
+      body:'COMPLETED WORK ORDER JOURNAL ENTRY\nWOT16501003 | INC000003112064\nDate Closed: April 8, 2026\n\nCUSTOMER & SITE\nCustomer: Automobile Club of Southern California (AAA)\nBusiness: AAA Altoona — Lompoc Data Center\nAddress: 525 W Central Avenue, Lompoc, CA 93436\nPrimary Contact: Jessica Garcia, Associate Supervisor — 805.740.5209\nSecondary Contact: Shawn Matz — 714-850-8250\nClient Services Tech (Unisys/AAA Account): Scott Pierson — 562-383-3026\n\nISSUE\nUPS battery near end of life warning on APC Smart-UPS 3000 at the Lompoc data center.\n\nON-SITE WORK\nDate: April 8, 2026 | Arrival: ~4:44 PM | Work Start: 5:00 PM\nHot-swap battery replacement. Self-test PASSED. No downtime. Est. 30 min.'
     }];
     localStorage.setItem(WOT_KEY,JSON.stringify(seed));
   }
 }
 
-function loadLog(){
-  return JSON.parse(localStorage.getItem(WOT_KEY)||'[]');
-}
-function saveLog(entries){
-  localStorage.setItem(WOT_KEY,JSON.stringify(entries));
-}
+function loadLog(){return JSON.parse(localStorage.getItem(WOT_KEY)||'[]');}
+function saveLog(entries){localStorage.setItem(WOT_KEY,JSON.stringify(entries));}
 
 function renderLog(){
   var entries=loadLog();
   var list=document.getElementById('wotLogList');
   var area=document.getElementById('wotDetailArea');
-
-  // Update stats
   document.getElementById('logCount').textContent=entries.length;
   var thisMonth=entries.filter(function(e){
     var d=new Date();
     return e.date&&e.date.indexOf(d.toLocaleString('en-US',{month:'long'}))>=0&&e.date.indexOf(d.getFullYear())>=0;
   }).length;
   document.getElementById('logMonth').textContent=thisMonth;
-
-  if(entries.length===0){
-    list.innerHTML='<div class="empty-log">No completed tickets yet. Add your first entry below.</div>';
-    area.innerHTML='';
-    return;
-  }
-
-  list.innerHTML='';
-  area.innerHTML='';
-
+  if(entries.length===0){list.innerHTML='<div class="empty-log">No completed tickets yet.</div>';area.innerHTML='';return;}
+  list.innerHTML='';area.innerHTML='';
   entries.slice().reverse().forEach(function(entry){
-    // Row
     var row=document.createElement('div');
     row.className='wot-log-row';
     row.onclick=function(){toggleDetail(entry.id);};
-    row.innerHTML=
-      '<span class="wot-num">'+entry.num+'</span>'+
-      '<span class="wot-customer">'+entry.customer+'</span>'+
-      '<span class="wot-type">'+entry.type+'</span>'+
-      '<span class="wot-date">'+entry.date+'</span>'+
-      '<span class="badge b-closed">✓ Closed</span>';
+    row.innerHTML='<span class="wot-num">'+entry.num+'</span><span class="wot-customer">'+entry.customer+'</span><span class="wot-type">'+entry.type+'</span><span class="wot-date">'+entry.date+'</span><span class="badge b-closed">✓ Closed</span>';
     list.appendChild(row);
-
-    // Detail block
     var detail=document.createElement('div');
     detail.className='wot-detail';
     detail.id='detail_'+entry.id;
-    detail.innerHTML=
-      '<div class="wot-detail-header">'+
-        '<span class="wot-detail-title">'+entry.num+' · '+entry.customer+'</span>'+
-        '<button class="btn" onclick="toggleDetail(\''+entry.id+'\')" style="padding:2px 9px;font-size:.55rem;">Close ✕</button>'+
-      '</div>'+
-      '<div style="white-space:pre-wrap;font-size:.82rem;line-height:1.8;color:var(--cream);">'+escHtml(entry.body)+'</div>';
+    detail.innerHTML='<div class="wot-detail-header"><span class="wot-detail-title">'+entry.num+' · '+entry.customer+'</span><button class="btn" onclick="toggleDetail(\''+entry.id+'\')" style="padding:2px 9px;font-size:.55rem;">Close ✕</button></div><div style="white-space:pre-wrap;font-size:.82rem;line-height:1.8;color:var(--cream);">'+escHtml(entry.body)+'</div>';
     area.appendChild(detail);
   });
 }
@@ -841,12 +942,9 @@ function renderLog(){
 function toggleDetail(id){
   var el=document.getElementById('detail_'+id);
   if(!el)return;
-  // Close all others
-  document.querySelectorAll('.wot-detail').forEach(function(d){
-    if(d.id!=='detail_'+id) d.classList.remove('open');
-  });
+  document.querySelectorAll('.wot-detail').forEach(function(d){if(d.id!=='detail_'+id)d.classList.remove('open');});
   el.classList.toggle('open');
-  if(el.classList.contains('open')) el.scrollIntoView({behavior:'smooth',block:'start'});
+  if(el.classList.contains('open'))el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function addWotEntry(){
@@ -856,50 +954,195 @@ function addWotEntry(){
   var date=document.getElementById('newWotDate').value.trim();
   var body=document.getElementById('newWotBody').value.trim();
   var hint=document.getElementById('saveHint');
-
-  if(!num||!customer||!body){
-    hint.textContent='⚠ WOT number, customer, and entry body are required.';
-    hint.style.color='var(--rust2)';
-    return;
-  }
-
+  if(!num||!customer||!body){hint.textContent='⚠ WOT number, customer, and entry body are required.';hint.style.color='var(--rust2)';return;}
   var entries=loadLog();
-  entries.push({
-    id:'wot_'+Date.now(),
-    num:num,
-    customer:customer,
-    type:type||'Field Service',
-    date:date||new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),
-    body:body
-  });
-  saveLog(entries);
-  renderLog();
-
-  // Clear form
-  document.getElementById('newWotNum').value='';
-  document.getElementById('newWotCustomer').value='';
-  document.getElementById('newWotType').value='';
-  document.getElementById('newWotDate').value='';
-  document.getElementById('newWotBody').value='';
-  hint.textContent='✅ Entry saved.';
-  hint.style.color='var(--sage2)';
+  entries.push({id:'wot_'+Date.now(),num:num,customer:customer,type:type||'Field Service',date:date||new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),body:body});
+  saveLog(entries);renderLog();
+  document.getElementById('newWotNum').value='';document.getElementById('newWotCustomer').value='';document.getElementById('newWotType').value='';document.getElementById('newWotDate').value='';document.getElementById('newWotBody').value='';
+  hint.textContent='✅ Entry saved.';hint.style.color='var(--sage2)';
   setTimeout(function(){hint.textContent='';},3000);
 }
 
 function clearLog(){
-  if(confirm('Clear all completed WOT entries? This cannot be undone.')){
-    localStorage.removeItem(WOT_KEY);
-    renderLog();
+  if(confirm('Clear all completed WOT entries? This cannot be undone.')){localStorage.removeItem(WOT_KEY);renderLog();}
+}
+
+// ══════════════════════════════════════════════
+// FUSIONS
+// ══════════════════════════════════════════════
+var FUSION_KEY='mw_fusions_v1';
+var activeCityFilter='all';
+
+function seedFusions(){
+  var existing=JSON.parse(localStorage.getItem(FUSION_KEY)||'[]');
+  if(existing.length===0){
+    var seed=[{
+      id:'fusion_'+Date.now(),
+      wot:'WOT16425470',
+      dps:'465586722',
+      date:'April 8, 2026',
+      customer:'Ventura County Hall of Administration',
+      device:'PowerEdge R760 · Tag 7503CW3 · SN VN0NHKX0FCV0047P000D',
+      city:'ventura',
+      type:'Rework',
+      status:'open',
+      issue:'Dell / PMO flagged that the LOM (rear I/O card — DA 1085061-00 / 5H0JD, Mellanox NVIDIA MMS4X00-NS400) was not migrated from the original MB to the replacement MB prior to return. A new WOT was created for rework. PMO note: ensure all removed hardware is fully inspected for missing parts before finishing service.\n\nOriginal dispatch: March 17, 2026. MB replacement performed on R760 vSAN Ready Node. Ran ePSA diags — all clear. Customer Jose Avila confirmed normal operation at close. iDRAC intermittent ping issue noted as still present; customer asked to monitor and report.',
+      response:'Responded to FE feedback formally on 04/08/2026. Key points: (1) Customer confirmed normal operation at close — an absent rear I/O card on a vSAN node would have caused immediate cluster-level network fault, which was not observed. (2) Part description noted "Also Ship Enabled" — ambiguity exists on whether manual migration was required or if the replacement MB was expected to ship with the card pre-installed. (3) Acknowledged PMO process guidance on hardware inspection before close-out. (4) Requested Dell clarification on expected handling of the "Also Ship Enabled" rear I/O card. Available to support rework WOT and provide additional information as needed.\n\nFE Feedback response sent via email 04/08/2026.'
+    }];
+    localStorage.setItem(FUSION_KEY,JSON.stringify(seed));
   }
 }
 
+function loadFusions(){return JSON.parse(localStorage.getItem(FUSION_KEY)||'[]');}
+function saveFusions(entries){localStorage.setItem(FUSION_KEY,JSON.stringify(entries));}
+
+function showCity(city,btn){
+  activeCityFilter=city;
+  document.querySelectorAll('.city-tab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+  renderFusions();
+}
+
+function renderFusions(){
+  var entries=loadFusions();
+  var filtered=activeCityFilter==='all'?entries:entries.filter(function(e){return e.city===activeCityFilter;});
+  var list=document.getElementById('fusionList');
+  var area=document.getElementById('fusionDetailArea');
+
+  // Stats (always from all entries)
+  document.getElementById('fusionTotal').textContent=entries.length;
+  document.getElementById('fusionOpen').textContent=entries.filter(function(e){return e.status==='open';}).length;
+  document.getElementById('fusionPending').textContent=entries.filter(function(e){return e.status==='pending';}).length;
+  document.getElementById('fusionResolved').textContent=entries.filter(function(e){return e.status==='resolved';}).length;
+
+  if(filtered.length===0){
+    list.innerHTML='<div class="empty-log">No fusions logged for this city yet.</div>';
+    area.innerHTML='';
+    return;
+  }
+
+  list.innerHTML='';
+  area.innerHTML='';
+
+  filtered.slice().reverse().forEach(function(entry){
+    var statusBadge=entry.status==='resolved'?'<span class="badge b-resolved">✓ Resolved</span>':entry.status==='pending'?'<span class="badge b-pending">⏳ Pending</span>':'<span class="badge b-open">⚡ Open</span>';
+    var typeBadge='<span class="badge b-amber">'+entry.type+'</span>';
+
+    var row=document.createElement('div');
+    row.className='fusion-row';
+    row.onclick=function(){toggleFusion(entry.id);};
+    row.innerHTML=
+      '<span class="fusion-wot">'+entry.wot+'</span>'+
+      '<span class="fusion-customer">'+entry.customer+'</span>'+
+      '<span class="fusion-issue">'+entry.issue.substring(0,80)+'…</span>'+
+      typeBadge+
+      statusBadge+
+      '<span class="fusion-date">'+entry.date+'</span>';
+    list.appendChild(row);
+
+    var cityLabel={ventura:'Ventura',santa-barbara:'Santa Barbara',slo:'SLO',lompoc:'Lompoc',other:'Other'}[entry.city]||entry.city;
+
+    var detail=document.createElement('div');
+    detail.className='fusion-detail';
+    detail.id='fusion_'+entry.id;
+    detail.innerHTML=
+      '<div class="fusion-detail-header">'+
+        '<div>'+
+          '<div class="fusion-detail-title">⚡ '+entry.wot+' · '+entry.customer+'</div>'+
+          '<div style="font-size:.72rem;color:var(--text2);margin-top:3px;">'+entry.type+' · '+cityLabel+' · '+entry.date+'</div>'+
+        '</div>'+
+        '<div style="display:flex;gap:6px;align-items:center;">'+
+          statusBadge+
+          '<button class="btn" onclick="toggleFusion(\''+entry.id+'\')" style="padding:2px 9px;font-size:.55rem;">Close ✕</button>'+
+        '</div>'+
+      '</div>'+
+      '<div class="fusion-meta">'+
+        '<div class="fusion-meta-block"><div class="td-label">WOT</div><div class="td-val" style="font-family:monospace;font-size:.78rem;">'+entry.wot+'</div></div>'+
+        '<div class="fusion-meta-block"><div class="td-label">DPS</div><div class="td-val" style="font-family:monospace;font-size:.78rem;">'+entry.dps+'</div></div>'+
+        '<div class="fusion-meta-block"><div class="td-label">Device</div><div class="td-val" style="font-size:.78rem;">'+entry.device+'</div></div>'+
+      '</div>'+
+      '<div class="fusion-section"><div class="fusion-section-label">Issue / What Happened</div><div class="fusion-section-body">'+escHtml(entry.issue).replace(/\n/g,'<br>')+'</div></div>'+
+      '<div class="fusion-section"><div class="fusion-section-label">My Response &amp; Notes</div><div class="fusion-response-box">'+escHtml(entry.response)+'</div></div>'+
+      '<div style="display:flex;gap:8px;margin-top:10px;">'+
+        '<button class="btn" onclick="updateFusionStatus(\''+entry.id+'\',\'open\')" style="font-size:.55rem;">⚡ Open</button>'+
+        '<button class="btn" onclick="updateFusionStatus(\''+entry.id+'\',\'pending\')" style="font-size:.55rem;">⏳ Pending</button>'+
+        '<button class="btn sage" onclick="updateFusionStatus(\''+entry.id+'\',\'resolved\')" style="font-size:.55rem;">✓ Mark Resolved</button>'+
+        '<button class="btn" onclick="deleteFusion(\''+entry.id+'\')" style="font-size:.55rem;color:var(--rust2);border-color:var(--rust);margin-left:auto;">🗑 Delete</button>'+
+      '</div>';
+    area.appendChild(detail);
+  });
+}
+
+function toggleFusion(id){
+  var el=document.getElementById('fusion_'+id);
+  if(!el)return;
+  document.querySelectorAll('.fusion-detail').forEach(function(d){if(d.id!=='fusion_'+id)d.classList.remove('open');});
+  el.classList.toggle('open');
+  if(el.classList.contains('open'))el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function updateFusionStatus(id,status){
+  var entries=loadFusions();
+  entries=entries.map(function(e){return e.id===id?Object.assign({},e,{status:status}):e;});
+  saveFusions(entries);
+  renderFusions();
+}
+
+function deleteFusion(id){
+  if(confirm('Delete this fusion entry? This cannot be undone.')){
+    var entries=loadFusions().filter(function(e){return e.id!==id;});
+    saveFusions(entries);
+    renderFusions();
+  }
+}
+
+function addFusion(){
+  var wot=document.getElementById('fWot').value.trim();
+  var dps=document.getElementById('fDps').value.trim();
+  var date=document.getElementById('fDate').value.trim();
+  var customer=document.getElementById('fCustomer').value.trim();
+  var device=document.getElementById('fDevice').value.trim();
+  var city=document.getElementById('fCity').value;
+  var type=document.getElementById('fType').value;
+  var status=document.getElementById('fStatus').value;
+  var issue=document.getElementById('fIssue').value.trim();
+  var response=document.getElementById('fResponse').value.trim();
+  var hint=document.getElementById('fusionSaveHint');
+
+  if(!wot||!customer||!issue){
+    hint.textContent='⚠ WOT number, customer, and issue description are required.';
+    hint.style.color='var(--rust2)';
+    return;
+  }
+
+  var entries=loadFusions();
+  entries.push({
+    id:'fusion_'+Date.now(),
+    wot:wot,dps:dps||'—',
+    date:date||new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),
+    customer:customer,device:device||'—',city:city,type:type,status:status,
+    issue:issue,response:response||'(No response logged yet.)'
+  });
+  saveFusions(entries);
+  renderFusions();
+
+  ['fWot','fDps','fDate','fCustomer','fDevice','fIssue','fResponse'].forEach(function(id){document.getElementById(id).value='';});
+  hint.textContent='✅ Fusion saved.';
+  hint.style.color='var(--amber2)';
+  setTimeout(function(){hint.textContent='';},3000);
+}
+
+function clearFusions(){
+  if(confirm('Clear all fusion entries? This cannot be undone.')){localStorage.removeItem(FUSION_KEY);renderFusions();}
+}
+
 function escHtml(str){
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 // Init
-seedLog();
-renderLog();
+seedLog();renderLog();
+seedFusions();renderFusions();
 </script>
 </body>
 </html>
